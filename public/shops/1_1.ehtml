@@ -1,0 +1,145 @@
+<? section={"title"=>"layout1", "website_id"=>1, "section_id"=>1, "lft"=>1, "root_id"=>1, "id"=>1, "is_enabled"=>true, "perma_name"=>"layout1", "section_instance"=>1, "copy_from"=>0, "parent_id"=>nil, "rgt"=>18}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>1, "root_id"=>1, "id"=>1, "is_enabled"=>true, "perma_name"=>"root", "parent_id"=>nil, "section_piece_id"=>1, "rgt"=>2}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+  <title>~|thispage.page_title|~</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+<script type="text/javascript" src="/javascripts/jquery.js"></script>
+<script type="text/javascript" src="/javascripts/jquery-ui.js"></script>
+  <script type="text/javascript" src="<?=@website.public_path('js')?>"></script>
+  <link rel="stylesheet" href="<?=@website.public_path('css')?>" type="text/css" />
+<!--[if lt IE 7]>
+  <script src="/javascripts/IE7.js" type="text/javascript"></script>
+<![endif]-->
+</head>
+<body class="clear-block">
+
+  <div id="page"><div id="page-inner" class="clear-block">
+    <a name="top" id="navigation-top"></a>
+    <div id="skip-to-nav"><a href="#navigation">Skip to Navigation</a></div>
+    <? section={"title"=>"container1", "website_id"=>1, "section_id"=>2, "lft"=>2, "root_id"=>1, "id"=>2, "is_enabled"=>true, "perma_name"=>"header", "section_instance"=>1, "copy_from"=>0, "parent_id"=>1, "rgt"=>7}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>3, "root_id"=>2, "id"=>2, "is_enabled"=>true, "perma_name"=>"container", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>4}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section={"title"=>"logo1", "website_id"=>1, "section_id"=>9, "lft"=>3, "root_id"=>1, "id"=>3, "is_enabled"=>true, "perma_name"=>"logo1", "section_instance"=>1, "copy_from"=>0, "parent_id"=>2, "rgt"=>4}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>17, "root_id"=>9, "id"=>9, "is_enabled"=>true, "perma_name"=>"logo", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>20}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>18, "root_id"=>9, "id"=>10, "is_enabled"=>true, "perma_name"=>"image1", "parent_id"=>9, "section_piece_id"=>7, "rgt"=>19}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<a href="~~PageParams.get:logourl~~">
+   <img <?= @param_values.get :logo ?>  border="0" />
+</a>
+
+      </div>          
+</div> <? section={"title"=>"hmenu1", "website_id"=>1, "section_id"=>3, "lft"=>5, "root_id"=>1, "id"=>4, "is_enabled"=>true, "perma_name"=>"hmenu1", "section_instance"=>1, "copy_from"=>0, "parent_id"=>2, "rgt"=>6}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>5, "root_id"=>3, "id"=>3, "is_enabled"=>true, "perma_name"=>"hmenu", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>10}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>6, "root_id"=>3, "id"=>4, "is_enabled"=>true, "perma_name"=>"hmenu1", "parent_id"=>3, "section_piece_id"=>3, "rgt"=>9}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<? if @menus.menu? ?>
+<? for page in @menus.menu.children ?>
+   <? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>7, "root_id"=>3, "id"=>5, "is_enabled"=>true, "perma_name"=>"menuitem1", "parent_id"=>4, "section_piece_id"=>6, "rgt"=>8}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<? if page.clickable? ?>
+  <? if page== @menus.current ?>
+   <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
+  <? else ?>
+   <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
+  <? end ?>
+<? else ?>
+  <a id="pi<?= @param_values.instance_id?>_page.id" class="noclick"> <?= page.title ?> </a>    
+<? end ?>
+
+<? end ?>
+<? end ?>
+      </div>          
+</div> 
+      </div>          
+</div> <? section={"title"=>"container2", "website_id"=>1, "section_id"=>2, "lft"=>8, "root_id"=>1, "id"=>5, "is_enabled"=>true, "perma_name"=>"content", "section_instance"=>2, "copy_from"=>0, "parent_id"=>1, "rgt"=>15}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>3, "root_id"=>2, "id"=>2, "is_enabled"=>true, "perma_name"=>"container", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>4}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section={"title"=>"container5", "website_id"=>1, "section_id"=>2, "lft"=>9, "root_id"=>1, "id"=>8, "is_enabled"=>true, "perma_name"=>"main_content", "section_instance"=>5, "copy_from"=>0, "parent_id"=>5, "rgt"=>10}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>3, "root_id"=>2, "id"=>2, "is_enabled"=>true, "perma_name"=>"container", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>4}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      
+      </div>          
+</div> <? section={"title"=>"container4", "website_id"=>1, "section_id"=>2, "lft"=>11, "root_id"=>1, "id"=>7, "is_enabled"=>true, "perma_name"=>"lftnav", "section_instance"=>4, "copy_from"=>0, "parent_id"=>5, "rgt"=>14}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>3, "root_id"=>2, "id"=>2, "is_enabled"=>true, "perma_name"=>"container", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>4}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section={"title"=>"vmenu1", "website_id"=>1, "section_id"=>6, "lft"=>12, "root_id"=>1, "id"=>9, "is_enabled"=>true, "perma_name"=>"vmenu", "section_instance"=>1, "copy_from"=>0, "parent_id"=>7, "rgt"=>13}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>11, "root_id"=>6, "id"=>6, "is_enabled"=>true, "perma_name"=>"vmenu", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>16}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      <? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>12, "root_id"=>6, "id"=>7, "is_enabled"=>true, "perma_name"=>"vmenu1", "parent_id"=>6, "section_piece_id"=>4, "rgt"=>15}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<? if @menus.menu? ?>
+<? for page in @menus.menu.children ?>
+   <? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>13, "root_id"=>6, "id"=>8, "is_enabled"=>true, "perma_name"=>"menuitem1", "parent_id"=>7, "section_piece_id"=>6, "rgt"=>14}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<? if page.clickable? ?>
+  <? if page== @menus.current ?>
+   <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
+  <? else ?>
+   <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
+  <? end ?>
+<? else ?>
+  <a id="pi<?= @param_values.instance_id?>_page.id" class="noclick"> <?= page.title ?> </a>    
+<? end ?>
+
+<? end ?>
+<? end ?>
+      </div>          
+</div> 
+      </div>          
+</div> 
+      </div>          
+</div> <? section={"title"=>"container3", "website_id"=>1, "section_id"=>2, "lft"=>16, "root_id"=>1, "id"=>6, "is_enabled"=>true, "perma_name"=>"footer", "section_instance"=>3, "copy_from"=>0, "parent_id"=>1, "rgt"=>17}?>
+<? section_piece={"section_piece_instance"=>1, "website_id"=>1, "lft"=>3, "root_id"=>2, "id"=>2, "is_enabled"=>true, "perma_name"=>"container", "parent_id"=>nil, "section_piece_id"=>2, "rgt"=>4}; 
+@param_values.setup(section,section_piece)
+@menus.setup(section,section_piece) ?>
+<!-- container  -->
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+      <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+      
+      </div>          
+</div> 
+  </div><!-- /#page-inner -->
+  </div><!-- /#page -->
+</body>
+</html>

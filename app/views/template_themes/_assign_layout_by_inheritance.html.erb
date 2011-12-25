@@ -1,0 +1,38 @@
+<%
+themes = TemplateTheme.all()
+-%>
+<table>
+  <tr>
+    <th> menu item  </th>
+    <th> template</th>
+    <th> for preview</th>
+    <th> detail template</th>
+    <th> for preview</th>
+  </tr>
+  <% for item in menu_root.self_and_descendants-%>
+  <%  enable_inheritance = (! item.root?)-%>
+  <tr>
+    <td >
+    <%= hidden_field "menu#{item.id}","id",{"value"=>item.id}%>  
+    <%= raw("&nbsp;"*item.level);%>
+    <%# do not call form.submit. %>
+    <%= link_to_function(item.title, "$('#selected_item_id').val(#{item.id});document.forms['item_editor_form'].onsubmit()")%>
+    </td>
+    <td>      
+      <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.theme_id, :select_name=>"menu#{item.id}[theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>      
+      <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.ptheme_id, :select_name=>"menu#{item.id}[ptheme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>
+    <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.detail_theme_id, :select_name=>"menu#{item.id}[detail_theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>
+    <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.pdetail_theme_id, :select_name=>"menu#{item.id}[pdetail_theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+
+  </tr>
+  <% end -%>
+</table>
+
+

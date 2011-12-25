@@ -1,0 +1,35 @@
+<h1>Listing page_layouts</h1>
+
+<table>
+  <tr>
+    <th>Root</th>
+    <th>Parent</th>
+    <th>Lft</th>
+    <th>Rgt</th>
+    <th>Perma name</th>
+    <th>Section</th>
+    <th>Section instance</th>
+    <th>Is enable</th>
+  </tr>
+
+<% @page_layouts.each do |page_layout| %>
+  <tr>
+    <td><%=h page_layout.root_id %></td>
+    <td><%=h page_layout.parent_id %></td>
+    <td><%=h page_layout.lft %></td>
+    <td><%=h page_layout.rgt %></td>
+    <td><%=h page_layout.perma_name %></td>
+    <td><%=h page_layout.section_id %></td>
+    <td><%=h page_layout.section_instance %></td>
+    <td><%=h page_layout.is_enabled %></td>
+    <td><%= link_to 'Show', page_layout_path(page_layout) %></td>
+    <td><%= link_to 'Edit', page_layout_path(page_layout, "edit") %></td>
+    <td><%= link_to 'Destroy', page_layout_path(page_layout, "destroy"), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Content', build_page_layout_source_path(page_layout) %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New page_layout', "/page_layouts/new" %>

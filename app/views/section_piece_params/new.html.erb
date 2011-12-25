@@ -1,0 +1,42 @@
+<h1>New section_piece_param</h1>
+
+<% form_for(@section_piece_param) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :section_piece_id %><br />
+    <%= select("section_piece_param", "section_piece_id", SectionPiece.all.collect {|p| [ p.perma_name, p.id ] }) %>
+  </p>
+  <p>
+    <%= f.label :editor_id %><br />
+    <%= select("section_piece_param", "editor_id", Editor.all.collect {|p| [ p.perma_name, p.id ] }) %>
+  </p>
+  <p>
+    <%= f.label :param_category_id %><br />
+    <%= select("section_piece_param", "param_category_id", ParamCategory.all.collect {|p| [ p.perma_name, p.id ] }) %>
+  </p>
+  <p>
+    <%= f.label :pclass %><br />
+    <%= f.text_field :pclass %>
+  </p>
+  <p>
+    <%= f.label :class_name %><br />
+    <%= f.text_field :class_name %>
+  </p>
+  <p>
+    <%- haids = @section_piece_param.html_attribute_ids.split.collect{|s|s.to_i}-%>
+    <%- for html_attribute in @html_attributes -%>            
+      <span class="option_item"><%=html_attribute.perma_name%><%=check_box_tag "html_attribute_ids[]", html_attribute.id, haids.include?(html_attribute.id)%>
+      </span>    
+    <%- end -%>      
+  </p>
+  <p>
+    <%= f.label :conditions %><br />
+    <%= f.text_field :conditions %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', section_piece_params_path %>

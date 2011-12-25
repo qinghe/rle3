@@ -1,0 +1,53 @@
+<%
+#params :@editors,@param_values_for_editors
+# @theme, selected theme,
+# @editor, selected editor
+
+# method of this form should be 'get', every time user click a section, get_param_values belong to the section.
+-%>
+<%= form_tag({:action=>'get_param_values'}, { :remote=>true, :method=>'post', 'data-type'=>'script', :id=>"layout_editor_form",:name=>"layout_editor_form"}) do -%>
+
+    <ul class="tabs clear-block">
+    <% for tab in @editors%>
+      <li data-id="<%=tab.id%>">
+<%=  link_to_function(tab.perma_name,"void(0)", {"class"=>(tab.id==@editor.id ? "selected":"")})%>
+      </li>
+    <% end%>
+    </ul>
+ <% # the next div container is for js to get all editors, in other word, its children
+ %>
+ <div>
+<% @editors.each_index{ |idx|-%>
+  <div style="<%= 'display:none' if @editors[idx]!=@editor %>">    
+  <%= render :partial=>"editor", :locals => {:editor=>@editors[idx], :param_values=>@param_values_for_editors[idx]}%>
+  </div>
+<%}-%>
+ </div>
+<%# put these hidden fields here, refresh this form while update editors 
+-%>
+<%=hidden_field_tag "selected_page_layout_id", @page_layout.id %>
+<%=hidden_field_tag "selected_theme_id", @theme.id %>
+<%=hidden_field_tag "selected_editor_id", @editor.id %>
+
+<%# set these hidden fields while a paramvalue just changed. 
+-%>
+<%=hidden_field_tag "editing_param_value_id" %>
+<%=hidden_field_tag "editing_html_attribute_id" %>
+<%=hidden_field_tag "param_value_event" %>
+
+<div>
+<%= link_to "UpdateParamValue",
+           :url => { :action => "update_param_values" }, :submit=>"layout_editor_form",:remote=>true,
+           :update => { :success => "posts", :failure => "error" },:id=>"update_param_value_button"%>
+</div>
+<% end-%>
+
+<script type="text/javascript" charset="utf-8">
+  $("#editors .tabs li").hover(function(){
+    $(this).parent().find('a').removeClass('selected');
+    $(this).find('a').addClass('selected'); 
+    $(this).parent().next().children().hide();
+    $(this).parent().next().children().eq($(this).index()).show();
+    $("#selected_editor_id").val($(this).attr('data-id'))
+  });  
+</script>

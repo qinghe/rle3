@@ -1,0 +1,37 @@
+<%-
+# list layout tree in editor page.
+# local params: layout_root, selected_id,
+-%>
+<%=form_tag({:action=>'update_layout_tree'}, :id=>"layout_tree_form",:name=>"layout_tree_form", :remote=>true) do -%>
+
+  <div  class="block">
+  <% for layout in layout_root.self_and_descendants-%>
+  <div class="clear-block">
+    <div class="fl">
+    <%=raw("&nbsp;"*layout.level)%>
+    <%# do not call form.submit. 
+    %>
+    <%= link_to_function(layout.perma_name, 
+      "$('#selected_page_layout_id').val(#{layout.id});$('#layout_editor_form').trigger('submit')",
+      {"class"=>(layout.id==selected_id ? "selected":""),"data-lid"=>layout.id})
+      %>
+    </div>
+    <div class="fr">
+
+<%= link_to_function "+","$('#layout_id').val(#{layout.id});$('#section_select_dialog').dialog('open')"%>
+
+<%= link_to_function "-","if (confirm('Really?')) submit_layout_tree_form('del_self',#{layout.id} )"%>
+
+<%= link_to_function "<","submit_layout_tree_form('move_left',#{layout.id} )"%>
+<%= link_to_function ">","submit_layout_tree_form('move_right',#{layout.id} )"%>
+
+      
+    </div>
+  </div>
+  <% end -%>
+  </div>
+<%=hidden_field_tag "selected_section_id" %>
+<%=hidden_field_tag "op" %>
+<%=hidden_field_tag "layout_id" %>
+
+<%end-%>

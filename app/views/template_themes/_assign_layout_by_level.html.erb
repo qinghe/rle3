@@ -1,0 +1,37 @@
+<%
+themes = TemplateTheme.all()
+levels = []
+-%>
+<table>
+  <tr>
+    <th> level </th>
+    <th> template</th>
+    <th> for preview</th>
+    <th> detail template</th>
+    <th> for preview</th>
+  </tr>
+  <% Menu.each_with_level(menu_root.self_and_descendants) do |item, level| -%>
+  <%   next if levels.include?(level)
+       levels << level
+       enable_inheritance = (!item.root?)
+  -%>
+  <tr>
+    <td >
+    <%= level==0 ? "default" : "Level #{level}" %>
+    </td>
+    <td>      
+      <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.theme_id, :select_name=>"menu#{menu_root.id}_level#{item.level}[theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>      
+      <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.ptheme_id, :select_name=>"menu#{menu_root.id}_level#{item.level}[ptheme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>
+    <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.detail_theme_id, :select_name=>"menu#{menu_root.id}_level#{item.level}[detail_theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+    <td>      
+      <%= render :partial=>"template_select", :locals=>{:themes=>themes, :selected_value=>item.pdetail_theme_id, :select_name=>"menu#{menu_root.id}_level#{item.level}[pdetail_theme_id]", :enable_inheritance=>enable_inheritance}%>
+    </td>
+
+  </tr>
+  <% end -%>
+</table>

@@ -1,0 +1,20 @@
+<%
+obj_name="menu#{menu.id}"
+-%>
+    <div >
+      <div >
+        <% # :checked is required, obj_name is not 'menu'
+        -%>
+        <%=radio_button obj_name, "inheritance",true, {:checked=>menu.inheritance,:class=>"menu_inheritance"}%> <%=label obj_name, :inheritance, "Assign layout by inheritance", :value=>true %>
+        <%=radio_button obj_name, "inheritance",false, {:checked=>!menu.inheritance,:class=>"menu_inheritance"}%> <%=label obj_name, :inheritance, "Assign layout by level", :value=>false %>
+      </div>
+      <div>
+        <div style="<%= 'display:none' unless menu.inheritance%>">
+        <%=render :partial=>"assign_layout_by_inheritance", :locals=>{:menu_root=>menu}%>
+        </div>
+        <div style="<%= 'display:none' if menu.inheritance%>">
+        <%=render :partial=>"assign_layout_by_level", :locals=>{:menu_root=>menu}%>
+        </div>
+      </div>
+
+    </div>

@@ -1,0 +1,23 @@
+<p>
+  <b>Editor:</b>
+  <%=h @param_category.editor_id %>
+</p>
+
+<p>
+  <b>Position:</b>
+  <%=h @param_category.position %>
+</p>
+
+<p>
+  <b>Perma name:</b>
+  <%=h @param_category.perma_name %>
+</p>
+
+<p>
+  <b>Is enable:</b>
+  <%=h @param_category.is_enabled %>
+</p>
+
+
+<%= link_to 'Edit', edit_param_category_path(@param_category) %> |
+<%= link_to 'Back', param_categories_path %>

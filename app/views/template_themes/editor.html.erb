@@ -1,0 +1,17 @@
+<%-
+  #params: @layout_roots, @theme, 
+  #@page_layout, current selected page_layout, it could be root or not. 
+  #@editors, 
+  #@param_values_for_editors
+-%>
+
+<div class="clear-block">
+  <div>
+    <%=render :partial=>"layout_selection", :locals=>{:page_layouts=>@layout_roots, :selected=>@theme} %>
+    
+  </div>
+  <div>
+    <%=render :partial=>"layout_editor"%>
+  </div>
+</div>
+

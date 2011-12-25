@@ -1,0 +1,11 @@
+<%
+  #params:  html_attribute_hash  {id=>html_attribute}
+  #         
+  #local_params: param_value, param_category
+  section_piece_param = param_value.section_param.section_piece_param
+  ha_array = param_value.section_param.html_attributes # excluded disabled by section
+-%>
+
+<%=render :partial=>"html_attribute_value", :collection=>ha_array,:as=>:html_attribute, :locals=>{:param_value=>param_value}
+-%>
+  

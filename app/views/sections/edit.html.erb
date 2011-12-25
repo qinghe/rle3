@@ -1,0 +1,36 @@
+<h1>Editing section</h1>
+
+<% form_for(@section) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :root_id %><br />
+    <%= select("section", "root_id", Section.all(:conditions=>'id=root_id').collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+  </p>
+  <p>
+    <%= f.label :parent_id %><br />
+    <%= select("section", "parent_id", Section.all().collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+  </p>
+  <p>
+    <%= f.label :perma_name %><br />
+    <%= f.text_field :perma_name %>
+  </p>
+  <p>
+    <%= f.label :section_piece_id %><br />
+    <%= select("section", "section_piece_id", SectionPiece.all().collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+  </p>
+  <p>
+    <%= f.label :section_piece_instance %><br />
+    <%= f.text_field :section_piece_instance %>
+  </p>
+  <p>
+    <%= f.label :is_enabled %><br />
+    <%= f.check_box :is_enabled %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @section %> |
+<%= link_to 'Back', sections_path %>

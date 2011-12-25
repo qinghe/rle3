@@ -1,0 +1,37 @@
+<p>
+  <b>Section piece:</b>
+  <%=h @section_piece_param.section_piece.perma_name %>
+</p>
+
+<p>
+  <b>Param category:</b>
+  <%=h @section_piece_param.param_category.perma_name %>
+</p>
+
+<p>
+  <b>Pclass:</b>
+  <%=h @section_piece_param.pclass %>
+</p>
+
+<p>
+  <b>Class name:</b>
+  <%=h @section_piece_param.class_name %>
+</p>
+
+<p>
+  <b>Html attribute ids:</b>
+  
+  <%=h @section_piece_param.html_attribute_ids %>
+  <%-for html_attribute in @html_attributes-%>
+  <%=h html_attribute.perma_name %>:<%=html_attribute.id%> 
+  <%-end-%>
+</p>
+
+<p>
+  <b>Conditions:</b>
+  <%=h @section_piece_param.conditions %>
+</p>
+
+
+<%= link_to 'Edit', edit_section_piece_param_path(@section_piece_param) %> |
+<%= link_to 'Back', section_piece_params_path %>

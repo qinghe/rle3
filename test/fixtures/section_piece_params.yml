@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  section_piece_id: 1
+  param_category_id: 1
+  pclass: MyString
+  class_name: MyString
+  html_attribute_ids: MyString
+  conditions: MyString
+
+two:
+  section_piece_id: 1
+  param_category_id: 1
+  pclass: MyString
+  class_name: MyString
+  html_attribute_ids: MyString
+  conditions: MyString

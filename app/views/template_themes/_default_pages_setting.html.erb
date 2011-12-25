@@ -1,0 +1,13 @@
+
+<%=  form_for(@website, :url => {:action=>"assign_default"}, :html=>{:id=>'website_form', :method=>"post"}) do |f|-%>
+
+<table>
+  <tr>
+    <th> default index page </th>
+    <td><%=  grouped_collection_select("website", "index_page", Menu.roots, :descendants, "perma_name", "id", "perma_name")%>  
+    </td>
+  </tr>
+
+</table>
+
+<% end-%>

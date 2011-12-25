@@ -1,0 +1,2 @@
+module SectionPiecesHelper
+end

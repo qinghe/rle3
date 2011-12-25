@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  section_id: 1
+  section_piece_id: 1
+  section_piece_instance: 1
+  is_enabled: false
+  disabled_ha_ids: MyString
+
+two:
+  section_id: 1
+  section_piece_id: 1
+  section_piece_instance: 1
+  is_enabled: false
+  disabled_ha_ids: MyString

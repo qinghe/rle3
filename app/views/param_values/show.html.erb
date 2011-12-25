@@ -1,0 +1,48 @@
+<p>
+  <b>Layout:</b>
+  <%=h @param_value.layout_id %>
+</p>
+
+<p>
+  <b>Section:</b>
+  <%=h @param_value.section_id %>
+</p>
+
+<p>
+  <b>Section instance:</b>
+  <%=h @param_value.section_instance %>
+</p>
+
+<p>
+  <b>Section param:</b>
+  <%=h @param_value.section_param_id %>
+</p>
+
+<p>
+  <b>TemplateTheme:</b>
+  <%=h @param_value.theme_id %>
+</p>
+
+<p>
+  <b>Pvalue:</b>
+  <%=h @param_value.pvalue %>
+</p>
+
+<p>
+  <b>Unset:</b>
+  <%=h @param_value.unset %>
+</p>
+
+<p>
+  <b>Preview pvalue:</b>
+  <%=h @param_value.preview_pvalue %>
+</p>
+
+<p>
+  <b>Preview unset:</b>
+  <%=h @param_value.preview_unset %>
+</p>
+
+
+<%= link_to 'Edit', edit_param_value_path(@param_value) %> |
+<%= link_to 'Back', param_values_path %>

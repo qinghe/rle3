@@ -1,0 +1,2 @@
+$('#page_layout_tree').html(<%=raw (render :partial=>"layout_tree.html.erb", :locals=>{:layout_root=>@layout, :selected_id=>@layout.id}).to_json%>);
+

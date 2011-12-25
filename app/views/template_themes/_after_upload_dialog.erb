@@ -1,0 +1,5 @@
+<textarea>
+$("#model_dialog").dialog('close');
+$("#editor_<%=@editor.id%>").html(
+<%=raw (render :partial => "editor", :locals=>{:editor=>@editor, :param_values=>@param_values}).to_json%>)
+</textarea> 

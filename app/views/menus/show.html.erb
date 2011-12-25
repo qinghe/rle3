@@ -1,0 +1,38 @@
+<p>
+  <b>Title:</b>
+  <%=h @menu.title %>
+</p>
+
+<p>
+  <b>Perma name:</b>
+  <%=h @menu.perma_name %>
+</p>
+
+<p>
+  <b>Root:</b>
+  <%=h @menu.root_id %>
+</p>
+
+<p>
+  <b>Parent:</b>
+  <%=h @menu.parent_id %>
+</p>
+
+<p>
+  <b>Lft:</b>
+  <%=h @menu.lft %>
+</p>
+
+<p>
+  <b>Rgt:</b>
+  <%=h @menu.rgt %>
+</p>
+
+<p>
+  <b>Is enabled:</b>
+  <%=h @menu.is_enabled %>
+</p>
+
+
+<%= link_to 'Edit', edit_menu_path(@menu) %> |
+<%= link_to 'Back', menus_path %>

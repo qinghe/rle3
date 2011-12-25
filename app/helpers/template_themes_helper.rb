@@ -1,0 +1,3 @@
+module TemplateThemesHelper
+
+end

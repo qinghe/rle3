@@ -1,0 +1,28 @@
+<p>
+  <b>Section:</b>
+  <%=h @section_param.section_id %>
+</p>
+
+<p>
+  <b>Section piece:</b>
+  <%=h @section_param.section_piece_id %>
+</p>
+
+<p>
+  <b>Section piece instance:</b>
+  <%=h @section_param.section_piece_instance %>
+</p>
+
+<p>
+  <b>Is enabled:</b>
+  <%=h @section_param.is_enabled %>
+</p>
+
+<p>
+  <b>Disabled ha ids:</b>
+  <%=h @section_param.disabled_ha_ids %>
+</p>
+
+
+<%= link_to 'Edit', edit_section_param_path(@section_param) %> |
+<%= link_to 'Back', section_params_path %>

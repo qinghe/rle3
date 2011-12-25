@@ -1,0 +1,33 @@
+<p>
+  <b>Perma name:</b>
+  <%=h @section_piece.perma_name %>
+</p>
+
+<p>
+  <b>Html:</b>
+  <%=h @section_piece.html %>
+</p>
+
+<p>
+  <b>Css:</b>
+  <%=h @section_piece.css %>
+</p>
+
+<p>
+  <b>Js:</b>
+  <%=h @section_piece.js %>
+</p>
+
+<p>
+  <b>Is container:</b>
+  <%=h @section_piece.is_container %>
+</p>
+
+<p>
+  <b>Is selectable:</b>
+  <%=h @section_piece.is_selectable %>
+</p>
+
+
+<%= link_to 'Edit', edit_section_piece_path(@section_piece) %> |
+<%= link_to 'Back', section_pieces_path %>

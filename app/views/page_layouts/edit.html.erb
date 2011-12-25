@@ -1,0 +1,44 @@
+<h1>Editing page_layout</h1>
+
+<% form_for(:page_layout,@page_layout) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :root_id %><br />
+    <%= f.text_field :root_id %>
+  </p>
+  <p>
+    <%= f.label :parent_id %><br />
+    <%= f.text_field :parent_id %>
+  </p>
+  <p>
+    <%= f.label :lft %><br />
+    <%= f.text_field :lft %>
+  </p>
+  <p>
+    <%= f.label :rgt %><br />
+    <%= f.text_field :rgt %>
+  </p>
+  <p>
+    <%= f.label :perma_name %><br />
+    <%= f.text_field :perma_name %>
+  </p>
+  <p>
+    <%= f.label :section_id %><br />
+    <%= f.text_field :section_id %>
+  </p>
+  <p>
+    <%= f.label :section_instance %><br />
+    <%= f.text_field :section_instance %>
+  </p>
+  <p>
+    <%= f.label :is_enabled %><br />
+    <%= f.check_box :is_enabled %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @page_layout %> |
+<%= link_to 'Back', page_layouts_path %>

@@ -1,0 +1,12 @@
+<%# locals={:menu_root}
+-%>
+  <% for item in menu_root.self_and_descendants-%>
+  <div class="clear-block">
+    <div >
+    <%= raw('&nbsp;'*item.level)%>
+    <%# do not call form.submit. %>
+    <%= link_to_function(item.title, "$('#selected_item_id').val(#{item.id});document.forms['item_editor_form'].onsubmit()")%>
+    </div>
+
+  </div>
+  <% end -%>

@@ -1,0 +1,32 @@
+<h1>Editing section_param</h1>
+
+<% form_for(@section_param) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :section_id %><br />
+    <%= f.text_field :section_id %>
+  </p>
+  <p>
+    <%= f.label :section_piece_id %><br />
+    <%= f.text_field :section_piece_id %>
+  </p>
+  <p>
+    <%= f.label :section_piece_instance %><br />
+    <%= f.text_field :section_piece_instance %>
+  </p>
+  <p>
+    <%= f.label :is_enabled %><br />
+    <%= f.check_box :is_enabled %>
+  </p>
+  <p>
+    <%= f.label :disabled_ha_ids %><br />
+    <%= f.text_field :disabled_ha_ids %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @section_param %> |
+<%= link_to 'Back', section_params_path %>

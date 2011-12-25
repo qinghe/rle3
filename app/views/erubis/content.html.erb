@@ -1,0 +1,9 @@
+<h1>page_layout content</h1>
+<% html,css = @page_layout.build_content -%>
+  <p>
+    <%= label_tag :html_content %><br />
+    <%= text_area_tag :page_layout,html, :rows=>18,:cols=>110  %>
+<br />
+    <%= label_tag :html_content %><br />
+    <%= text_area_tag :page_layout,css, :rows=>18,:cols=>110  %>
+  </p>

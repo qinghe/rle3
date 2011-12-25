@@ -1,0 +1,2 @@
+module ErubisHelper
+end

@@ -1,0 +1,26 @@
+<h1>Listing param_categories</h1>
+
+<table>
+  <tr>
+    <th>editor</th>
+    <th>Position</th>
+    <th>Perma name</th>
+    <th>Is enable</th>
+  </tr>
+
+<% @param_categories.each do |param_category| %>
+  <tr>
+    <td><%=h param_category.editor.perma_name %></td>
+    <td><%=h param_category.position %></td>
+    <td><%=h param_category.perma_name %></td>
+    <td><%=h param_category.is_enabled %></td>
+    <td><%= link_to 'Show', param_category %></td>
+    <td><%= link_to 'Edit', edit_param_category_path(param_category) %></td>
+    <td><%= link_to 'Destroy', param_category, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New param_category', new_param_category_path %>

@@ -1,0 +1,391 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+root:
+  id: 1
+  html: |-
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+    <head>
+      <title>~|thispage.page_title|~</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-ui.js"></script>
+      <script type="text/javascript" src="<?=@website.public_path('js')?>"></script>
+      <link rel="stylesheet" href="<?=@website.public_path('css')?>" type="text/css" />
+    <!--[if lt IE 7]>
+      <script src="/javascripts/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+    </head>
+    <body class="clear-block">
+
+      <div id="page"><div id="page-inner" class="clear-block">
+        <a name="top" id="navigation-top"></a>
+        <div id="skip-to-nav"><a href="#navigation">Skip to Navigation</a></div>
+        ~~content~~
+      </div><!-- /#page-inner -->
+      </div><!-- /#page -->
+    </body>
+    </html>
+  is_selectable: true
+  is_container: true
+  is_root: true
+  css: |-
+    body
+      { font-size: 100%;
+        margin: 0;
+        padding: 0;
+        <?= @param_values.get :body ?>
+      }    
+      body, caption, th, td, input, textarea, select, option, legend, fieldset
+      {
+        <? if @param_values.get(:font_family)== 'serif' ?>
+        font-family: Times, "Times New Roman", Georgia, "Bitstream Vera Serif", serif;
+        <? else ?>
+        font-family: Tahoma, Verdana, Arial, Helvetica, "Bitstream Vera Sans", Sans, sans-serif;
+        <? end ?>
+      }    
+    /* **** Defaults **** */  /** headings **/
+      h1
+      { font-size: 2em;
+        line-height: 1.3em;
+        margin-top: 0;
+        margin-bottom: 0.5em; /* 0.5em is equavalent to 1em in the page's base font. A margin specified in ems is relative to
+                                 the element's font-size, not to the pages' base font size. */
+      }    
+      h2
+      { font-size: 1.5em;
+        line-height: 1.3em;
+        margin-top: 0.667em; /* Equivalent to 1em in the page's base font: 1 / 1.5 = 0.667em */
+        margin-bottom: 0.667em;
+      }    
+      h3
+      { font-size: 1.3em;
+        line-height: 1.3em;
+        margin-top: 0.769em; /* Equivalent to 1em in the page's base font: 1 / 1.3 = 0.769 */
+        margin-bottom: 0.769em;
+      }    
+      h4, h5, h6
+      { font-size: 1.1em;
+        line-height: 1.3em;
+        margin-top: 0.909em; /* Equivalent to 1em in the page's base font: 1 / 1.1 = 0.909 */
+        margin-bottom: 0.909em;
+      }    
+      p, ul, ol
+      { margin: 0;
+      }    
+      table
+      { border-collapse: collapse;
+      }    
+      th, thead th, tbody th
+      { text-align: left;
+      }
+      img
+      { border: 0;
+      }
+      form
+      { margin: 0;
+        padding: 0;
+      }
+    <? if @param_values.get :use_bbtl ?>
+    div#bbtl
+    { position:absolute;
+      top:0;
+      left:0;
+      <?= @param_values.get :bbtl ?>
+    }
+    <? end ?>
+    <? if @param_values.get :use_bbtr ?>
+    div#bbtr
+    { position:absolute;
+      top:0;
+      right:0;
+      <?= @param_values.get :bbtr ?>
+    }
+    <? end ?>
+    <? if @param_values.get :use_pbbl ?>
+    div#pbbl
+    { position:absolute;
+      bottom:0;
+      left:0;
+      <?= @param_values.get :pbbl ?>
+    }
+    <? end ?>
+    <? if @param_values.get :use_pbbr ?>
+    div#pbbr
+    { position:absolute;
+      bottom:0;
+      right:0;
+      <?= @param_values.get :pbbr ?>
+    }
+    <? end ?>
+      #page
+      {
+        <? if @param_values.get(:font_size)== 10?>
+        font-size: 0.625em; /* 16px x .625 = 10px */
+        line-height: 1.4em; /* 10px x 1.4 = 14px */
+        <? elsif @param_values.get(:font_size)== 12?>
+        font-size: 0.75em; /* 16px x .75 = 12px */
+        line-height: 1.333em; /* 12px x 1.333 = 16px */
+        <? elsif @param_values.get(:font_size)== 14?>
+        font-size: 0.875em; /* 16px x .875 = 14px */
+        line-height: 1.286; /* 14px x 1.286 = 18px */
+        <? elsif @param_values.get(:font_size)== 16?>
+        font-size: 1em; /* 16px x 1 = 16px */
+        line-height: 1.13; /* 16px x 1.13 = 18px */
+        <? end ?>
+        <? if @param_values.get :layout_fixed ?>
+        margin-left: auto;
+        margin-right: auto;
+          <?= @param_values.get :page_width ?>
+        <? else ?>
+          <?= @param_values.get :page_min_width ?>
+          <?= @param_values.get :page_fluid ?>
+        <? end ?>
+        <?= @param_values.get :page ?>
+      }
+        #page-inner
+        { position:relative;
+        <? @param_values.get :page_inner ?>
+        }
+          #navigation-top, #navigation
+          { position: absolute;
+            left: -10000px;
+          }
+          #skip-to-nav
+          { position:relative; /* This allows the skip-to-nav link to not take up any screen space at all, but will remain visible to screen readers? */
+            z-index:-99;
+            margin: 0 !important;
+            font-size: 0.8em;
+            background-color:#9cb3be;
+          }
+    
+          #skip-to-nav a, #skip-to-nav a:hover, #skip-to-nav a:visited
+          {
+            position: absolute;
+            left: 0;
+            top: -500px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+          }
+    
+          #skip-to-nav a:active, #skip-to-nav a:focus
+          {
+            position: static;
+            width: auto;
+            height: auto;
+          }
+    #page .section
+    {  
+      <? if @param_values.get(:content_horizontal).to_i > 0 ?>
+      clear:none;
+      <? else ?>
+      clear:both;
+      <? end ?>
+    }
+    .section .inner
+    {
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+    }
+    .clear-block:after {
+      content: ".";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    .clear-block {
+      display: block;
+    }
+    .tlc, .trc, .blc, .brc
+    { background-repeat: no-repeat;
+      width:100%;
+      height:100%;
+    }
+    .tb, .bb
+    { background-repeat: repeat-x;
+      width:100%;
+      height:100%;
+    }
+    .lb, .rb
+    { width:100%;
+      height:100%;
+    }
+  perma_name: root
+  js: ""
+
+container:
+  id: 2
+  html: |-
+    <!-- container  -->
+        <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+          <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+          ~~content~~
+          </div>          
+    </div> 
+  is_selectable: "1"
+  is_container: "1"
+  css: |-
+    /* background, margin, border, skinnables */
+    #s_<?=@param_values.instance_id?>
+    { overflow:hidden;  padding:0;  margin:0; 
+      position:relative;
+      <?=@param_values.get(:position)?>
+    }
+    /* background, margin, border, padding */
+    #s_<?=@param_values.instance_id?> .c_<?=@param_values.instance_id?>-inner
+    {
+      <?=@param_values.get(:mbp)?>
+      <?=@param_values.get(:background)?>
+      <?=@param_values.get(:mbp,{:source=>'computed'})?>
+    }
+    #s_<?=@param_values.instance_id?> .section
+    {
+      <?if @param_values.get(:content_horizontal).to_i > 0 ?>
+      clear:none;
+      <?else?>
+      clear:both;
+      <?end?>
+    }
+    
+      <? if @param_values.get :use_img_tlc ?>
+    #s_<?= @param_values.instance_id?>_tlc
+    {
+      <?= @param_values.get :img_tlc ?>
+      background-position: 0% 0%;
+      background-repeat:no-repeat;
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_trc ?>
+    #s_<?= @param_values.instance_id?>_trc
+    {
+      <?= @param_values.get :img_trc ?>
+      background-position: 100% 0%;
+      background-repeat:no-repeat;
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_blc ?>
+    #s_<?= @param_values.instance_id?>_blc
+    {
+      <?= @param_values.get :img_blc ?>
+      background-position: 0% 100%;
+      background-repeat:no-repeat;
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_brc ?>
+    #s_<?= @param_values.instance_id?>_brc
+    {
+      <?= @param_values.get :img_brc ?>
+      background-position: 100% 100%;
+      background-repeat:no-repeat;
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_tb ?>
+    #s_<?= @param_values.instance_id?>_tb
+    {
+      <?= @param_values.get :img_tb ?>
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_bb ?>
+    #s_<?= @param_values.instance_id?>_bb
+    {
+      <?= @param_values.get :img_bb ?>
+      background-position: 50% 100%;
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_rb ?>
+    #s_<?= @param_values.instance_id?>_rb
+    {
+      <?= @param_values.get :img_rb ?>
+    }
+      <? end ?>
+      <? if @param_values.get :use_img_lb ?>
+    #s_<?= @param_values.instance_id?>_lb
+    {
+      <?= @param_values.get :img_lb ?>
+    }
+      <? end ?>
+  perma_name: container
+  js: ""
+  
+hmenu:
+  id: 3
+  html: |-
+    <? if @menus.menu? ?>
+    <? for page in @menus.menu.children ?>
+       ~~content~~
+    <? end ?>
+    <? end ?>
+  is_selectable: "0"
+  is_container: "1"
+  is_menu: true
+  css: ""
+  perma_name: hmenu
+  js: ""
+vmenu:
+  id: 4
+  html: |-
+    <? if @menus.menu? ?>
+    <? for page in @menus.menu.children ?>
+       ~~content~~
+    <? end ?>
+    <? end ?>
+  is_selectable: "0"
+  is_container: "1"
+  is_menu: true
+  css: |-
+      #s_<?=@param_values.root_piece_instance_id?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
+
+  perma_name: vmenu
+  js: ""
+   
+menuitem:
+  id: 6
+  html: |
+    <? if page.clickable? ?>
+      <? if page== @menus.current ?>
+       <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
+      <? else ?>
+       <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
+      <? end ?>
+    <? else ?>
+      <a id="pi<?= @param_values.instance_id?>_page.id" class="noclick"> <?= page.title ?> </a>    
+    <? end ?>
+  created_at: 2011-06-23 11:40:07
+  is_selectable: "0"
+  updated_at: 2011-06-23 11:40:07
+  is_container: "0"
+  css: |-
+      #s_<?=@param_values.root_piece_instance_id?> a{
+       <?= @param_values.get :ainner ?>
+       <?= @param_values.get :a ?>  
+       }
+      #s_<?=@param_values.root_piece_instance_id?> a:hover{  
+        <?= @param_values.get :ah ?> 
+        }
+      #s_<?=@param_values.root_piece_instance_id?> a.selected{ 
+        <?= @param_values.get :as ?> 
+        }
+      #s_<?=@param_values.root_piece_instance_id?> a.selected:hover{  <?= @param_values.get :ahs ?> }
+      #s_<?=@param_values.root_piece_instance_id?> a.noclick{ <?= @param_values.get :au ?> }
+  perma_name: menuitem
+  js: ""
+image:
+  id: 7
+  html: |
+          <a href="~~PageParams.get:logourl~~">
+             <img <?= @param_values.get :logo ?>  border="0" />
+          </a>
+  created_at: 2011-09-20 19:40:07
+  is_selectable: "0"
+  updated_at: 2011-09-20 19:40:07
+  is_container: "0"
+  css: ""
+  perma_name: image
+  js: ""
+  

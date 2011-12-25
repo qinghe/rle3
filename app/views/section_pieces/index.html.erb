@@ -1,0 +1,30 @@
+<h1>Listing section_pieces</h1>
+
+<table>
+  <tr>
+    <th>Perma name</th>
+    <th>Html</th>
+    <th>Css</th>
+    <th>Js</th>
+    <th>Is container</th>
+    <th>Is selectable</th>
+  </tr>
+
+<% @section_pieces.each do |section_piece| %>
+  <tr>
+    <td><%=h section_piece.perma_name %></td>
+    <td><%=h section_piece.html %></td>
+    <td><%=h section_piece.css %></td>
+    <td><%=h section_piece.js %></td>
+    <td><%=h section_piece.is_container %></td>
+    <td><%=h section_piece.is_selectable %></td>
+    <td><%= link_to 'Show', section_piece %></td>
+    <td><%= link_to 'Edit', edit_section_piece_path(section_piece) %></td>
+    <td><%= link_to 'Destroy', section_piece, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New section_piece', new_section_piece_path %>

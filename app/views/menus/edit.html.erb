@@ -1,0 +1,30 @@
+<h1>Editing menu</h1>
+
+<% form_for(@menu) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :perma_name %><br />
+    <%= f.text_field :perma_name %>
+  </p>
+
+  <p>
+    <%= f.label :parent_id %><br />
+    <%= f.text_field :parent_id %>
+  </p>
+
+  <p>
+    <%= f.label :is_enabled %><br />
+    <%= f.check_box :is_enabled %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @menu %> |
+<%= link_to 'Back', menus_path %>

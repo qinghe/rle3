@@ -1,0 +1,12 @@
+<h1>Editing theme</h1>
+
+<% form_for(@theme) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @theme %> |
+<%= link_to 'Back', template_themes_path %>

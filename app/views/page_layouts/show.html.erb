@@ -1,0 +1,43 @@
+<p>
+  <b>Root:</b>
+  <%=h @page_layout.root_id %>
+</p>
+
+<p>
+  <b>Parent:</b>
+  <%=h @page_layout.parent_id %>
+</p>
+
+<p>
+  <b>Lft:</b>
+  <%=h @page_layout.lft %>
+</p>
+
+<p>
+  <b>Rgt:</b>
+  <%=h @page_layout.rgt %>
+</p>
+
+<p>
+  <b>Perma name:</b>
+  <%=h @page_layout.perma_name %>
+</p>
+
+<p>
+  <b>Section:</b>
+  <%=h @page_layout.section_id %>
+</p>
+
+<p>
+  <b>Section instance:</b>
+  <%=h @page_layout.section_instance %>
+</p>
+
+<p>
+  <b>Is enable:</b>
+  <%=h @page_layout.is_enabled %>
+</p>
+
+
+<%= link_to 'Edit', page_layout_path(@page_layout,"edit") %> |
+<%= link_to 'Back', page_layouts_path %>

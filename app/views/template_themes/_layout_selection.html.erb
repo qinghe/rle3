@@ -1,0 +1,14 @@
+<%-
+#params:  layouts, page_layout roots,  
+#         selected, the selected theme.
+          
+-%>
+
+<select onchange="window.location.href=this.value" name="theme[id]" id="theme_id">
+  <% for pl in page_layouts -%>
+  <optgroup label="<%=pl.perma_name%>">
+    <% options = pl.themes.collect{|theme| [theme.perma_name, editor_template_theme_path(theme)] }-%>
+    <%=  options_for_select(options, editor_template_theme_path(selected)) -%>
+  </optgroup>  
+  <% end-%>
+</select>

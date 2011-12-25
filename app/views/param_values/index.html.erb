@@ -1,0 +1,36 @@
+<h1>Listing param_values</h1>
+
+<table>
+  <tr>
+    <th>Layout</th>
+    <th>Section</th>
+    <th>Section instance</th>
+    <th>Section param</th>
+    <th>TemplateTheme</th>
+    <th>Pvalue</th>
+    <th>Unset</th>
+    <th>Preview pvalue</th>
+    <th>Preview unset</th>
+  </tr>
+
+<% @param_values.each do |param_value| %>
+  <tr>
+    <td><%=h param_value.layout_id %></td>
+    <td><%=h param_value.section_id %></td>
+    <td><%=h param_value.section_instance %></td>
+    <td><%=h param_value.section_param_id %></td>
+    <td><%=h param_value.theme_id %></td>
+    <td><%=h param_value.pvalue %></td>
+    <td><%=h param_value.unset %></td>
+    <td><%=h param_value.preview_pvalue %></td>
+    <td><%=h param_value.preview_unset %></td>
+    <td><%= link_to 'Show', param_value %></td>
+    <td><%= link_to 'Edit', edit_param_value_path(param_value) %></td>
+    <td><%= link_to 'Destroy', param_value, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New param_value', new_param_value_path %>

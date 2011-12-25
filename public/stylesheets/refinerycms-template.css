@@ -1,0 +1,94 @@
+.fl{ float:left;}
+.fr{ float:right;}
+.clear-block:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clear-block {
+  display: block;
+}
+
+.block
+{
+    border: solid 1px gray;
+    padding: 2px;
+    margin: 2px;
+}
+
+ul.menu{ list-style:none; margin: 0; padding: 0;}
+
+.menu li{
+  padding:5px;
+	float:left;
+}
+ul.tabs{list-style:none; margin:0;padding:0;}
+.tabs li{
+  padding:5px;
+    float:left;
+}
+
+span.option_item
+{
+  display:inline-block;
+  width:170px;
+}
+
+div.pv{
+    padding:2px;
+    
+}
+span.pv-name
+{
+  display:inline-block;
+  width:150px;    
+}
+
+input.pv-psv, select.pv-psv
+{
+  display:inline-block;
+  width:120px;    
+}
+input.pv-pv
+{
+  display:inline-block;
+  width:120px;    
+}
+
+#section_select_dialog ul
+{
+  list-style:none; margin: 0; padding: 0;
+}
+#section_select_dialog li.selected
+{
+  background-color: silver;
+}
+#section_select_dialog .details .selected
+{
+  display:block;
+}
+#section_select_dialog .details div
+{
+  display:none;
+}
+
+#editors label, #menu_and_template label
+{
+  margin:0;
+  padding:0;
+  display:inline;
+}
+#publish ul
+{
+  margin:0;
+  padding:0;
+}
+
+a.selected
+{
+  background-color: #22A7F2;
+  color: white;
+  font-weight: bold;
+}

@@ -1,0 +1,3 @@
+<%# locals={:selected_value}
+-%>
+<%= select "menu","id", Menu.roots.collect{|item| [item.title,item.id] }%>

@@ -1,0 +1,30 @@
+<h1>Listing section_params</h1>
+
+<table>
+  <tr>
+    <th>Section</th>
+    <th>Section piece</th>
+    <th>Section piece instance</th>
+    <th>Default value</th>
+    <th>Is enabled</th>
+    <th>Disabled ha ids</th>
+  </tr>
+
+<% @section_params.each do |section_param| %>
+  <tr>
+    <td><%=h section_param.section_id %></td>
+    <td><%=h section_param.section_piece_id %></td>
+    <td><%=h section_param.section_piece_instance %></td>
+    <td><%=h section_param.default_value %></td>
+    <td><%=h section_param.is_enabled %></td>
+    <td><%=h section_param.disabled_ha_ids %></td>
+    <td><%= link_to 'Show', section_param %></td>
+    <td><%= link_to 'Edit', edit_section_param_path(section_param) %></td>
+    <td><%= link_to 'Destroy', section_param, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New section_param', new_section_param_path %>

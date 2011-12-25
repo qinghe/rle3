@@ -1,0 +1,39 @@
+<h1>Editing section_piece</h1>
+
+<% form_for(@section_piece) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :perma_name %><br />
+    <%= f.text_field :perma_name %>
+  </p>
+  <div class="clear-block">
+    <div class='fl'>
+    <%= f.label :html %><br />
+    <%= f.text_area :html,:cols=>70,:rows=>25 %>
+    </div>
+    <div class='fl'>
+       <%= f.label :css %><br />
+    <%= f.text_area :css,:cols=>70,:rows=>25 %>
+    </div>
+  </div>
+
+  <p>
+    <%= f.label :js %><br />
+    <%= f.text_field :js %>
+  </p>
+  <p>
+    <%= f.label :is_container %><br />
+    <%= f.text_field :is_container %>
+  </p>
+  <p>
+    <%= f.label :is_selectable %><br />
+    <%= f.text_field :is_selectable %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @section_piece %> |
+<%= link_to 'Back', section_pieces_path %>

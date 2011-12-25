@@ -1,0 +1,48 @@
+<h1>Editing param_value</h1>
+
+<% form_for(@param_value) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :layout_id %><br />
+    <%= f.text_field :layout_id %>
+  </p>
+  <p>
+    <%= f.label :section_id %><br />
+    <%= f.text_field :section_id %>
+  </p>
+  <p>
+    <%= f.label :section_instance %><br />
+    <%= f.text_field :section_instance %>
+  </p>
+  <p>
+    <%= f.label :section_param_id %><br />
+    <%= f.text_field :section_param_id %>
+  </p>
+  <p>
+    <%= f.label :theme_id %><br />
+    <%= f.text_field :theme_id %>
+  </p>
+  <p>
+    <%= f.label :pvalue %><br />
+    <%= f.text_field :pvalue %>
+  </p>
+  <p>
+    <%= f.label :unset %><br />
+    <%= f.text_field :unset %>
+  </p>
+  <p>
+    <%= f.label :preview_pvalue %><br />
+    <%= f.text_field :preview_pvalue %>
+  </p>
+  <p>
+    <%= f.label :preview_unset %><br />
+    <%= f.text_field :preview_unset %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @param_value %> |
+<%= link_to 'Back', param_values_path %>

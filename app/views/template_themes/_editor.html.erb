@@ -1,0 +1,18 @@
+<%-
+#local_params: editor, param_values
+
+param_category_ids = []
+-%>
+<div id="editor_<%=editor.id%>" class="block">
+<%for pv in param_values-%>
+<%
+   param_category = pv.section_param.section_piece_param.param_category
+   unless param_category_ids.include? param_category.id
+    param_category_ids << param_category.id
+-%>
+<div>H:<%=param_category.perma_name%></div>
+<% end-%>
+
+<%=render :partial=>"param_value",  :locals=>{:editor=>editor,:param_value=>pv}%>
+<%end-%>
+</div>

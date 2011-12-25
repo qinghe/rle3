@@ -1,0 +1,35 @@
+<h1>New section_piece</h1>
+
+<% form_for(@section_piece) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :perma_name %><br />
+    <%= f.text_field :perma_name %>
+  </p>
+  <p>
+    <%= f.label :html %><br />
+    <%= f.text_area :html,:cols=>80 %>
+  </p>
+  <p>
+    <%= f.label :css %><br />
+    <%= f.text_area :css,:cols=>80 %>
+  </p>
+  <p>
+    <%= f.label :js %><br />
+    <%= f.text_field :js %>
+  </p>
+  <p>
+    <%= f.label :is_container %><br />
+    <%= f.text_field :is_container %>
+  </p>
+  <p>
+    <%= f.label :is_selectable %><br />
+    <%= f.text_field :is_selectable %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', section_pieces_path %>

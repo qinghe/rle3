@@ -1,0 +1,34 @@
+<h1>Listing sections</h1>
+
+<table>
+  <tr>
+    <th>Root</th>
+    <th>Parent</th>
+    <th>Lft</th>
+    <th>Rgt</th>
+    <th>Perma name</th>
+    <th>Section piece</th>
+    <th>Section piece instance</th>
+    <th>Is enable</th>
+  </tr>
+
+<% @sections.each do |section| %>
+  <tr>
+    <td><%=h section.root_id %></td>
+    <td><%=h section.parent_id %></td>
+    <td><%=h section.lft %></td>
+    <td><%=h section.rgt %></td>
+    <td><%=h section.perma_name %></td>
+    <td><%=h section.section_piece_id %></td>
+    <td><%=h section.section_piece_instance %></td>
+    <td><%=h section.is_enabled %></td>
+    <td><%= link_to 'Show', section %></td>
+    <td><%= link_to 'Edit', edit_section_path(section) %></td>
+    <td><%= link_to 'Destroy', section, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New section', new_section_path %>

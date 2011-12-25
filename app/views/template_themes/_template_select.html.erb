@@ -1,0 +1,18 @@
+<%
+# local params:
+#   select_name
+#   themes  
+#   selected_value
+#  
+options = themes.collect{|item| [item.perma_name,item.id] }
+
+
+if  enable_inheritance
+  options.unshift(['inheritance',0])
+else # it is root, enable blank.
+  options.unshift(['none',0])
+end
+-%>
+
+<%= select "theme","id", options,{:selected=>selected_value},{:name=>select_name}%>
+
