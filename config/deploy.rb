@@ -1,7 +1,9 @@
 set :application, "RLE3"
-set :repository,  "/var/www/workspace/rle3"
 
-#set :scm, :subversion
+default_run_options[:pty] = true  # Must be set for the password prompt from git to work
+set :repository,  "git@github.com:qinghe/rle3.git"
+set :scm, :git
+set :scm_passphrase, "passphrase4github"  # The deploy user's password
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 set :user, "root"
 set :use_sudo, false
