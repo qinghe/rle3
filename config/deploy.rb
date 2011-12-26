@@ -1,9 +1,10 @@
 set :application, "RLE3"
 
 default_run_options[:pty] = true  # Must be set for the password prompt from git to work
+
 set :repository,  "git@github.com:qinghe/rle3.git"
 set :scm, :git
-set :scm_passphrase, "passphrase4github"  # The deploy user's password
+set :scm_passphrase, "a12345z"  # The deploy user's password
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 set :user, "root"
 set :use_sudo, false
@@ -14,6 +15,7 @@ server "114.112.177.227", :app, :web, :db, :primary => true
 #role :app, "114.112.177.227"                          # This may be the same as your `Web` server
 #role :db,  "114.112.177.227", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
+ssh_options[:forward_agent] = true
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
