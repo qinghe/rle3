@@ -36,6 +36,6 @@ gem 'jquery-rails', '>= 1.0.12'
 group :development, :test do
   gem "mongrel"
 end
-group :product do
+group :production do
   gem "passenger"
 end
