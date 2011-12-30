@@ -4,11 +4,11 @@ default_run_options[:pty] = true  # Must be set for the password prompt from git
 
 set :repository,  "git@github.com:qinghe/rle3.git"
 set :scm, :git
-set :scm_passphrase, "a12345z"  # The deploy user's password
+set :user, "dalian_david"
+set :scm_passphrase, "ps4david@vps"  # The deploy user's password
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
-set :user, "root"
 set :use_sudo, false
-set :deploy_to, "/var/www"
+set :deploy_to, "/var/www/rle3"
 
 server "114.112.177.227", :app, :web, :db, :primary => true
 #role :web, "114.112.177.227"                          # Your HTTP server, Apache/etc
@@ -16,6 +16,7 @@ server "114.112.177.227", :app, :web, :db, :primary => true
 #role :db,  "114.112.177.227", :primary => true # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 ssh_options[:forward_agent] = true
+set :deploy_via, :remote_cache
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
@@ -28,3 +29,4 @@ ssh_options[:forward_agent] = true
 #     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
 #   end
 # end
+# require 'bundler/capistrano'

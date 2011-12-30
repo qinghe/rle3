@@ -35,6 +35,7 @@ GEM
       activerecord (>= 3.0.0)
     builder (2.1.2)
     cgi_multipart_eof_fix (2.5.0)
+    daemon_controller (0.2.6)
     daemons (1.1.4)
     dragonfly (0.9.4)
       rack
@@ -64,6 +65,11 @@ GEM
       cgi_multipart_eof_fix (>= 2.4)
       gem_plugin (>= 0.2.3)
     mysql2 (0.2.11)
+    passenger (3.0.7)
+      daemon_controller (>= 0.2.5)
+      fastthread (>= 1.0.1)
+      rack
+      rake (>= 0.8.1)
     polyglot (0.3.1)
     rack (1.2.3)
     rack-mount (0.6.14)
@@ -105,5 +111,6 @@ DEPENDENCIES
   jquery-rails (>= 1.0.12)
   mongrel
   mysql2 (~> 0.2.6)
+  passenger
   rails (= 3.0.9)
   responds_to_parent
