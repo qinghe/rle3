@@ -37,5 +37,5 @@ group :development, :test do
   gem "mongrel"
 end
 group :production do
-  gem "passenger",'2.2.9' # it works on server.
+  gem "passenger",'2.2.9' 
 end
