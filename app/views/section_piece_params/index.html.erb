@@ -8,7 +8,7 @@
     <th>Pclass</th>
     <th>Class name</th>
     <th>Html attribute ids</th>
-    <th>Conditions</th>
+    <th>Param conditions</th>
   </tr>
 
 <% @section_piece_params.each do |section_piece_param| %>
@@ -19,7 +19,7 @@
     <td><%=h section_piece_param.pclass %></td>
     <td><%=h section_piece_param.class_name %></td>
     <td><%=h section_piece_param.html_attribute_ids %></td>
-    <td><%=h section_piece_param.conditions %></td>
+    <td><%=h section_piece_param.param_conditions %></td>
     <td><%= link_to 'Show', section_piece_param %></td>
     <td><%= link_to 'Edit', edit_section_piece_param_path(section_piece_param) %></td>
     <td><%= link_to 'Destroy', section_piece_param, :confirm => 'Are you sure?', :method => :delete %></td>

@@ -17,7 +17,7 @@ server "114.112.177.227", :app, :web, :db, :primary => true
 #role :db,  "your slave db-server here"
 ssh_options[:forward_agent] = true
 set :deploy_via, :remote_cache
-set :branch, "master"
+set :branch, "dalianshops"
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
 
