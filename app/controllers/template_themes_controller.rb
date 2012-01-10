@@ -265,7 +265,7 @@ class TemplateThemesController < ApplicationController
     selected_editor_id = params[:selected_editor_id]
     param_value_keys = params.keys.select{|k| k=~/pv[\d]+/}
     
-    for pvk in param_value_keys
+   for pvk in param_value_keys
       param_value_params = params[pvk]
       pv_id = pvk[/\d+/].to_i
       param_value = ParamValue.find(pv_id, :include=>[:section_param, :section])
@@ -287,21 +287,19 @@ class TemplateThemesController < ApplicationController
       source_param_value = ParamValue.find(editing_param_value_id, :include=>[:section_param, :section])
       updated_html_attribute_values = do_update_param_value(source_param_value, param_value_params, param_value_event, editing_html_attribute_id)
 
-    updated_html_attribute_ids= [editing_html_attribute_id]
-    #return_hash = {}
     #  param_value = ParamValue.find(editing_param_value_id)
-       
-    respond_to do |format|
-      format.html 
-      format.js  {render :action=>'editors'}
-    end    
-    
     theme = TemplateTheme.find(theme_id)  
     editor = Editor.find(editor_id)
     page_layout = PageLayout.find(layout_id) 
     prepare_params_for_editors(theme,editor,page_layout)
+   
+    respond_to do |format|
+      format.html 
+      format.js  {render :partial=>'update_param_value',:locals=>{:source_param_value=>source_param_value,:updated_html_attribute_values=>updated_html_attribute_values}}
+    end    
     
-    render "editors"
+    
+#    render "editors"
   end
   
   

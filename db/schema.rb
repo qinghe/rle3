@@ -135,16 +135,17 @@ ActiveRecord::Schema.define(:version => 20111013164757) do
   end
 
   create_table "sections", :force => true do |t|
-    t.integer "website_id",             :limit => 3
-    t.integer "root_id",                :limit => 3
-    t.integer "parent_id",              :limit => 3
-    t.integer "lft",                    :limit => 2,   :default => 0,    :null => false
-    t.integer "rgt",                    :limit => 2,   :default => 0,    :null => false
-    t.string  "perma_name",             :limit => 200, :default => "",   :null => false
-    t.integer "section_piece_id",       :limit => 3,   :default => 0
-    t.integer "section_piece_instance", :limit => 2,   :default => 0
-    t.boolean "is_enabled",                            :default => true, :null => false
-    t.string  "reserved_events",        :limit => 200, :default => "",   :null => false
+    t.integer "website_id",               :limit => 3
+    t.integer "root_id",                  :limit => 3
+    t.integer "parent_id",                :limit => 3
+    t.integer "lft",                      :limit => 2,   :default => 0,    :null => false
+    t.integer "rgt",                      :limit => 2,   :default => 0,    :null => false
+    t.string  "perma_name",               :limit => 200, :default => "",   :null => false
+    t.integer "section_piece_id",         :limit => 3,   :default => 0
+    t.integer "section_piece_instance",   :limit => 2,   :default => 0
+    t.boolean "is_enabled",                              :default => true, :null => false
+    t.string  "global_events",            :limit => 200, :default => "",   :null => false
+    t.string  "subscribed_global_events", :limit => 200, :default => "",   :null => false
   end
 
   create_table "template_files", :force => true do |t|

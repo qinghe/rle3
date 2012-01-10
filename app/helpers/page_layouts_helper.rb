@@ -1,11 +1,7 @@
 module PageLayoutsHelper
-  def self.build_html_attribute_container_id(param_value_id, html_attribute_id)
+  def build_html_attribute_container_id(param_value_id, html_attribute_id)
     "pv_#{param_value_id}_#{html_attribute_id}"
   end
-  
-  def build_html_attribute_container_id(param_value_id, html_attribute_id)
-    PageLayoutsHelper.build_html_attribute_container_id(param_value_id, html_attribute_id)
-  end 
   
   def build_page_layout_source_path(page_layout)
     "/page_layouts/content/#{page_layout[:id]}"

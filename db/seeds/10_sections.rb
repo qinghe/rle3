@@ -22,16 +22,13 @@ sps = SectionPiece.all
 section_piece_hash= sps.inject({}){|h,sp| h[sp.perma_name] = sp; h}
 
 Section.delete_all              
-root = Section.create_section(section_piece_hash['root'].id, {:perma_name=>"root",:reserved_events=>"fixed"}, 
+root = Section.create_section(section_piece_hash['root'].id, {:perma_name=>"root",:global_events=>"page_layout_fixed",:subscribed_global_events=>"page_layout_fixed"}, 
   {'content_layout'=>{86=>HtmlAttribute::BOOL_FALSE},
    'page'=>{21=>"width:800px",'21unset'=>unset_false, 20=>"min-width:800px", '20hidden'=>bool_true},
    'page_layout'=>{'92unset'=>unset_false,92=>bool_true}})
 
-container = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"container",:website_id=>website.id},
-  {'content_horizontal'=>{86=>HtmlAttribute::BOOL_TRUE},
-   'block'=>{15=>"height:100px;",21=>"width:100%", 101=>"float:left;",'disabled_ha_ids'=>'111'},
-   'float'=>{},
-   'inner'=>{'15hidden'=>bool_true}})
+container = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"container",:subscribed_global_events=>"page_layout_fixed"},{'content_layout'=>{86=>bool_true,'86unset'=>unset_false},
+'block'=>{15=>"height:100px",'15unset'=>unset_false,101=>"float:left",'101unset'=>unset_false}, 'inner'=>{'15hidden'=>bool_true}})
 
 
 hmenu = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"hmenu",:website_id=>website.id},
