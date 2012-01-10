@@ -103,11 +103,12 @@ class PageLayout < ActiveRecord::Base
     # copy param values to all available themes
     for theme in clone_node.root.themes
       table_column_values  = table_column_names.dup
-      table_column_values[table_column_values.index('layout_id')] = clone_node.root_id
+      table_column_values[table_column_values.index('root_layout_id')] = clone_node.root_id
+      table_column_values[table_column_values.index('layout_id')] = clone_node.id
       table_column_values[table_column_values.index('theme_id')] = theme.id
       table_column_values[table_column_values.index('section_instance')] =  clone_node.section_instance
     
-      sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((layout_id =#{self.root_id}) and (theme_id =#{copy_theme.id}) and section_id=#{self.section_id} and section_instance=#{self.section_instance})! 
+      sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((root_layout_id=#{self.root_id} and layout_id =#{self.id}) and (theme_id =#{copy_theme.id}) and section_id=#{self.section_id} and section_instance=#{self.section_instance})! 
       self.class.connection.execute(sql) 
     end 
         
@@ -241,17 +242,20 @@ puts "sp.default_value=#{sp.default_value.inspect}"
    
   #param: some_event could be a global_param_value changed event or a section_event.
   def subscribe_event?( some_event)
-    reserved_section_events = self.section.reserved_event_array
-    
-    reserved_section_events.include? some_event.event_name
-   
+    section_events = self.section.subscribed_global_event_array
+    section_events.include? some_event.event_name   
   end
   
+  #usage: raise this global_param_value_event to whole layout tree or not 
+  def raise_event?( some_event)
+    reserved_section_events = self.section.global_event_array    
+    reserved_section_events.include? some_event.event_name       
+  end
   # get all descendants which reserved the :some_event
   def nodes_for_event(some_event)
     @subscribe_event_nodes_hash ||={}
     unless @subscribe_event_nodes_hash.key?  some_event.event_name
-      nodes = self.root.self_and_descendants.select{|layout| layout.section.reserved_event_array.include? some_event.event_name}
+      nodes = self.root.self_and_descendants.select{|layout| layout.section.global_event_array.include? some_event.event_name}
       @subscribe_event_nodes_hash[some_event.event_name] = nodes
     end
     @subscribe_event_nodes_hash[some_event.event_name]

@@ -23,7 +23,7 @@
            units = ha.units
 onchange = my_remote_function( :submit=>"layout_editor_form",  
 :url => { :action => "update_param_value",:editing_param_value_id=> param_value.id, :editing_html_attribute_id=>ha.id, :param_value_event=>ParamValue::EventEnum[:psv_changed]})
-logger.debug "ha=#{hav.html_attribute.id},hav.properties=#{hav.properties.inspect} psvalue=#{psvalue}, pvalue=#{pvalue}, unit=#{unit}"
+#logger.debug "ha=#{hav.html_attribute.id},hav.properties=#{hav.properties.inspect} psvalue=#{psvalue}, pvalue=#{pvalue}, unit=#{unit}"
         -%>
         <%# possible selected value
         -%>

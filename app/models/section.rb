@@ -55,7 +55,7 @@ class Section < ActiveRecord::Base
   def add_section_piece_param(default_param_values={})
     # section_id, section_piece_param_id, section_piece_id, section_piece_instance, is_enabled, disabled_ha_ids
     section_piece_params = section_piece.section_piece_params
-    exclude_keys = ['disabled_ha_ids']
+    exclude_keys = [:disabled_ha_ids]
     section_id = self.root.id
       for spp in section_piece_params
         section_param = SectionParam.create(:section_id=>section_id) do |sp|
@@ -72,15 +72,20 @@ class Section < ActiveRecord::Base
         end
       end
   end
-     
-  def reserved_event_array
-    if @reserved_event_array.nil?
-      @reserved_event_array = self.reserved_events.split(',')
+    
+  def global_event_array
+    if @global_event_array.nil?
+      @global_event_array = self.global_events.split(',')
     end
+    @global_event_array
   end
-       
-  private
   
+  def subscribed_global_event_array
+    if @subscribed_global_event_array.nil?
+      @subscribed_global_event_array = self.subscribed_global_events.split(',')
+    end
+    @subscribed_global_event_array
+  end
   
   
   def build_html_piece(tree, node, section_piece_hash)
@@ -136,4 +141,6 @@ class Section < ActiveRecord::Base
     header << "<? @menus.setup(section,section_piece) ?>#{$/}" if node.section_piece.is_menu?
     header
   end 
+  
+
 end

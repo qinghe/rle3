@@ -138,8 +138,11 @@ class ParamValuesTag < TagBase
                   end
                 end
               else
+                unset = pv.unset?(ha.id)
+                # should output hidden pv
+                # hidden= pv.hidden?(ha.id)
                 pv_for_ha = pv.pvalue_for_haid(ha.id)
-                if pv_for_ha
+                if !unset 
                   if spp.pclass==SectionPieceParam::PCLASS_STYLE
                     ha_perma_name, ha_value = pv_for_ha.split(':')
                     val << %Q!#{ha_perma_name}="#{ha_value}"!

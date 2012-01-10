@@ -31,9 +31,15 @@ class ParamValue < ActiveRecord::Base
   #   unique_key = hav.computed? ?  "computed_#{class_name}_#{hav.html_attribute.perma_name}" : "#{class_name}_#{hav.html_attribute.perma_name}"
 
   def html_attribute_values_hash
-    ha_array = HtmlAttribute.find_by_ids(html_attribute_ids)
-    hav_hash = ha_array.inject({}){|h, ha| hav = HtmlAttributeValue.parse_from(self,ha); h[ha.id]=hav;h[ha.perma_name]=hav; h }
+    ha_array = HtmlAttribute.find_by_ids(self.html_attribute_ids)
     
+    hav_hash = ha_array.inject({}){|h, ha| hav = HtmlAttributeValue.parse_from(self,ha); 
+      h[ha.id]=hav;
+      unique_key = "#{hav.param_value.section_param.section_piece_param.class_name}_#{hav.html_attribute.perma_name}"
+      h[unique_key]=hav; h 
+    }
+
+    hav_hash
   end
   
 
@@ -41,7 +47,8 @@ class ParamValue < ActiveRecord::Base
   # params: html_attribute_id_value_map, 
   #  it is hash like {html_attribute_id=>{pvalue, unit,psvalue}}
   def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event = nil)
-    @updated_html_attribute_values = []
+    # it maybe called more times by conditions, we should keep updated_html_attribute_values
+    @updated_html_attribute_values ||= []
     original_html_attribute_value = HtmlAttributeValue.parse_from(self,html_attribute)
     new_html_attribute_value = HtmlAttributeValue.parse_from(self, html_attribute, html_attribute_value_params)
     is_updated= false
@@ -51,9 +58,9 @@ class ParamValue < ActiveRecord::Base
       if some_event 
         if some_event==EventEnum[:unset_changed]
           if new_html_attribute_value.unset?
-            self.set_unset_for_haid(html_attribute.id, new_html_attribute_value.unset)     
+            self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)     
           else # user modify unset, we should give a default value. 
-            self.set_unset_for_haid(html_attribute.id, new_html_attribute_value.unset)   
+            self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)   
 Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)}"              
             self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue(default=true))            
           end
@@ -75,7 +82,7 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
       @updated_html_attribute_values << new_html_attribute_value
       is_updated = true  
     end
-    [is_updated,new_html_attribute_value]
+    [is_updated, new_html_attribute_value, original_html_attribute_value]
   end
   
   #Usage:  user modify param_value, trigger event, event in EventEnum
@@ -91,7 +98,7 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
     if some_event=~/changed/
       html_attribute =  event_params[:html_attribute ]
       html_attribute_value_params= event_params[:html_attribute_value_params]
-      is_updated, new_html_attribute_value = update_html_attribute_value(html_attribute, html_attribute_value_params, some_event)
+      is_updated, new_html_attribute_value, original_html_attribute_value = update_html_attribute_value(html_attribute, html_attribute_value_params, some_event)
       if is_updated
         if some_event!=EventEnum[:psv_changed]
           pve = ParamValueEvent.new(some_event, self, html_attribute, nil, nil )
@@ -169,9 +176,9 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
   # use in layout_generator
   def hidden?(html_attribute_id)
     # all computed are hidden
-    ( self.html_attribute_extra(html_attribute_id,'hidden')== HtmlAttribute::BOOL_TRUE or computed?(html_attribute_id)) ?  true : false  
+    ( self.html_attribute_extra(html_attribute_id,'hidden')== HtmlAttribute::BOOL_TRUE or computed?) ?  true : false  
   end
-
+  
   def computed?(html_attribute_id)
     ( self.html_attribute_extra(html_attribute_id,'computed')== HtmlAttribute::BOOL_TRUE) ?  true : false  
   end

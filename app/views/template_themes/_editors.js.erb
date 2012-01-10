@@ -1,0 +1,5 @@
+//highlight selected layout node
+$('#page_layout_tree a.selected').removeClass('selected')
+$('#page_layout_tree a[data-lid="<%=@page_layout.id%>"]').addClass('selected')
+
+$('#editors').html(<%=raw (render :partial=>"editors.html.erb").to_json%>);

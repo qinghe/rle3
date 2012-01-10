@@ -256,7 +256,7 @@ class TemplateThemesController < ApplicationController
     
     respond_to do |format|
       format.html 
-      format.js  {render :action=>'editors'}
+      format.js  {render :partial=>'editors'}
     end    
   end
 
@@ -291,11 +291,11 @@ class TemplateThemesController < ApplicationController
     #return_hash = {}
     #  param_value = ParamValue.find(editing_param_value_id)
        
-    #  for uha_id in updated_html_attribute_ids
-    #    html_attribute = HtmlAttribute.find(uha_id)        
-    #    div = PageLayoutsHelper.build_html_attribute_container_id(editing_param_value_id, uha_id)
-    #    return_hash[div] = render_to_string :partial => "#{params[:controller]}/html_attribute_value", :locals=>{:html_attribute=>html_attribute, :param_value=>param_value}
-    #  end
+    respond_to do |format|
+      format.html 
+      format.js  {render :action=>'editors'}
+    end    
+    
     theme = TemplateTheme.find(theme_id)  
     editor = Editor.find(editor_id)
     page_layout = PageLayout.find(layout_id) 

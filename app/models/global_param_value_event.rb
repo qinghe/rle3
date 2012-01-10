@@ -23,23 +23,24 @@ class GlobalParamValueEvent < AbstractSectionEvent
     # get all section instance which reserved the current section event.
     # pls = page_layout.root.self_and_descendants.select{|layout| layout.subscribe_event?(self.new_html_attribute_value)}
     # we load all layout tree here. so we could preload all param_value for each section instance.
-    pls = page_layout.root.self_and_descendants        
+    pls = page_layout.root.self_and_descendants.all(:include=>:section)        
       section_instances = SectionInstance.ultra_instantiate(pls)
       for si in section_instances
-        si.notify(self)
+        self.updated_html_attribute_values.concat( si.notify(self) )
       end
     self.updated_html_attribute_values
 
   end
   
-  #event_name+'_event_handler', is handler name of this event.
+  #event_name+'_event_handler', is handler name of this event. 
   def event_name
-    self.html_attribute.perma_name
+    # ex. page_layout + fixed =  page_layout_fixed
+    self.param_value.section_param.section_piece_param.class_name+'_'+self.html_attribute.perma_name
   end
   # original html attribute value - new html attribute value
   def difference #delta
     #TODO, html_attribute.repeat >1
-    self.event == ParamValue::EventEnum[:pv_changed] ? original_html_attribute_value['pvalue']-new_html_attribute_value['pvalue'] : 0
+    self.event == ParamValue::EventEnum[:pv_changed] ? original_html_attribute_value['pvalue'].to_i-new_html_attribute_value['pvalue'].to_i : 0
   end
   
   

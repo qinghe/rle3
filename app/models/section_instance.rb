@@ -12,10 +12,8 @@ class SectionInstance
     #get general param values for section instances
     
     layout_id = page_layouts.first.root_id
-    # class_name = [block, inner, page, layout] 
-    # editor='position'
-    editor_id=2
-    pvs = ParamValue.all(:conditions=>["layout_id=? and editor_id=?",layout_id, editor_id], :include=>[:section_param=>:section_piece_param])  
+    # class_name = [block, inner, page, layout]
+    pvs = ParamValue.all(:conditions=>["root_layout_id=?",layout_id ], :include=>[{:section_param=>:section_piece_param},:section])  
         
     for page_layout in page_layouts
       pvs_for_layout = pvs.select{|pv| pv.section_id==page_layout.section_id and pv.section_instance==page_layout.section_instance}
@@ -45,7 +43,7 @@ class SectionInstance
   end
   
   def is_parent_of?( a_page_layout)
-     self.page_layout.parent_id == a_page_layout.id
+     self.page_layout.id == a_page_layout.parent_id
   end
   
   def children_hash
@@ -58,16 +56,18 @@ class SectionInstance
   # xevent could be a global_param_value_event or section_event
   # it should return updated_html_attribute_values, action collect them and update the editor.
   def notify(xevent)
+    updated_html_attribute_value_array =[]
     #see current section instance subscribe the xevent or not? 
     if self.page_layout.subscribe_event?(xevent)
       event_name = xevent.event_name
       handler_name = xevent.kind_of?(ParamValueEvent) ? 
         "#{self.html_attribute.perma_name[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
       
-      send handler_name, xevent
+      send handler_name, xevent      
+      updated_html_attribute_value_array.concat( self.save )
     end
-    self.updated_html_attribute_values
-
+    #Rails.logger.debug "updated_html_attribute_value_array=#{updated_html_attribute_value_array.inspect}"    
+    updated_html_attribute_value_array
   end
       
   # set or get html_attribute_value by key.
@@ -113,7 +113,7 @@ class SectionInstance
 # 5. page width from 800px to 900px
   
   # params: param_value_event is instance of GlobalParamValueEvent  
-  def width_event_handler( param_value_event )
+  def block_width_event_handler( param_value_event )
     # TODO make sure each child's width less then the container's width 
     # TODO support unit %
     is_value_changed = (param_value_event.event == ParamValue::EventEnum[:pv_changed]) # value changed or unit changed
@@ -122,21 +122,37 @@ class SectionInstance
     part_triggered = ['center_part','left_part','right_part'].include? source_section_name
     page_triggered = ['root'].include? source_section_name
     # width of one in these three changed.       
-    if self.section.perma_name=='center_area'
+    if self.section_perma_name=='center_area'
+      left_part = self.children.select{|s| s.section_perma_name=='left_part'}.first
+      right_part = self.children.select{|s| s.section_perma_name=='right_part'}.first
+      center_part = self.children.select{|s| s.section_perma_name=='center_part'}.first
+Rails.logger.debug "left_part=#{left_part}, right_part=#{right_part}, center_part=#{center_part}"        
       if part_triggered
-        if is_fixed
-          left_part = self.children.select{|s| s.section_perma_name=='left_part'}.first
-          right_part = self.children.select{|s| s.section_perma_name=='right_part'}.first
-          center_part = self.children.select{|s| s.section_perma_name=='center_part'}.first
+        if false #is_fixed, enable fixed center_area later. 
+          center_part_width = center_part.html_attribute_values( 'block_width' )
           if source_section_name == 'left_part'
-            center_part_width = center_part.html_attribute_values['block_width']
             center_part_width['pvalue']+= param_value_event.difference
+
           elsif  source_section_name == 'right_part'
             
           else
             
             
           end
+        else          
+          left_part_block_width =  left_part.html_attribute_values( 'block_width' )            
+          left_part_block_margin = left_part.html_attribute_values( 'block_margin' )
+          right_part_block_width = right_part.html_attribute_values( 'block_width' )
+          right_part_block_margin = right_part.html_attribute_values( 'block_margin' )
+          center_part_inner_margin = center_part.html_attribute_values( 'inner_margin' )
+          if source_section_name == 'left_part'
+            center_part_inner_margin['pvalue3']+= param_value_event.difference
+            left_part_block_margin['pvalue1'] = -left_part_block_width['pvalue'] #margin-right = -left_part.width
+          elsif  source_section_name == 'right_part'
+            center_part_inner_margin['pvalue1']+= param_value_event.difference   
+            right_part_block_margin['pvalue3'] = -right_part_block_width['pvalue'] #margin-left = -right_part.width                 
+          end
+          self.updated_html_attribute_values.push(center_part_inner_margin, left_part_block_margin, right_part_block_margin)
         end
         
       end                   
@@ -172,7 +188,7 @@ class SectionInstance
 #  root is also a container
 # rules to change layout from fluid to fixed             
   
-  def fixed_event_handler( global_param_value_event )
+  def page_layout_fixed_event_handler( global_param_value_event )
     is_fixed = global_param_value_event.new_html_attribute_value.pvalue
     parent_block_width =  self.parent_section_instance.html_attribute_values("block_width") unless self.parent.nil?    
     block_width = html_attribute_values("block_width")
@@ -180,9 +196,11 @@ class SectionInstance
     block_inner_margin = html_attribute_values("inner_margin")
 Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_name}"    
 
-    
-    self.save
-
+    if is_fixed
+      to_fixed()
+    else
+      to_fluid()
+    end
   end
 
   # a container, content layout attribute of parent is vertical, and have a width value, we could say to_fluid means unset the width. 
@@ -272,7 +290,7 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
     return html_attribute_values("page_width")['pvalue'] if self.root? 
 
     # self width unset, parent content layout is vertical.
-    if self.html_attribute_values("block_width").unset? and parent.content_layout_vertical?
+    if self.html_attribute_values("block_width").unset? and self.parent.content_layout_vertical?
       #TODO consider the computed margin, computed_padding caused by 'border image'
       margin, border, padding = html_attribute_values("inner_margin"), html_attribute_values("inner_border-width"), html_attribute_values("inner_padding")
       computed_width = self.parent_width      
@@ -287,7 +305,7 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
   end
   
   def parent_width
-    self.parent_section_instance.width
+    self.parent.width
   end
   
   def save
@@ -295,7 +313,7 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
     # update param_value.pvalue
     updated_html_attribute_values.collect{|hav| hav.param_value}.uniq.each{|pv| pv.save}
     # save param_value.pvalue  
-    updated_html_attribute_values.clear
+    updated_html_attribute_values.pop(updated_html_attribute_values.length)    
   end
 
   def fixed?
