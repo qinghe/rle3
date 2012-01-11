@@ -298,9 +298,7 @@ class TemplateThemesController < ApplicationController
       format.js  {render :partial=>'update_param_value',:locals=>{:source_param_value=>source_param_value,:updated_html_attribute_values=>updated_html_attribute_values}}
     end    
     
-    
-#    render "editors"
-  end
+end
   
   
   def test_create_layout
@@ -482,5 +480,6 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
     render :text => html
 
   end
+    
     
 end

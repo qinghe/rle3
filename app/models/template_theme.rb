@@ -1,7 +1,7 @@
 class TemplateTheme < ActiveRecord::Base
   belongs_to :website
   belongs_to :page_layout, :foreign_key=>"layout_id", :dependent=>:destroy
-  has_many :param_values#  :dependent=>:destroy, do not use dependent, it cause load each one of param_value
+  has_many :param_values, :foreign_key=>"theme_id"#  :dependent=>:destroy, do not use dependent, it cause load each one of param_value
   
   after_destroy :remove_relative_data
   
@@ -52,5 +52,13 @@ class TemplateTheme < ActiveRecord::Base
   
   def remove_relative_data
     ParamValue.delete_all(["theme_id=?", self.id])
+  end
+  
+  # all menus used by this theme, from param values which pclass='db'
+  # param_value.pvalue should be menu root id
+  # return menu roots
+  def assigned_menus
+    pvs = self.param_values.all(:conditions=>["section_piece_params.pclass=?","db"],:include=>[:section_param=>:section_piece_param])
+    pvs.collect{|pv| mid = pv.first_pvalue.to_i; mid>0 ? Menu.find(mid) : nil }.compact
   end
 end

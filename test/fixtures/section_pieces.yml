@@ -143,6 +143,7 @@ root:
           <?= @param_values.get :page_fluid ?>
         <? end ?>
         <?= @param_values.get :page ?>
+        <?= @param_values.get :background ?>
       }
         #page-inner
         { position:relative;
@@ -178,7 +179,7 @@ root:
           }
     #page .section
     {  
-      <? if @param_values.get(:content_horizontal).to_i > 0 ?>
+      <? if @param_values.get(:content_layout).to_i > 0 ?>
       clear:none;
       <? else ?>
       clear:both;
@@ -223,7 +224,7 @@ container:
   id: 2
   html: |-
     <!-- container  -->
-        <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
+    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
           <div class="c_<?=@param_values.instance_id?>-inner clear-block">
           ~~content~~
           </div>          
@@ -235,18 +236,17 @@ container:
     #s_<?=@param_values.instance_id?>
     { overflow:hidden;  padding:0;  margin:0; 
       position:relative;
-      <?=@param_values.get(:position)?>
+      <?=@param_values.get(:block)?>
     }
     /* background, margin, border, padding */
     #s_<?=@param_values.instance_id?> .c_<?=@param_values.instance_id?>-inner
     {
-      <?=@param_values.get(:mbp)?>
+      <?=@param_values.get(:inner)?>
       <?=@param_values.get(:background)?>
-      <?=@param_values.get(:mbp,{:source=>'computed'})?>
     }
     #s_<?=@param_values.instance_id?> .section
     {
-      <?if @param_values.get(:content_horizontal).to_i > 0 ?>
+      <?if @param_values.get(:content_layout).to_i > 0 ?>
       clear:none;
       <?else?>
       clear:both;

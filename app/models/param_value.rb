@@ -200,6 +200,12 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
     @disabled_html_attribute_ids
   end  
   
+  # in case, there is only one html_attribute_id in current param_value
+  # use this to fetch param value directly.
+  def first_pvalue
+    pvalue_for_haid(html_attribute_ids.first)
+  end
+  
 end
 
 

@@ -79,7 +79,8 @@ div#pbbr
     margin-left: auto;
     margin-right: auto;
       
-    width:800px;min-width:800px;
+    width:800px;
+    
   }
     #page-inner
     { position:relative;
@@ -152,18 +153,17 @@ div#pbbr
 #s_2_1_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  
+  float:left;height:100px;
 }
 /* background, margin, border, padding */
 #s_2_1_2_1 .c_2_1_2_1-inner
 {
   
   
-  
 }
 #s_2_1_2_1 .section
 {
-  clear:both;
+  clear:none;
 }
 
 #s_2_1_2_1_tlc
@@ -217,7 +217,6 @@ div#pbbr
 /* background, margin, border, padding */
 #s_9_1_2_1 .c_9_1_2_1-inner
 {
-  
   
   
 }
@@ -279,7 +278,6 @@ div#pbbr
 {
   
   
-  
 }
 #s_3_1_2_1 .section
 {
@@ -330,7 +328,7 @@ div#pbbr
   
 #s_3_1_2_1 a{
  
- background-color:green;  
+   
  }
 #s_3_1_2_1 a:hover{  
    
@@ -344,18 +342,17 @@ div#pbbr
 #s_2_2_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  
+  float:left;height:100px;
 }
 /* background, margin, border, padding */
 #s_2_2_2_1 .c_2_2_2_1-inner
 {
   
   
-  
 }
 #s_2_2_2_1 .section
 {
-  clear:both;
+  clear:none;
 }
 
 #s_2_2_2_1_tlc
@@ -404,18 +401,17 @@ div#pbbr
 #s_2_4_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  
+  float:left;height:100px;
 }
 /* background, margin, border, padding */
 #s_2_4_2_1 .c_2_4_2_1-inner
 {
   
   
-  
 }
 #s_2_4_2_1 .section
 {
-  clear:both;
+  clear:none;
 }
 
 #s_2_4_2_1_tlc
@@ -469,7 +465,6 @@ div#pbbr
 /* background, margin, border, padding */
 #s_6_1_2_1 .c_6_1_2_1-inner
 {
-  
   
   
 }
@@ -537,18 +532,17 @@ div#pbbr
 #s_2_5_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  
+  float:left;height:100px;
 }
 /* background, margin, border, padding */
 #s_2_5_2_1 .c_2_5_2_1-inner
 {
   
   
-  
 }
 #s_2_5_2_1 .section
 {
-  clear:both;
+  clear:none;
 }
 
 #s_2_5_2_1_tlc
@@ -597,18 +591,17 @@ div#pbbr
 #s_2_3_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  
+  float:left;height:100px;
 }
 /* background, margin, border, padding */
 #s_2_3_2_1 .c_2_3_2_1-inner
 {
   
   
-  
 }
 #s_2_3_2_1 .section
 {
-  clear:both;
+  clear:none;
 }
 
 #s_2_3_2_1_tlc

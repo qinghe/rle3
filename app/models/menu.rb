@@ -44,10 +44,12 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
   def find_theme_id(is_preview = false, is_detail = false)
     the_theme_id = 0
     col = "theme_id"
-    col= "detail"+col if is_detail
+    col= "detail_"+col if is_detail
     col= "p"+col if is_preview
     if self.root.inheritance
-      for item in self_and_ancestors
+      items = find_self_and_ancestors(self.root.self_and_descendants)
+#Rails.logger.debug "items = #{items.inspect}"      
+      for item in items
         the_theme_id = item[col] if item[col]>0
       end
     else  
@@ -56,5 +58,30 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
     the_theme_id
   end
   
-    
+  # usege: if current is not root, find themes used by current menu item, 
+  # else find default used themes by whole tree 
+  # return: [theme_for_list, theme_for_detail] 
+  
+  def assigned_theme_ids(is_preview = false)
+    if @theme_ids.nil?
+      @theme_ids = []
+      @theme_ids << find_theme_id(is_preview)
+      @theme_ids << find_theme_id(is_preview, is_detail = true)
+    end
+    @theme_ids
+  end
+  
+  # for each menu item, it has assigned preview template_theme.
+  def previewable?
+    if self.root.assigned_theme_ids.include?(0)
+      return !self.assigned_theme_ids.include?(0)
+    else
+      return true  
+    end
+  end
+  
+  def find_self_and_ancestors(whole_tree)
+    nodes = whole_tree.select{|node| node.lft<= self.lft and node.rgt>=self.rgt }
+  end
+  
 end

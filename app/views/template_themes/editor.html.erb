@@ -5,12 +5,17 @@
   #@param_values_for_editors
 -%>
 
-<div class="clear-block">
+<div >
   <div>
     <%=render :partial=>"layout_selection", :locals=>{:page_layouts=>@layout_roots, :selected=>@theme} %>
-    
+    <% if Website.current.previewable?%>
+        <%= link_to_function "Preview", "window.open('#{preview_template_themes_path}','rle-preview')"%>
+
+    <% else%>
+    <%= link_to "Preview setting", publish_template_themes_url%>
+    <% end%>
   </div>
-  <div>
+  <div class="clear-block">
     <%=render :partial=>"layout_editor"%>
   </div>
 </div>

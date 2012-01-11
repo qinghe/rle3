@@ -225,7 +225,7 @@ class PageLayout < ActiveRecord::Base
           ParamValue.create(:root_layout_id=>root_layout_id, :section_id=>section_id, :layout_id=>layout_id, :section_instance=>self.section_instance) do |pv|
             pv.section_param_id = sp.id
             pv.theme_id = theme.id
-puts "sp.default_value=#{sp.default_value.inspect}"            
+# puts "sp.default_value=#{sp.default_value.inspect}"            
             pv.pvalue = sp.default_value   
             #set default empty {} for now.
           end
