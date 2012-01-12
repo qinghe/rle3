@@ -43,6 +43,10 @@ class MenusTag <TagBase
     def clickable?
       self.menu_model.clickable?
     end
+    
+    def current?
+      self.menus_tag.layout_generator.menu.id == self.menu_model.id
+    end
   end
   
   attr_accessor :menu_models, :menu_keys # keys are section_piece_param.class_name
@@ -230,8 +234,8 @@ class LayoutGenerator
     self.theme = TemplateTheme.find(param_theme_id)
     self.website = self.theme.website
     self.layout_id, self.theme_id = param_layout_id, param_theme_id
-    if options[:preview]
-      self.url_prefix = "/erubis/preview"
+    if options[:preview_url]
+      self.url_prefix = "/template_themes/preview"
     else
       self.url_prefix = "/erubis/example"
     end

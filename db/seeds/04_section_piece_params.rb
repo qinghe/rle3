@@ -25,7 +25,7 @@ objs=[
   {"id"=>41, "editor_id"=>2, "section_piece_id"=>7, "class_name"=>"logo", "pclass"=>"style", "param_category_id"=>2,  "html_attribute_ids"=>"61,62"},
   {"id"=>43, "editor_id"=>2, "section_piece_id"=>7, "class_name"=>"logourl", "pclass"=>"style", "param_category_id"=>2,  "html_attribute_ids"=>"60"},
   # menu item
-  {"id"=>52, "editor_id"=>2, "section_piece_id"=>6, "class_name"=>"ainner", "pclass"=>"css", "param_category_id"=>6,  "html_attribute_ids"=>"31,32,7,8,6"},
+  {"id"=>52, "editor_id"=>2, "section_piece_id"=>6, "class_name"=>"ainner", "pclass"=>"css", "param_category_id"=>6,  "html_attribute_ids"=>"32,7,8,6"},
   {"id"=>56, "editor_id"=>4, "section_piece_id"=>6, "class_name"=>"a", "pclass"=>"css", "param_category_id"=>11,  "html_attribute_ids"=>"23,24,25,27,49,53,54,56"},  
   {"id"=>57, "editor_id"=>4, "section_piece_id"=>6, "class_name"=>"ah", "pclass"=>"css", "param_category_id"=>12,  "html_attribute_ids"=>"23,24,25,27,49,53,54,56"},  
   {"id"=>58, "editor_id"=>4, "section_piece_id"=>6, "class_name"=>"as", "pclass"=>"css", "param_category_id"=>13,  "html_attribute_ids"=>"23,24,25,27,49,53,54,56"},  

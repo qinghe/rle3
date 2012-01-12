@@ -109,8 +109,11 @@ class TemplateThemesController < ApplicationController
       the_menu = Menu.find_by_id(the_website.index_page)  
     end
     the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    do_preview(the_theme.id, the_theme.layout_id, the_menu.id)
-    render :text => File.read("#{Rails.public_path}/shops/#{the_theme.file_name('html')}")
+    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id)
+    #insert css to html
+    style = %Q!<style type="text/css">#{css}</style>!
+    html.insert(html.index("</head>"),style)
+    render :text => html
   end
     
   def publish
@@ -438,9 +441,7 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   end
   
   def do_preview( theme_id, layout_id, menu_id, options={})
-    options[:serialize_html] ||= true
-    options[:serialize_css] ||= true
-    
+      options[:preview_url] = preview_template_themes_url
       theme = TemplateTheme.find(theme_id)
       @lg = LayoutGenerator.new( theme_id, layout_id, menu_id, options)
       html, css = @lg.generate
