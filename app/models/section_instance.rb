@@ -57,12 +57,15 @@ class SectionInstance
   # it should return updated_html_attribute_values, action collect them and update the editor.
   def notify(xevent)
     updated_html_attribute_value_array =[]
-    #see current section instance subscribe the xevent or not? 
-    if self.page_layout.subscribe_event?(xevent)
+    #see current section instance subscribe the xevent or not?
+    # param_value_event, only this section subscribed, it is sended to section_instance.
+    # global_param_value_event, once it is subscribed by original section instance, it is broadcasted to all section instance of the layout.    
+    if xevent.kind_of?(ParamValueEvent) or 
+      self.page_layout.subscribe_event?(xevent)
       event_name = xevent.event_name
       handler_name = xevent.kind_of?(ParamValueEvent) ? 
-        "#{self.html_attribute.perma_name[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
-      
+        "#{xevent.html_attribute.perma_name[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
+Rails.logger.debug "handler_name=#{handler_name},#{event_name}"      
       send handler_name, xevent      
       updated_html_attribute_value_array.concat( self.save )
     end
@@ -136,7 +139,6 @@ Rails.logger.debug "left_part=#{left_part}, right_part=#{right_part}, center_par
           elsif  source_section_name == 'right_part'
             
           else
-            
             
           end
         else          
@@ -252,13 +254,13 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
   def height_pv_changed_handler(param_value_event)
     param_value = param_value_event.param_value
     html_attribute = param_value_event.html_attribute      
-    height = self.html_attribute_values['block_height']
+    height = self.html_attribute_values('block_height')
+  Rails.logger.debug "param_value_event=#{param_value_event.event}"    
     if height.manual_entry?
-  
-      margin, border, padding  = self.html_attribute_values['inner_margin'],
-        self.html_attribute_values['inner_border-width'],
-        self.html_attribute_values['inner_padding']
-      computed_inner_height = self.html_attribute_values['inner_height']
+      margin, border, padding  = self.html_attribute_values('inner_margin'),
+        self.html_attribute_values('inner_border-width'),
+        self.html_attribute_values('inner_padding')
+      computed_inner_height = self.html_attribute_values('inner_height')
       inner_height_value = height['pvalue0'].to_i
       [0,2].each{|i|#0:top, 2: bottom
         inner_height_value-= margin["pvalue#{i}"]  if margin.manual_entry?(i)  
@@ -266,7 +268,9 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
         inner_height_value-= padding["pvalue#{i}"] if padding.manual_entry?(i)  
           } 
   Rails.logger.debug "height=#{height['pvalue0']}, inner_height_value=#{inner_height_value}"           
+      computed_inner_height['psvalue'] = height['psvalue']
       computed_inner_height['pvalue'] = inner_height_value
+      computed_inner_height['unit'] = height['unit']
       computed_inner_height['unset'] = HtmlAttribute::UNSET_FALSE
       self.updated_html_attribute_values.push(computed_inner_height)
     end

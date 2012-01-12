@@ -8,8 +8,7 @@ class ParamValue < ActiveRecord::Base
   after_save :trigger_events
 
   scope :within_section, lambda { |param_value|
-{ :conditions=>["layout_id=? and theme_id=? and param_values.section_id=? and param_values.section_instance=?", param_value.layout_id, param_value.theme_id, param_value.section_id, param_value.section_instance],
-  :include=>['section_param'=>'section_piece_param']}      
+  where("layout_id=? and theme_id=? and param_values.section_id=? and param_values.section_instance=?", param_value.layout_id, param_value.theme_id, param_value.section_id, param_value.section_instance).includes(:section_param=>:section_piece_param)      
      }
 
   #usage:  
@@ -72,10 +71,10 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
           self.html_attribute_extra(html_attribute.id, 'hidden', new_html_attribute_value.hidden)
         end     
         if new_html_attribute_value.unset != original_html_attribute_value.unset
-          self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.hidden)
+          self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)
         end
         if new_html_attribute_value.computed != original_html_attribute_value.computed
-          self.html_attribute_extra(html_attribute.id, 'computed', new_html_attribute_value.hidden)
+          self.html_attribute_extra(html_attribute.id, 'computed', new_html_attribute_value.computed)
         end
         self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)        
       end
