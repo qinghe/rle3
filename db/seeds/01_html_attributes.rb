@@ -1,6 +1,6 @@
 objs=[
   {"neg_ok"=>false, "pvalues_desc"=>"Scroll,Fixed", "default_value"=>0, "pvalues"=>"scroll,fixed", "punits"=>"", "perma_name"=>"background-attachment", "id"=>1, "pvspecial"=>""},
-  {"neg_ok"=>false, "pvalues_desc"=>"Transparent,0c", "default_value"=>0, "pvalues"=>"transparent,0c", "punits"=>"", "perma_name"=>"background-color", "id"=>2, "pvspecial"=>""},
+  {"neg_ok"=>false, "pvalues_desc"=>"transparent,aqua,black,blue,fuchsia,gray,green,lime,maroon,navy,olive,purple,red,silver,teal,white,yellow,0c", "default_value"=>0, "pvalues"=>"transparent,aqua,black,blue,fuchsia,gray,green,lime,maroon,navy,olive,purple,red,silver,teal,white,yellow,0c", "punits"=>"", "perma_name"=>"background-color", "id"=>2, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"None,0i", "default_value"=>0, "pvalues"=>"none,0i", "punits"=>"", "perma_name"=>"background-image", "id"=>3, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"Left|top,Center|center,Right|bottom,L1|l1", "default_value"=>0, "pvalues"=>"left|top,center|center,right|bottom,l1|l1", "punits"=>"l,%", "perma_name"=>"background-position", "id"=>4, "pvspecial"=>"hv"},
   {"neg_ok"=>false, "pvalues_desc"=>"Repeat,Repeat-x,Repeat-y,No-repeat", "default_value"=>0, "pvalues"=>"repeat,repeat-x,repeat-y,no-repeat", "punits"=>"", "perma_name"=>"background-repeat", "id"=>5, "pvspecial"=>""},

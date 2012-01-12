@@ -137,17 +137,13 @@ root:
         <? if @param_values.get :layout_fixed ?>
         margin-left: auto;
         margin-right: auto;
-          <?= @param_values.get :page_width ?>
-        <? else ?>
-          <?= @param_values.get :page_min_width ?>
-          <?= @param_values.get :page_fluid ?>
         <? end ?>
         <?= @param_values.get :page ?>
         <?= @param_values.get :background ?>
       }
         #page-inner
         { position:relative;
-        <? @param_values.get :page_inner ?>
+        <? @param_values.get :inner ?>
         }
           #navigation-top, #navigation
           { position: absolute;

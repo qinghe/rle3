@@ -19,7 +19,7 @@ class ParamValueEvent
       #event handler is html_attribute.perma_name + event + handler      
       if param_conditions[self.html_attribute.id].include?(self.event)
         #html_attribute.perma_name may contain '-', we only allow a-z,A-Z,0-9,_ by [/\w+/]
-        pvs = ParamValue.within_section(self.param_value).all(:include=>['section_param'=>'section_piece_param'])      
+        pvs = ParamValue.within_section(self.param_value)      
         section_instance = SectionInstance.new(self.param_value.page_layout,  parent_section_instance=nil, pvs)      
         self.updated_html_attribute_values.concat( section_instance.notify(self) )    
       end      

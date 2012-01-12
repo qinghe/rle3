@@ -78,7 +78,6 @@ div#pbbr
   {
     margin-left: auto;
     margin-right: auto;
-      
     width:800px;
     
   }
@@ -153,13 +152,13 @@ div#pbbr
 #s_2_1_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  float:left;height:100px;
+  float:left;width:100%;
 }
 /* background, margin, border, padding */
 #s_2_1_2_1 .c_2_1_2_1-inner
 {
   
-  
+  background-color:aqua;
 }
 #s_2_1_2_1 .section
 {
@@ -342,13 +341,13 @@ div#pbbr
 #s_2_2_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  float:left;height:100px;
+  float:left;height:100px;width:100%;
 }
 /* background, margin, border, padding */
 #s_2_2_2_1 .c_2_2_2_1-inner
 {
   
-  
+  background-color:fuchsia;
 }
 #s_2_2_2_1 .section
 {
@@ -401,13 +400,13 @@ div#pbbr
 #s_2_4_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  float:left;height:100px;
+  float:left;height:100px;width:120px;
 }
 /* background, margin, border, padding */
 #s_2_4_2_1 .c_2_4_2_1-inner
 {
   
-  
+  background-color:olive;
 }
 #s_2_4_2_1 .section
 {
@@ -532,13 +531,13 @@ div#pbbr
 #s_2_5_2_1
 { overflow:hidden;  padding:0;  margin:0; 
   position:relative;
-  float:left;height:100px;
+  float:left;height:100px;width:680px;
 }
 /* background, margin, border, padding */
 #s_2_5_2_1 .c_2_5_2_1-inner
 {
   
-  
+  background-color:gray;
 }
 #s_2_5_2_1 .section
 {
