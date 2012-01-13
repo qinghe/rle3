@@ -1,4 +1,8 @@
 Rle3::Application.routes.draw do
+  resources :blog_posts
+
+  resources :assignments
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
