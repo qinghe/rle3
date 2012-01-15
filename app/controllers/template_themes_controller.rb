@@ -103,8 +103,8 @@ class TemplateThemesController < ApplicationController
     
     the_website=the_menu=the_layout=the_theme = nil
     the_website = Website.find_by_url(params[:d])
-    if params[:c]
-      the_menu = Menu.find_by_id(params[:c])
+    if params[:id]
+      the_menu = Menu.find_by_id(params[:id])
     else
       the_menu = Menu.find_by_id(the_website.index_page)  
     end

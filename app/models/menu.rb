@@ -3,6 +3,9 @@ class Menu < ActiveRecord::Base
 
   has_one :menu_level, :primary_key=>"root_id", :foreign_key=>"menu_id", :conditions=>['menu_levels.level=#{self.level} and #{!self.root.inheritance}']
   
+  has_many :assignments
+  has_many :blog_posts,:through =>:assignments
+  
   before_save :assign_perma_name
   after_save  :store_root_id
 

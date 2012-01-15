@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(:version => 20120113124312) do
 
-  create_table "assignments", :force => true do |t|
+  create_table "assignments", :id => false, :force => true do |t|
     t.integer  "website_id",   :default => 0, :null => false
     t.integer  "blog_post_id"
     t.integer  "menu_id"
@@ -163,6 +163,13 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.boolean  "is_container",                   :default => false, :null => false
     t.boolean  "is_selectable",                  :default => false, :null => false
     t.boolean  "is_menu",                        :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "section_texts", :force => true do |t|
+    t.string   "lang"
+    t.string   "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

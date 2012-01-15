@@ -17,14 +17,54 @@ class TagBase
   end
 end
 
+class BlogPostsTag <TagBase
+  include Enumerable
+  
+  class WrappedBlogPost
+    attr_accessor :blog_posts_tag, :blog_post_model
+    def initialize(tag, blog_post)
+      self.blog_post_model = blog_post
+      self.blog_posts_tag = tag
+    end
+    
+        
+    def title
+      self.blog_post_model.title
+    end
+    
+        
+    def body
+      self.blog_post_model.body
+    end
+    
+  end  
+  
+  attr_accessor :blog_post_models, :blog_posts
+  
+  def initialize(layout_generator_instance)
+    super
+    self.blog_post_models = self.layout_generator.menu.blog_posts
+    
+    self.blog_posts = self.blog_post_models.collect{|item| WrappedBlogPost.new(self, item)}
+  end
+  
+ 
+  def each(&block)
+    self.blog_posts.each{|item|
+      yield item
+    }
+  end
+end
+
 class MenusTag <TagBase
   
   class WrappedMenu
-    attr_accessor :menus_tag, :menu_model
+    attr_accessor :menus_tag, :menu_model, :blog_posts_tag
     
     def initialize(tag, menu)
       self.menu_model = menu
       self.menus_tag = tag
+      self.blog_posts_tag = nil
     end
     
     def children
@@ -47,6 +87,14 @@ class MenusTag <TagBase
     def current?
       self.menus_tag.layout_generator.menu.id == self.menu_model.id
     end
+    
+    def blog_posts
+      if blog_posts_tag.nil?
+        self.blog_posts_tag = BlogPostsTag.new(self.menus_tag.layout_generator)
+      end
+      self.blog_posts_tag
+    end
+    
   end
   
   attr_accessor :menu_models, :menu_keys # keys are section_piece_param.class_name
@@ -67,7 +115,10 @@ class MenusTag <TagBase
   # means the current select menu in erubis context.
   # we should set before generate the page.
   def current
-    layout_generator.menu
+    if @current.nil?
+      @current = WrappedMenu.new( self, layout_generator.menu)
+    end
+    @current
   end
    
   def menus
@@ -228,8 +279,8 @@ class LayoutGenerator
   attr_accessor :param_values_tag, :websites_tag, :menus_tag
   attr_accessor :context
   attr_accessor :is_preview
-  def initialize( param_theme_id,param_layout_id, param_menu_id=nil, options={})
-    self.menu = Menu.find(param_menu_id) if param_menu_id
+  def initialize( param_theme_id,param_layout_id, param_menu_id, options={})
+    self.menu = Menu.find(param_menu_id) 
     self.layout = PageLayout.find(param_layout_id)
     self.theme = TemplateTheme.find(param_theme_id)
     self.website = self.theme.website

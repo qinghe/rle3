@@ -49,4 +49,19 @@ logo = Section.create_section(section_piece_hash['container'].id, {:perma_name=>
    'content_horizontal'=>{'disabled_ha_ids'=>'101'},
    'inner'=>{'15hidden'=>bool_true}})
 logo.add_section_piece(section_piece_hash['image'].id)
+
+
+text = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"text",:website_id=>website.id},
+  {'block'=>{'disabled_ha_ids'=>'111'},
+   'content_horizontal'=>{'disabled_ha_ids'=>'101'},
+   'inner'=>{'15hidden'=>bool_true}})
+text.add_section_piece(section_piece_hash['text'].id)
+
+blog_post_list = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"blog_post_list",:website_id=>website.id},
+  {'block'=>{'disabled_ha_ids'=>'111'},
+   'content_horizontal'=>{'disabled_ha_ids'=>'101'},
+   'inner'=>{'15hidden'=>bool_true}})
+blog_post_list.add_section_piece(section_piece_hash['blog_post_list'].id).add_section_piece(section_piece_hash['blog_post'].id)
+
+
   

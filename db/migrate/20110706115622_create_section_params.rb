@@ -12,9 +12,17 @@ class CreateSectionParams < ActiveRecord::Migration
       t.timestamps
     end
     
+    # store the text used in the section. like pclass='txt'
+    create_table :section_texts do |t|
+      t.string :lang
+      t.string :body
+      t.timestamps
+    end
+    
   end
 
   def self.down
     drop_table :section_params
+    drop_table :section_texts
   end
 end

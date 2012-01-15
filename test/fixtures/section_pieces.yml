@@ -401,4 +401,43 @@ image:
   css: ""
   perma_name: image
   js: ""
-  
+text:
+  id: 8
+  html: |          
+          <?= @param_values.get :text ?> 
+  created_at: 2011-09-20 19:40:07
+  is_selectable: "0"
+  updated_at: 2011-09-20 19:40:07
+  is_container: "0"
+  css: ""
+  perma_name: text
+  js: ""
+blog_post_list:
+  id: 11
+  html: |          
+    <ul>
+    <? for blog_post in @menus.current.blog_posts ?>
+       ~~content~~
+    <? end ?>
+    </ul>
+  created_at: 2011-09-20 19:40:07
+  is_selectable: "0"
+  updated_at: 2011-09-20 19:40:07
+  is_container: "0"
+  css: ""
+  perma_name: blog_post_list
+  js: ""
+blog_post:
+  id: 12
+  html: |          
+    <li>
+       <?=blog_post.title ?>
+       <?=blog_post.body ?>
+    </li>
+  created_at: 2011-09-20 19:40:07
+  is_selectable: "0"
+  updated_at: 2011-09-20 19:40:07
+  is_container: "0"
+  css: ""
+  perma_name: blog_post
+  js: ""    

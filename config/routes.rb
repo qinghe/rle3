@@ -13,8 +13,6 @@ Rle3::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  match 'erubis/preview'=>'erubis#preview'
-  match 'erubis/example'=>'erubis#example'
 
   resources :template_files
   resources :menus

@@ -31,3 +31,7 @@ lftnav = body.add_section(section_hash['container'].id,:perma_name=>"lftnav")
 main_content = body.add_section(section_hash['container'].id,:perma_name=>"main_content")
 
 lftnav.add_section(section_hash['vmenu'].id,:perma_name=>"vmenu")
+main_content.add_section(section_hash['blog_post_list'].id,:perma_name=>"blog_post_list")
+
+footer.add_section(section_hash['hmenu'].id,:perma_name=>"footer_menu")
+footer.add_section(section_hash['text'].id,:perma_name=>"copyright")

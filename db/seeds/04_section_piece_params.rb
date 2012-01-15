@@ -36,7 +36,11 @@ objs=[
   {"id"=>62, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"ah", "pclass"=>"css", "param_category_id"=>62,  "html_attribute_ids"=>"2,3,4,5"},  
   {"id"=>63, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"as", "pclass"=>"css", "param_category_id"=>63,  "html_attribute_ids"=>"2,3,4,5"},  
   {"id"=>64, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"ahs", "pclass"=>"css", "param_category_id"=>64,  "html_attribute_ids"=>"2,3,4,5"},  
-  {"id"=>65, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"au", "pclass"=>"css", "param_category_id"=>65,  "html_attribute_ids"=>"2,3,4,5"}  
+  {"id"=>65, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"au", "pclass"=>"css", "param_category_id"=>65,  "html_attribute_ids"=>"2,3,4,5"},
+  
+  # text
+  {"id"=>101, "editor_id"=>1, "section_piece_id"=>8, "class_name"=>"text", "pclass"=>"text", "param_category_id"=>2,  "html_attribute_ids"=>"84"},
+  
   ]
 
 SectionPieceParam.delete_all              
