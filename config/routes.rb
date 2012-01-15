@@ -1,7 +1,4 @@
 Rle3::Application.routes.draw do
-  resources :blog_posts
-
-  resources :assignments
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -27,6 +24,14 @@ Rle3::Application.routes.draw do
   resources :sections
   resources :param_categories
   resources :section_pieces
+  resources :blog_posts do
+      collection do
+        get 'assign'
+        post 'assign'
+      end    
+  end
+
+  resources :assignments
 
   resources :template_themes do
        member do

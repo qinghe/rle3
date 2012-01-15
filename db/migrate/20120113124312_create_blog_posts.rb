@@ -3,7 +3,7 @@ class CreateBlogPosts < ActiveRecord::Migration
     create_table :blog_posts, :id => true do |t|
       t.string :title
       t.text :body
-      t.boolean :draft
+      t.boolean :is_published
       t.datetime :published_at
       t.timestamps
     end

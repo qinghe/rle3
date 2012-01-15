@@ -1,4 +1,12 @@
-<p id="notice"><%= notice %></p>
+<p>
+  <b>Title:</b>
+  <%=h @blog_post.title %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%=h @blog_post.body %>
+</p>
 
 
 <%= link_to 'Edit', edit_blog_post_path(@blog_post) %> |

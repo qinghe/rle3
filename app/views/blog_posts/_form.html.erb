@@ -10,8 +10,45 @@
       </ul>
     </div>
   <% end %>
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  
+  <%= f.fields_for :assignment do |assignment_fields| %>
+  <p>
+    <%= label_tag :assignment_menu_id, "Menu" %><br />    
+    <%= grouped_collection_select(:assignment, :menu_id, Menu.roots, :children, :title, :id, :perma_name) %>
+  </p>
+  <% end %>
+  
+  <p>
+    <%= f.label :body %><br />
+    <%= f.text_area :body,:class=>"wymeditor" %>
+  </p>
+
+
+  <p>
+    <%= f.label :is_published %><br />
+    <%= f.check_box :is_published %>
+  </p>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit nil, {:class=>"wymupdate"}%>
   </div>
 <% end %>
+<%=javascript_include_tag "wymeditor/jquery.wymeditor.min"%>
+<script type="text/javascript">
+
+/* Here we replace each element with class 'wymeditor'
+ * (typically textareas) by a WYMeditor instance.
+ * 
+ * We could use the 'html' option, to initialize the editor's content.
+ * If this option isn't set, the content is retrieved from
+ * the element being replaced.
+ */
+
+jQuery(function() {
+    jQuery('.wymeditor').wymeditor();
+});
+</script>

@@ -10,7 +10,40 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111013164757) do
+ActiveRecord::Schema.define(:version => 20120113124312) do
+
+  create_table "assignments", :force => true do |t|
+    t.integer  "website_id",   :default => 0, :null => false
+    t.integer  "blog_post_id"
+    t.integer  "menu_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blog_comments", :force => true do |t|
+    t.integer  "blog_post_id"
+    t.boolean  "spam"
+    t.string   "name"
+    t.string   "email"
+    t.text     "body"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "blog_comments", ["id"], :name => "index_blog_comments_on_id"
+
+  create_table "blog_posts", :force => true do |t|
+    t.string   "title"
+    t.text     "body"
+    t.boolean  "is_published"
+    t.datetime "published_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "blog_posts", ["id"], :name => "index_blog_posts_on_id"
 
   create_table "editors", :force => true do |t|
     t.string   "perma_name", :limit => 200, :default => "", :null => false

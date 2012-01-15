@@ -41,9 +41,10 @@ class BlogPostsController < ApplicationController
   # POST /blog_posts.xml
   def create
     @blog_post = BlogPost.new(params[:blog_post])
-
+    assignment = params[:assignment]
     respond_to do |format|
       if @blog_post.save
+        @blog_post.assignments.create(assignment)
         format.html { redirect_to(@blog_post, :notice => 'Blog post was successfully created.') }
         format.xml  { render :xml => @blog_post, :status => :created, :location => @blog_post }
       else
