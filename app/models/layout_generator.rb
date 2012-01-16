@@ -27,14 +27,16 @@ class BlogPostsTag <TagBase
       self.blog_posts_tag = tag
     end
     
-        
     def title
       self.blog_post_model.title
     end
-    
-        
+            
     def body
       self.blog_post_model.body
+    end
+    
+    def url
+      self.blog_posts_tag.layout_generator.url_prefix+"/#{self.menu_model.id}"
     end
     
   end  
