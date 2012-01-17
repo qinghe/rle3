@@ -13,11 +13,26 @@ objs=[
     obj.save
   end
 =end                
-#section perma_names= [root,container,menu]
+
+# section perma_names= [root,container,menu]
 objects = Section.roots
 section_hash= objects.inject({}){|h,sp| h[sp.perma_name] = sp; h}
-#puts "section_hash=#{section_hash.keys}"
+# puts "section_hash=#{section_hash.keys}"
 website_id = section_hash['root'].website_id
+  
+# blog_post_list_or_detail
+blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'].id, "blog_post_list_or_detail", :website_id=>website_id) 
+blog_post_list_or_detail.add_section(section_hash['blog_post_list'].id)
+blog_post_list_or_detail.add_section(section_hash['blog_post_detail'].id)
+  
+# center area
+center_area = PageLayout.create_layout(section_hash['center_area'].id, "center_area", :website_id=>website_id)
+center_area.add_section(section_hash['center_part'].id,:perma_name=>"center_part")
+center_area.add_section(section_hash['left_part'].id,:perma_name=>"left_part")
+center_area.add_section(section_hash['right_part'].id,:perma_name=>"right_part")
+  
+  
+  
 root = PageLayout.create_layout(section_hash['root'].id, "layout1", :website_id=>website_id)
 
 header = root.add_section(section_hash['container'].id,:perma_name=>"header")
@@ -31,7 +46,7 @@ lftnav = body.add_section(section_hash['container'].id,:perma_name=>"lftnav")
 main_content = body.add_section(section_hash['container'].id,:perma_name=>"main_content")
 
 lftnav.add_section(section_hash['vmenu'].id,:perma_name=>"vmenu")
-main_content.add_section(section_hash['blog_post_list'].id,:perma_name=>"blog_post_list")
+main_content.add_layout_tree(blog_post_list_or_detail.id)
 
 footer.add_section(section_hash['hmenu'].id,:perma_name=>"footer_menu")
 footer.add_section(section_hash['text'].id,:perma_name=>"copyright")

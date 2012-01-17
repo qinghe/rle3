@@ -63,5 +63,29 @@ blog_post_list = Section.create_section(section_piece_hash['container'].id, {:pe
    'inner'=>{'15hidden'=>bool_true}})
 blog_post_list.add_section_piece(section_piece_hash['blog_post_list'].id).add_section_piece(section_piece_hash['blog_post'].id)
 
+blog_post_detail = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"blog_post_detail",:website_id=>website.id},
+  {'block'=>{'disabled_ha_ids'=>'111'},
+   'content_horizontal'=>{'disabled_ha_ids'=>'101'},
+   'inner'=>{'15hidden'=>bool_true}})
+blog_post_detail.add_section_piece(section_piece_hash['blog_post_detail'].id)
+
+################################################ center area start ##############################################  
+center_area = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"center_area",:subscribed_global_events=>"page_layout_fixed,block_width"},{'content_layout'=>{86=>bool_true,'86unset'=>unset_false},
+'block'=>{15=>"height:100px",'15unset'=>unset_false,:disabled_ha_ids=>"101"}})
+
+left_part = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"left_part",:global_events=>"block_width"},
+  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
+   'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:200px",'21unset'=>unset_false, 101=>"float:left",'101unset'=>unset_false,111=>"margin:0 -200px 0 0",'111unset'=>unset_false,:disabled_ha_ids=>"111"},
+   'inner'=>{'15hidden'=>bool_true}})
+right_part = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"right_part",:global_events=>"block_width"},
+  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
+   'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:200px",'21unset'=>unset_false, 101=>"float:right",'101unset'=>unset_false,111=>"margin:0 0 0 -200px",'111unset'=>unset_false,:disabled_ha_ids=>"111"},
+   'inner'=>{'15hidden'=>bool_true}})
+   
+center_part = Section.create_section(section_piece_hash['container'].id, {:perma_name=>"center_part",:global_events=>"block_width"},
+  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
+'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:100%",'21unset'=>unset_false, 101=>"float:left",'101unset'=>unset_false,111=>"margin:0 -100% 0 0",'111unset'=>unset_false, '111hidden'=>bool_true,:disabled_ha_ids=>"101,21"},
+'inner'=>{31=>"margin:0 200px 0 200px",'31unset'=>unset_false, '31hidden'=>bool_true, '15hidden'=>bool_true}})
+################################################ center area end ##############################################  
 
   
