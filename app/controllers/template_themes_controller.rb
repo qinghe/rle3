@@ -89,7 +89,7 @@ class TemplateThemesController < ApplicationController
     @theme.destroy
 
     respond_to do |format|
-      format.html { redirect_to(themes_url) }
+      format.html { redirect_to(template_themes_url) }
       format.xml  { head :ok }
     end
   end
