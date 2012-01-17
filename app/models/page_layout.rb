@@ -132,7 +132,7 @@ class PageLayout < ActiveRecord::Base
     end
     # root means we have copied all decendants and do not copy them other than root 
     if new_parent.root?
-      self.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",self.id, Time.now,Time.now],['root_id=?',new_layout.id])
+      self.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",self.id, Time.now,Time.now],['root_id=?',new_parent.id])
     end
   end
     

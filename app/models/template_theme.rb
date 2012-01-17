@@ -22,7 +22,7 @@ class TemplateTheme < ActiveRecord::Base
     new_layout.save!
     new_layout.update_attribute("root_id", new_layout.id)    
     layout.copy_decendants_to_new_parent(new_layout)   
-    layout.class.update_all(["copy_from=?,updated_at=?, created_at=?",layout.id, Time.now,Time.now],['root_id=?',new_layout.id])
+    #layout.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",layout.id, Time.now,Time.now],['root_id=?',new_layout.id])
     #create theme record
     new_theme = self.clone
     new_theme.perma_name = 'copy_'+self.perma_name

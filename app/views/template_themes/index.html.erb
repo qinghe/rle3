@@ -9,10 +9,8 @@
   <tr>
     <td><%=h theme.perma_name %></td>
 
-    <td><%= link_to 'Show', theme %></td>
-    <td><%= link_to 'Edit', edit_template_theme_path(theme) %></td>
     <td><%= link_to 'Destroy', theme, :confirm => 'Are you sure?', :method => :delete %></td>
-    <td><%= link_to 'copy', {:action=>"copy",:id=>theme} %></td>
+    <td><%= link_to 'copy', {:action=>"copy",:id=>theme}, {:method=>:post} %></td>
     <td><%= link_to 'Editor', editor_template_theme_path(theme) %></td>
   </tr>
 <% end %>
