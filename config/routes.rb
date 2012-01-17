@@ -13,6 +13,7 @@ Rle3::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  match 'preview(/:c(/:r))' => 'template_themes#preview', :as => :preview
 
   resources :template_files
   resources :menus
@@ -41,7 +42,7 @@ Rle3::Application.routes.draw do
        end
   
        collection do
-         get 'preview'
+         get 'preview' # add function preview_template_themes_path
          get 'publish'
          get 'upload_file_dialog'
          post :assign
