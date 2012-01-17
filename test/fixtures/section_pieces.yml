@@ -414,12 +414,14 @@ text:
   js: ""
 blog_post_list:
   id: 11
-  html: |          
+  html: |         
+    <? if @blog_posts.current.nil? ?> 
     <ul>
     <? for blog_post in @menus.current.blog_posts ?>
        ~~content~~
     <? end ?>
     </ul>
+    <? end ?>
   created_at: 2011-09-20 19:40:07
   is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
@@ -431,7 +433,7 @@ blog_post:
   id: 12
   html: |          
     <li>
-       <?=blog_post.title ?>
+       <a href="<?= blog_post.url ?>"> <?=blog_post.title ?> </a>
        <?=blog_post.body ?>
     </li>
   created_at: 2011-09-20 19:40:07
@@ -441,3 +443,18 @@ blog_post:
   css: ""
   perma_name: blog_post
   js: ""    
+blog_post_detail:
+  id: 13
+  html: |    
+    <? if @blog_posts.current ?>          
+    <p>   <?=@blog_posts.current.published_at ?> </p>
+    <p>   <?=@blog_posts.current.title ?> </p>
+    <p>   <?=@blog_posts.current.body ?>  </p>
+    <? end ?>
+  created_at: 2011-09-20 19:40:07
+  is_selectable: "0"
+  updated_at: 2011-09-20 19:40:07
+  is_container: "0"
+  css: ""
+  perma_name: blog_post_detail
+  js: ""      
