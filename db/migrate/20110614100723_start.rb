@@ -4,6 +4,10 @@ class Start < ActiveRecord::Migration
       t.string :perma_name
       t.string :url
       t.integer :index_page,     :null => false, :default => 0
+      t.integer :list_template,     :null => false, :default => 0
+      t.integer :detail_template,     :null => false, :default => 0
+      t.integer :plist_template,     :null => false, :default => 0
+      t.integer :pdetail_template,     :null => false, :default => 0
       t.timestamps
     end  
        

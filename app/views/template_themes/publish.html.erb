@@ -6,20 +6,7 @@ menu_roots = Menu.roots
 %>
 <% form_tag( assign_template_themes_path(),{:remote=>true,"data-type"=>"script"} ) do  %>
 <div id="publish">
-  <div class="clear-block">
-    <h3> assign page template</h3>
-    <ul >
-    <% for menu in menu_roots-%>
-      <li class="clear-block">
-        <div class="block">
-        <h4> <%= menu.title %>  </h4>  
-        <%=  render :partial=>"menu_and_template", :locals=>{:menu=>menu}%>
-          
-        </div> 
-      </li>
-    <% end-%>
-    </ul> 
-  </div>
+
   <div >
     <h3> assign website default pages</h3>
     <div><%= render :partial=>"default_pages_setting" %>

@@ -58,6 +58,13 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
     else  
       the_theme_id = self.menu_level[col]
     end    
+    
+    # this menu have no assigned theme, get theme from website default.
+    if the_theme_id==0
+      col = is_detail ? "detail_template" : "list_template"
+      col = "p"+col if is_preview
+      the_theme_id= Website.current[col]
+    end
     the_theme_id
   end
   

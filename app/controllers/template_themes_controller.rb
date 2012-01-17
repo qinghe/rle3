@@ -140,46 +140,9 @@ class TemplateThemesController < ApplicationController
     if commit_command=~/Update/
       #update default page
       website_params = params[:website]
-      self.website[:index_page] = website_params[:index_page].to_i
+      self.website.attributes = website_params
       self.website.save
-      #update all pages.
-      for menu in Menu.roots
-        menu_params = params["menu#{menu.id}"]
-        if menu_params
-          menu.inheritance = menu_params[:inheritance]
-          if menu.inheritance
-            for item in menu.self_and_descendants
-              item_params = params["menu#{item.id}"]          
-              item.theme_id = item_params[:theme_id].to_i
-              item.detail_theme_id = item_params[:detail_theme_id].to_i
-              item.ptheme_id = item_params[:ptheme_id].to_i
-              item.pdetail_theme_id = item_params[:pdetail_theme_id].to_i
-              item.save
-            end        
-          else
-            levels = []
-            menu_for_levels = {}
-            Menu.each_with_level(menu.self_and_descendants) do |o, level|
-              next if levels.include? level
-              levels << level
-              menu_for_levels[level] =  o
-            end
-            
-            for level in levels
-              item = menu_for_levels[level]
-              item_params = params["menu#{menu.id}_level#{level}"]
-              if item.menu_level.nil?
-                item_params['level'] = level
-                item.create_menu_level(item_params)
-              else
-                item.menu_level.update_attributes(item_params)
-              end
-            end
-              
-          end
-          menu.save
-        end
-      end
+      
     end
     
     if commit_command=~/Publish/

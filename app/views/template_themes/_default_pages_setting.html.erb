@@ -1,13 +1,31 @@
-
-<%=  form_for(@website, :url => {:action=>"assign_default"}, :html=>{:id=>'website_form', :method=>"post"}) do |f|-%>
+<% themes = TemplateTheme.all()
+%>
 
 <table>
   <tr>
     <th> default index page </th>
     <td><%=  grouped_collection_select("website", "index_page", Menu.roots, :descendants, "perma_name", "id", "perma_name")%>  
+    </td>    
+  </tr>
+  <tr>
+    <th> default list template</th>
+    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.list_template, :select_name=>"website[list_template]", :enable_inheritance=>false}%>
     </td>
   </tr>
-
+  <tr>
+    <th> default detail template</th>
+    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.detail_template, :select_name=>"website[detail_template]", :enable_inheritance=>false}%>
+    </td>
+  </tr>
+  <tr>
+    <th> default list template for preview</th>
+    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.plist_template, :select_name=>"website[plist_template]", :enable_inheritance=>false}%>
+    </td>
+  </tr>
+  <tr>
+    <th> default detail template for preview</th>
+    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.pdetail_template, :select_name=>"website[pdetail_template]", :enable_inheritance=>false}%>
+    </td>
+  </tr>
 </table>
 
-<% end-%>

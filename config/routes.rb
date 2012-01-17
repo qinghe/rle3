@@ -16,7 +16,12 @@ Rle3::Application.routes.draw do
   match 'preview(/:c(/:r))' => 'template_themes#preview', :as => :preview
 
   resources :template_files
-  resources :menus
+  resources :menus do
+    collection do
+        get 'assign_template'
+        post 'assign_template'
+    end  
+  end
   resources :param_values
   resources :section_params
   resources :section_piece_params

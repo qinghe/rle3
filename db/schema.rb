@@ -209,7 +209,11 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   create_table "websites", :force => true do |t|
     t.string   "perma_name"
     t.string   "url"
-    t.integer  "index_page", :default => 0, :null => false
+    t.integer  "index_page",       :default => 0, :null => false
+    t.integer  "list_template",    :default => 0, :null => false
+    t.integer  "detail_template",  :default => 0, :null => false
+    t.integer  "plist_template",   :default => 0, :null => false
+    t.integer  "pdetail_template", :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

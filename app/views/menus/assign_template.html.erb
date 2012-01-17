@@ -1,0 +1,24 @@
+<%
+# @menu is required
+menu_roots = Menu.roots
+
+%>
+<% form_tag( assign_template_menus_path() ) do  %>
+
+  <div class="clear-block">
+    <h3> assign page template</h3>
+    <ul >
+    <% for menu in menu_roots-%>
+      <li class="clear-block">
+        <div class="block">
+        <h4> <%= menu.title %>  </h4>  
+        <%=  render :partial=>"menu_and_template", :locals=>{:menu=>menu}%>
+          
+        </div> 
+      </li>
+    <% end-%>
+    </ul> 
+  </div>
+  <%= submit_tag  "submit"%>
+  <% end-%>
+  
