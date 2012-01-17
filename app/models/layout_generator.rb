@@ -27,6 +27,10 @@ class BlogPostsTag <TagBase
       self.blog_posts_tag = tag
     end
     
+    def id
+      self.blog_post_model.id
+    end
+    
     def title
       self.blog_post_model.title
     end
@@ -35,27 +39,56 @@ class BlogPostsTag <TagBase
       self.blog_post_model.body
     end
     
+    def published_at
+      self.blog_post_model.published_at
+    end
+    
     def url
-      self.blog_posts_tag.layout_generator.url_prefix+"/#{self.menu_model.id}"
+      self.blog_posts_tag.layout_generator.build_url(
+        :blog_post_id=>self.id, 
+        :menu_id=>blog_posts_tag.wrapped_menu.id)
     end
     
   end  
   
-  attr_accessor :blog_post_models, :blog_posts
+  attr_accessor :blog_post_models, :blog_posts, :current, :wrapped_menu
   
-  def initialize(layout_generator_instance)
-    super
-    self.blog_post_models = self.layout_generator.menu.blog_posts
-    
-    self.blog_posts = self.blog_post_models.collect{|item| WrappedBlogPost.new(self, item)}
+  def initialize(layout_generator_instance, wrapped_menu_instance)
+    super(layout_generator_instance)
+    @blog_post_models = nil
+    @blog_posts=nil
+    @current = nil
+    @wrapped_menu = wrapped_menu_instance
   end
   
- 
+  def blog_post_models
+    if @blog_post_models.nil?
+      self.blog_post_models = self.layout_generator.menu.blog_posts
+    end
+    @blog_post_models
+  end
+  
+  def blog_posts
+    if @blog_posts.nil?
+      self.blog_posts = self.blog_post_models.collect{|item| WrappedBlogPost.new(self, item)}      
+    end
+    @blog_posts    
+  end
+   
   def each(&block)
     self.blog_posts.each{|item|
       yield item
     }
   end
+  # means the current select blog post in erubis context.
+  def current
+    if @current.nil? and !self.layout_generator.resource.nil?
+      @current = WrappedBlogPost.new( self, layout_generator.resource)
+    end
+    @current
+  end
+   
+  
 end
 
 class MenusTag <TagBase
@@ -73,13 +106,17 @@ class MenusTag <TagBase
       self.menu_model.children.collect{|item| WrappedMenu.new(self.menus_tag, item)}
     end
     
+    def id
+      self.menu_model.id
+    end
+    
     def title
       self.menu_model.title
     end
     
     # url link to the menu itme's page(each menu itme link to a page).
     def url
-      self.menus_tag.layout_generator.url_prefix+"/#{self.menu_model.id}"
+      self.menus_tag.layout_generator.build_url(:menu_id=>menu_model.id)
     end
     
     def clickable?
@@ -92,7 +129,7 @@ class MenusTag <TagBase
     
     def blog_posts
       if blog_posts_tag.nil?
-        self.blog_posts_tag = BlogPostsTag.new(self.menus_tag.layout_generator)
+        self.blog_posts_tag = BlogPostsTag.new(self.menus_tag.layout_generator, self)
       end
       self.blog_posts_tag
     end
@@ -271,14 +308,14 @@ class LayoutGenerator
   cattr_accessor :pattern
   self.pattern = '<\? \?>'
   
-  attr_accessor :website, :menu, :layout, :theme
+  attr_accessor :website, :menu, :layout, :theme, :resource # resource could be blog_post, flash, file, image...
   attr_accessor :layout_id, :theme_id
   attr_accessor :url_prefix
   attr_accessor :html, :css, :js
   #ruby embeded source
   attr_accessor :ehtml, :ecss, :ejs 
   #these attributes are for templates
-  attr_accessor :param_values_tag, :websites_tag, :menus_tag
+  attr_accessor :param_values_tag, :websites_tag, :menus_tag, :blog_posts_tag
   attr_accessor :context
   attr_accessor :is_preview
   def initialize( param_theme_id,param_layout_id, param_menu_id, options={})
@@ -288,9 +325,13 @@ class LayoutGenerator
     self.website = self.theme.website
     self.layout_id, self.theme_id = param_layout_id, param_theme_id
     if options[:preview_url]
-      self.url_prefix = "/template_themes/preview"
+      self.url_prefix = "/preview"
     else
       self.url_prefix = "/erubis/example"
+    end
+    self.resource = nil
+    if options[:blog_post_id]
+      self.resource = BlogPost.find(options[:blog_post_id])
     end
     html = css = js = nil
     ehtml = ecss = ejs = nil
@@ -299,7 +340,8 @@ class LayoutGenerator
     self.param_values_tag = ParamValuesTag.new(self)    
     self.websites_tag = WebsitesTag.new(self)    
     self.menus_tag = MenusTag.new(self)    
-    self.context = {:param_values=>param_values_tag,:website=>websites_tag, :menus=>menus_tag}  
+    self.blog_posts_tag = self.menus_tag.current.blog_posts
+    self.context = {:param_values=>param_values_tag,:website=>websites_tag, :menus=>menus_tag, :blog_posts=>blog_posts_tag}  
   end
   
 
@@ -332,6 +374,14 @@ class LayoutGenerator
   def init_availables
     
     
+  end
+  
+  def build_url(options={})
+    menu_id = options[:menu_id]
+    blog_post_id = options[:blog_post_id]  
+    url= self.url_prefix+"/#{menu_id}"
+    url<< "/#{blog_post_id}" if blog_post_id
+    url
   end
   
 end

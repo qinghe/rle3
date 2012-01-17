@@ -1,6 +1,6 @@
 class TemplateThemesController < ApplicationController
   cattr_accessor :layout_base_path
-  self.layout_base_path = File.join(RAILS_ROOT,"public","shops")   
+  self.layout_base_path = File.join(::Rails.root.to_s,"public","shops")   
 
   # GET /themes
   # GET /themes.xml
@@ -101,15 +101,18 @@ class TemplateThemesController < ApplicationController
     #for debug
     params[:d] = 'www.rubyecommerce.com'
     
-    the_website=the_menu=the_layout=the_theme = nil
+    the_website=the_menu=the_layout=the_theme = the_resource = nil
     the_website = Website.find_by_url(params[:d])
-    if params[:id]
-      the_menu = Menu.find_by_id(params[:id])
+    if params[:c]
+      the_menu = Menu.find_by_id(params[:c])
+      if params[:r]
+        the_resource = BlogPost.find_by_id(params[:r])
+      end  
     else
       the_menu = Menu.find_by_id(the_website.index_page)  
     end
     the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id)
+    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id,{:blog_post_id=>(the_resource.nil? ? nil:the_resource.id)})
     #insert css to html
     style = %Q!<style type="text/css">#{css}</style>!
     html.insert(html.index("</head>"),style)
@@ -441,7 +444,7 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   end
   
   def do_preview( theme_id, layout_id, menu_id, options={})
-      options[:preview_url] = preview_template_themes_url
+      options[:preview_url] = true #preview_template_themes_url
       theme = TemplateTheme.find(theme_id)
       @lg = LayoutGenerator.new( theme_id, layout_id, menu_id, options)
       html, css = @lg.generate
