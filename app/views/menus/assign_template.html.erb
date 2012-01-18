@@ -5,20 +5,31 @@ menu_roots = Menu.roots
 %>
 <% form_tag( assign_template_menus_path() ) do  %>
 
-  <div class="clear-block">
+  <div id="assign_template" class="clear-block">
     <h3> assign page template</h3>
-    <ul >
-    <% for menu in menu_roots-%>
-      <li class="clear-block">
-        <div class="block">
-        <h4> <%= menu.title %>  </h4>  
-        <%=  render :partial=>"menu_and_template", :locals=>{:menu=>menu}%>
-          
-        </div> 
-      </li>
-    <% end-%>
-    </ul> 
+      <ul class="tabs fl" style="width:30%">
+      <% for menu in menu_roots-%>
+        <li style="float: none;">
+          <a> <%= menu.title %>  </a>  
+        </li>
+      <% end-%>
+      </ul>
+      <div class="fl" style="width:69%">
+      <% for menu in menu_roots-%>
+        <div>
+          <%=  render :partial=>"menu_and_template", :locals=>{:menu=>menu}%>
+        </div>
+      <% end-%>       
+      <%= submit_tag  "submit"%>
+    </div>
   </div>
-  <%= submit_tag  "submit"%>
   <% end-%>
-  
+<script type="text/javascript" charset="utf-8">
+  $("#assign_template .tabs li").click(function(){
+    $(this).parent().find('a').removeClass('selected');
+    $(this).find('a').addClass('selected'); 
+    $(this).parent().next().children('div').hide();
+    $(this).parent().next().children().eq($(this).index()).show();
+  });  
+  $("#assign_template .tabs li").first().click();
+</script>

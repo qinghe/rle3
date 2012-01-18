@@ -45,7 +45,7 @@ class BlogPostsController < ApplicationController
     respond_to do |format|
       if @blog_post.save
         @blog_post.assignments.create(assignment)
-        format.html { redirect_to(@blog_post, :notice => 'Blog post was successfully created.') }
+        format.html { redirect_to(blog_posts_url, :notice => 'Blog post was successfully created.') }
         format.xml  { render :xml => @blog_post, :status => :created, :location => @blog_post }
       else
         format.html { render :action => "new" }
