@@ -1,0 +1,6 @@
+<ul>
+<% for item in menus-%>
+
+  <li> <%= link_to item.title, :url=>{:action=>"select_tree",:menu_id=>item.id}, :remote=>true %></li>
+<% end-%>
+</ul>

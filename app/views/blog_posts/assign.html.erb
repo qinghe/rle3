@@ -1,24 +1,31 @@
+<%
+  blog_posts = BlogPost.all()
+  menus = Menu.roots
+  menu = menus.first
+%>
+
+
 <div class="clear-block"> 
-  <div class="fl" style="width:33%">
+  <div class="fl block" style="width:30%">
     <div>
-      menu root list
+      <%= select "menu","id",menus.collect {|p| [ p.title, p.id ] }%>
     </div>
-    <div>
-    menu list
-    </div>
+    <div id="menu_list">
+      <%= render :partial=>"menu_list",:locals=>{:menus=>menu.children}%>
+     </div>
   </div>
   
   
-  <div class="fl" style="width:33%">
-    
-    assignment
+  <div class="fl block" style="width:33%">
+    <div>assignment</div>
+    <div id="assignment_list"></div>
     
   </div>
   
   
-  <div class="fr" style="width:33%">
-    
-    blog posts
+  <div class="fr block" style="width:30%">
+    <div>blog post list</div>
+      <%= render :partial=>"blog_post_list",:locals=>{:blog_posts=>blog_posts }%>
     
   </div>
 </div>
