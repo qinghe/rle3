@@ -5,7 +5,9 @@ class PageLayout < ActiveRecord::Base
   #has_many :param_values, :foreign_key=>:layout_id, :primary_key=>root.id
   # remove section relatives after page_layout destroyed.
   before_destroy :remove_section
-
+  
+  scope :full_html, where(:is_full_html=>true)
+  
   # a page_layout tree could be whole html or partial html, it depend's on self.section.section_piece.is_root?,  
   # it is only for root.
   def is_html_root?
@@ -45,13 +47,14 @@ class PageLayout < ActiveRecord::Base
   end
   #notice: attribute section_id, perma_name required
   # section.root.section_piece_id should be 'root'
-  def self.create_layout(section_id, title, attrs={})
+  def self.create_layout(section, title, attrs={})
     #create record in table page_layouts
-    obj = create!(:section_id=>section_id) do |l|
+    obj = create!(:section_id=>section.id) do |l|
       l.title = title
       l.perma_name = title.underscore
       l.attributes = attrs unless attrs.empty?
       l.section_instance = 1
+      l.is_full_html = section.section_piece.is_root?
     end
     obj.update_attribute("root_id",obj.id)
     #create a theme for it.
