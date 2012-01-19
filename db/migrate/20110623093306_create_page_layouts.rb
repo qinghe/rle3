@@ -17,6 +17,9 @@ class CreatePageLayouts < ActiveRecord::Migration
       # this node is copy from another tree, ex. center area is a layout tree, we prebuilt it for user.
       # value is layout tree's root_id.  
       t.column "copy_from_root_id",              :integer,                  :null => false, :default => 0
+      # it is only for root record, this layout tree is full html page.
+      # there are two kinds of layout tree  full_html_page and part_html_page
+      t.column "is_full_html",             :boolean,                :null => false, :default => false
       t.timestamps
       
     end

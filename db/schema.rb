@@ -93,14 +93,15 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "website_id",        :limit => 3,   :default => 0
     t.integer  "root_id",           :limit => 3
     t.integer  "parent_id",         :limit => 3
-    t.integer  "lft",               :limit => 2,   :default => 0,    :null => false
-    t.integer  "rgt",               :limit => 2,   :default => 0,    :null => false
-    t.string   "title",             :limit => 200, :default => "",   :null => false
-    t.string   "perma_name",        :limit => 200, :default => "",   :null => false
+    t.integer  "lft",               :limit => 2,   :default => 0,     :null => false
+    t.integer  "rgt",               :limit => 2,   :default => 0,     :null => false
+    t.string   "title",             :limit => 200, :default => "",    :null => false
+    t.string   "perma_name",        :limit => 200, :default => "",    :null => false
     t.integer  "section_id",        :limit => 3,   :default => 0
-    t.integer  "section_instance",  :limit => 2,   :default => 0,    :null => false
-    t.boolean  "is_enabled",                       :default => true, :null => false
-    t.integer  "copy_from_root_id",                :default => 0,    :null => false
+    t.integer  "section_instance",  :limit => 2,   :default => 0,     :null => false
+    t.boolean  "is_enabled",                       :default => true,  :null => false
+    t.integer  "copy_from_root_id",                :default => 0,     :null => false
+    t.boolean  "is_full_html",                     :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

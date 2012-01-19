@@ -21,19 +21,19 @@ section_hash= objects.inject({}){|h,sp| h[sp.perma_name] = sp; h}
 website_id = section_hash['root'].website_id
   
 # blog_post_list_or_detail
-blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'].id, "blog_post_list_or_detail", :website_id=>website_id) 
+blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'], "blog_post_list_or_detail", :website_id=>website_id) 
 blog_post_list_or_detail.add_section(section_hash['blog_post_list'].id)
 blog_post_list_or_detail.add_section(section_hash['blog_post_detail'].id)
   
 # center area
-center_area = PageLayout.create_layout(section_hash['center_area'].id, "center_area", :website_id=>website_id)
+center_area = PageLayout.create_layout(section_hash['center_area'], "center_area", :website_id=>website_id)
 center_area.add_section(section_hash['center_part'].id,:perma_name=>"center_part")
 center_area.add_section(section_hash['left_part'].id,:perma_name=>"left_part")
 center_area.add_section(section_hash['right_part'].id,:perma_name=>"right_part")
   
   
   
-root = PageLayout.create_layout(section_hash['root'].id, "layout1", :website_id=>website_id)
+root = PageLayout.create_layout(section_hash['root'], "layout1", :website_id=>website_id)
 
 header = root.add_section(section_hash['container'].id,:perma_name=>"header")
 header.add_section(section_hash['logo'].id)
