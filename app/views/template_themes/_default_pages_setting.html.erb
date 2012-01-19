@@ -1,4 +1,5 @@
-<% themes = TemplateTheme.all()
+<% page_layouts = PageLayout.full_html
+
 %>
 
 <table>
@@ -9,22 +10,22 @@
   </tr>
   <tr>
     <th> default list template</th>
-    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.list_template, :select_name=>"website[list_template]", :enable_inheritance=>false}%>
+    <td> <%= render :partial=>"/common/layout_theme_select", :locals=>{:page_layouts=>page_layouts, :selected_value=>Website.current.list_template, :select_name=>"website[list_template]", :enable_inheritance=>false}%>
     </td>
   </tr>
   <tr>
     <th> default detail template</th>
-    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.detail_template, :select_name=>"website[detail_template]", :enable_inheritance=>false}%>
+    <td> <%= render :partial=>"/common/layout_theme_select", :locals=>{:page_layouts=>page_layouts, :selected_value=>Website.current.detail_template, :select_name=>"website[detail_template]", :enable_inheritance=>false}%>
     </td>
   </tr>
   <tr>
     <th> default list template for preview</th>
-    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.plist_template, :select_name=>"website[plist_template]", :enable_inheritance=>false}%>
+    <td> <%= render :partial=>"/common/layout_theme_select", :locals=>{:page_layouts=>page_layouts, :selected_value=>Website.current.plist_template, :select_name=>"website[plist_template]", :enable_inheritance=>false}%>
     </td>
   </tr>
   <tr>
     <th> default detail template for preview</th>
-    <td> <%= render :partial=>"/common/template_select", :locals=>{:themes=>themes, :selected_value=>Website.current.pdetail_template, :select_name=>"website[pdetail_template]", :enable_inheritance=>false}%>
+    <td> <%= render :partial=>"/common/layout_theme_select", :locals=>{:page_layouts=>page_layouts, :selected_value=>Website.current.pdetail_template, :select_name=>"website[pdetail_template]", :enable_inheritance=>false}%>
     </td>
   </tr>
 </table>
