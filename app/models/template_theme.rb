@@ -9,25 +9,20 @@ class TemplateTheme < ActiveRecord::Base
     "#{layout_id}_#{id}.#{usage}"
   end
 
-  # Usage: user want to copy this layout to new for editing or backup.
+  # Usage: user want to copy this layout&theme to new for editing or backup.
   #        we need copy param_value and theme_images
   #        note that it is only for root. 
   def copy_to_new()
 
     layout = self.page_layout    
-    #create new root first, get new root id.
-    new_layout = layout.clone
-    new_layout.perma_name = "copy_"+layout.perma_name
-    new_layout.root_id = 0 # reset the lft,rgt.
-    new_layout.save!
-    new_layout.update_attribute("root_id", new_layout.id)    
-    layout.copy_decendants_to_new_parent(new_layout)   
-    #layout.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",layout.id, Time.now,Time.now],['root_id=?',new_layout.id])
+    #copy new whole tree
+    new_layout = layout.copy_to_new
     #create theme record
     new_theme = self.clone
     new_theme.perma_name = 'copy_'+self.perma_name
     new_theme.layout_id = new_layout.id
     new_theme.save!
+    
     #copy param values
     #INSERT INTO tbl_temp2 (fld_id)    SELECT tbl_temp1.fld_order_id    FROM tbl_temp1 WHERE tbl_temp1.fld_order_id > 100;
     table_name = "param_values"
@@ -36,12 +31,16 @@ class TemplateTheme < ActiveRecord::Base
     table_column_names.delete('id')
     
     table_column_values  = table_column_names.dup
-    table_column_values[table_column_values.index('layout_id')] = new_layout.id
+    table_column_values[table_column_values.index('root_layout_id')] = new_layout.id
     table_column_values[table_column_values.index('theme_id')] = new_theme.id
     
-    sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((layout_id =#{layout.id}) and (theme_id =#{self.id}))! 
-    self.class.connection.execute(sql)    
-    
+    #copy param value from origin to new.
+    sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((root_layout_id =#{layout.id}) and (theme_id =#{self.id}))! 
+    self.class.connection.execute(sql)
+    #update layout_id to new_layout.id    
+    for layout in new_layout.descendants
+      ParamValue.update_all(["layout_id=?", layout.id],["root_layout_id=? and section_id=? and section_instance=?",layout.root_id, layout.section_id, layout.section_instance])
+    end
     return new_theme
   end
   

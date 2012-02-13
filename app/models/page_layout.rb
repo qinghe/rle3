@@ -133,12 +133,25 @@ class PageLayout < ActiveRecord::Base
         node.copy_decendants_to_new_parent(clone_node)
       end
     end
-    # root means we have copied all decendants and do not copy them other than root 
+    # copy_from_root_id means we have copied all decendants and do not copy them other than root 
     if new_parent.root?
       self.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",self.id, Time.now,Time.now],['root_id=?',new_parent.id])
     end
   end
+   
+  # copy whole tree
+  def copy_to_new(new_attributes = nil)
+    #create new root first, get new root id.
+    new_layout = self.clone
+    new_layout.perma_name = "copy_"+self.perma_name
+    new_layout.root_id = 0 # reset the lft,rgt.
+    new_layout.save!
+    new_layout.update_attribute("root_id", new_layout.id)  
     
+    self.copy_decendants_to_new_parent(new_layout)
+    new_layout.reload
+  end
+   
   #
   # Usage: modify layout, add the section instance as child of current node into the layout,
   # Params: page_layout, instance of model PageLayout 
