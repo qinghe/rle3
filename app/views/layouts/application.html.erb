@@ -12,15 +12,18 @@
   <%= javascript_include_tag  'jquery.form.js' %>
 </head>
 <body>
-
-<%= render :partial => "/layouts/main_menu" %>
-<% if File.exists?("app/views/#{params[:controller]}/_sub_menu.html.erb")-%>
-<%= render :partial => "sub_menu" %>
-<% end-%>
+<div id="header">
+  <%= render :partial => "/layouts/main_menu" %>
+  <% if File.exists?("app/views/#{params[:controller]}/_sub_menu.html.erb")-%>
+  <%= render :partial => "sub_menu" %>
+  <% end-%>
+</div>
+<div id="message">
 <%= render :partial=>"/base/message_box"%>
-
+</div>
+<div id="content">
 <%= yield %>
-
+</div>
 <%= render :partial=>"/base/model_dialog"%>
 </body>
 </html>

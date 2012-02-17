@@ -252,7 +252,7 @@ class ParamValuesTag < TagBase
         end
       end
     end
-Rails.logger.debug    " class_name={class_name}, val=#{val}"
+# Rails.logger.debug    " class_name={class_name}, val=#{val}"
     val
   end
   
@@ -309,7 +309,7 @@ class LayoutGenerator
   self.pattern = '<\? \?>'
   
   attr_accessor :website, :menu, :layout, :theme, :resource # resource could be blog_post, flash, file, image...
-  attr_accessor :layout_id, :theme_id
+  attr_accessor :layout_id, :theme_id, :editor
   attr_accessor :url_prefix
   attr_accessor :html, :css, :js
   #ruby embeded source
@@ -329,6 +329,8 @@ class LayoutGenerator
     else
       self.url_prefix = "/erubis/example"
     end
+    
+    self.editor = options[:editor]
     self.resource = nil
     if options[:blog_post_id]
       self.resource = BlogPost.find(options[:blog_post_id])
@@ -344,6 +346,9 @@ class LayoutGenerator
     self.context = {:param_values=>param_values_tag,:website=>websites_tag, :menus=>menus_tag, :blog_posts=>blog_posts_tag}  
   end
   
+  def has_editor?
+    self.editor.present?
+  end
 
   #build html, css sourse
   def build

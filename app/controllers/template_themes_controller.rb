@@ -100,7 +100,7 @@ class TemplateThemesController < ApplicationController
   def preview
     #for debug
     params[:d] = 'www.rubyecommerce.com'
-    
+    editor = params[:editor]
     the_website=the_menu=the_layout=the_theme = the_resource = nil
     the_website = Website.find_by_url(params[:d])
     if params[:c]
@@ -112,7 +112,7 @@ class TemplateThemesController < ApplicationController
       the_menu = Menu.find_by_id(the_website.index_page)  
     end
     the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id,{:blog_post_id=>(the_resource.nil? ? nil:the_resource.id)})
+    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id,{:blog_post_id=>(the_resource.nil? ? nil:the_resource.id),:editor=>editor})
     #insert css to html
     style = %Q!<style type="text/css">#{css}</style>!
     html.insert(html.index("</head>"),style)
