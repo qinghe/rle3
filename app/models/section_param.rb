@@ -1,7 +1,7 @@
 class SectionParam < ActiveRecord::Base  
   has_one :default_param_value, :conditions=>["layout_id=? and theme_id=?",0,0]
   belongs_to :section_piece_param
-  serialize :defalut_value, Hash
+  serialize :default_value, Hash
   
   
   def disabled_html_attribute_ids

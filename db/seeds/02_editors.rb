@@ -6,6 +6,6 @@ editors = [{:id=>1,:perma_name=>'config'},
     ]
 for ha in     editors
   obj = Editor.new
-  obj.send(:attributes=, ha, false)
+  obj.assign_attributes( ha,  :without_protection => true)
   obj.save
 end

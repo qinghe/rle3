@@ -120,7 +120,7 @@ objs=[
 HtmlAttribute.delete_all              
 for ha in objs
   obj = HtmlAttribute.new
-  obj.send(:attributes=, ha, false)
+  obj.assign_attributes( ha,  :without_protection => true)
   obj.save
 end
                 

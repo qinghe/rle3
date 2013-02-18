@@ -47,7 +47,7 @@ SectionPieceParam.delete_all
 for ha in objs
   obj = SectionPieceParam.new
   obj.param_conditions={}
-  obj.send(:attributes=, ha, false)
+  obj.assign_attributes( ha,  :without_protection => true)
   obj.save
 end
                 

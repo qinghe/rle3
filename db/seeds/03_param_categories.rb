@@ -23,7 +23,7 @@ objs=[
 ParamCategory.delete_all              
 for ha in objs
   obj = ParamCategory.new
-  obj.send(:attributes=, ha, false)
+  obj.assign_attributes( ha,  :without_protection => true)
   obj.save
 end
                 

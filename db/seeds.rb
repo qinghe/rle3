@@ -11,7 +11,7 @@
 
 # plese load section_pieces first, seed sections.rb need it.
 require 'active_record/fixtures'
-Fixtures.create_fixtures("#{Rails.root}/test/fixtures", "section_pieces")   
+ActiveRecord::Fixtures.create_fixtures("#{Rails.root}/test/fixtures", "section_pieces")   
 
 SectionParam.delete_all
 ParamValue.delete_all

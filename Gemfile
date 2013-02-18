@@ -1,12 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.9'
+gem 'rails', '3.2.8'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 #gem 'sqlite3'
-gem "mysql2", '~>0.2.6'
+gem "mysql2"
 gem "acts_as_list"
 gem "acts_as_tree"
 gem "awesome_nested_set"
@@ -33,9 +33,7 @@ gem 'jquery-rails', '>= 1.0.12'
 # group :development, :test do
 #   gem 'webrat'
 # end
-group :development, :test do
-  gem "mongrel"
-end
-group :production do
-  gem "passenger",'2.2.9' 
-end
+
+#group :production do
+#  gem "passenger",'2.2.9' #only this work on server 
+#end
