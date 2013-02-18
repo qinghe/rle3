@@ -1,3 +1,4 @@
+#it is a theme of page_layout
 class TemplateTheme < ActiveRecord::Base
   belongs_to :website
   belongs_to :page_layout, :foreign_key=>"layout_id", :dependent=>:destroy
@@ -18,14 +19,14 @@ class TemplateTheme < ActiveRecord::Base
     #copy new whole tree
     new_layout = layout.copy_to_new
     #create theme record
-    new_theme = self.clone
+    new_theme = self.dup
     new_theme.perma_name = 'copy_'+self.perma_name
     new_theme.layout_id = new_layout.id
     new_theme.save!
     
     #copy param values
     #INSERT INTO tbl_temp2 (fld_id)    SELECT tbl_temp1.fld_order_id    FROM tbl_temp1 WHERE tbl_temp1.fld_order_id > 100;
-    table_name = "param_values"
+    table_name = ParamValue.table_name
     
     table_column_names = ParamValue.column_names
     table_column_names.delete('id')

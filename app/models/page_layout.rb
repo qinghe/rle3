@@ -89,7 +89,7 @@ class PageLayout < ActiveRecord::Base
     new_section_instance =  ( cached_whole_tree.select{|xnode| xnode.section_id==self.section_id}.size +
       added_section_ids.select{|xid| xid==self.section_id}.size ).succ
     
-    clone_node = self.clone
+    clone_node = self.dup # do not call clone, or modify itself
     clone_node.parent_id = new_parent.id
     clone_node.root_id = new_parent.root_id
     clone_node.section_instance = new_section_instance
@@ -125,7 +125,7 @@ class PageLayout < ActiveRecord::Base
   # since copy to new root, there is no section_instance confliction.
   def copy_decendants_to_new_parent(new_parent)
     for node in self.children
-      clone_node = node.clone
+      clone_node = node.dup
       clone_node.parent_id = new_parent.id
       clone_node.root_id = new_parent.root_id
       clone_node.save!
@@ -142,7 +142,7 @@ class PageLayout < ActiveRecord::Base
   # copy whole tree
   def copy_to_new(new_attributes = nil)
     #create new root first, get new root id.
-    new_layout = self.clone
+    new_layout = self.dup
     new_layout.perma_name = "copy_"+self.perma_name
     new_layout.root_id = 0 # reset the lft,rgt.
     new_layout.save!

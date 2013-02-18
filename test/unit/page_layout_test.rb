@@ -16,10 +16,12 @@ class PageLayoutTest < ActiveSupport::TestCase
     assert root.root?
   end
   
-  test "should create a root by clone" do
+  test "should create a root by dup" do
     
     #lft, rgt is updated automatically, updated_at, created_at is same as original.
-    assert PageLayout.root.clone.save
+    original_count = PageLayout.count
+    assert PageLayout.root.dup.save
+    assert PageLayout.count == original_count.succ
   end
   
   test "should get themes" do
