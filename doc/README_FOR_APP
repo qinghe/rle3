@@ -1,6 +1,43 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+==General design idea
 
-page_layout is html structure.
+a page contains many menus, each menu has some menu items.
+each menu item has a template to show the content, in other words, it is another page.
 
-theme decide content and css. 
+user could assign sets of products or groups to menu item, and name each set. 
+while rendering page template, it would know assigned products and display them. 
+
+section is piece of html.
+a section has two kinds of section params
+  1. assigned website resource, ex. menu, image, logo, flash      
+  2. css stuff, positon/color/font
+
+   
+
+page_layout is html.
+page_layout is section tree,
+there are 5 contexts, each context contain proper available data_source 
+  1. product,blog... list,  data_source: named_product_set
+  2. product,blog... detail, data_source: current_product
+  3. cart
+  4. account 
+  5. either
+since a data_source may be contain multiple kinds of source, we need filters to specify/sort them.
+ex. named_product_set, may contain group and product. 
+a page_layout display group title for assigned group,   
+    some sections only available under proper context.
+    product_attribute
+    product_images
+
+data_sources
+  named_product_set > :group > products 
+                    > :product
+                    
+each section in page_layout own a context.  
+  
+  
+template_theme is website resource and css. 
+  
+a page_layout could has many template_themes
+
+if a template_theme apply to new website, should configure website resource first.
+

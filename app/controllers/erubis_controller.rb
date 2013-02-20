@@ -1,7 +1,7 @@
 require 'erubis'
 class ErubisController < ApplicationController
   cattr_accessor :layout_base_path
-  self.layout_base_path = File.join(RAILS_ROOT,"public","shops")   
+  self.layout_base_path = File.join(Rails.root,"public","shops")   
 
   def index
     @page_layouts = PageLayout.roots

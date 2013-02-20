@@ -304,7 +304,7 @@ end
 class LayoutGenerator
   cattr_accessor :layout_base_path, :layout_public_path
   self.layout_public_path = File.join(File::SEPARATOR,"shops")
-  self.layout_base_path = File.join(RAILS_ROOT,'public',layout_public_path)   
+  self.layout_base_path = File.join(Rails.root,'public',layout_public_path)   
   cattr_accessor :pattern
   self.pattern = '<\? \?>'
   
