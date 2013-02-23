@@ -17,9 +17,9 @@ class SectionTest < ActiveSupport::TestCase
   
   test "should build menu content" do
     
-    @section = Section.first(:conditions=>["perma_name=?","menu"])
+    @section = Section.root
     #assert @section
-logger.debug "content:#{@section.build_html}"     
+Rails.logger.debug "content:#{@section.build_html}"     
     assert @section.build_html
   end
   

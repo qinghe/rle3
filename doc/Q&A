@@ -1,0 +1,5 @@
+1. run a unit test?
+  cd test
+  ruby -ITest -I. unit/page_layout_test.rb
+  references:
+  http://stackoverflow.com/questions/3950768/rails-tests-cant-find-test-helper 

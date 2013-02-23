@@ -13,6 +13,9 @@ class CreatePageLayouts < ActiveRecord::Migration
       t.column "section_id",             :integer, :limit => 3,     :null => true,  :default => 0
       # id of sections, only root could be here.
       t.column "section_instance",       :integer, :limit => 2,     :null => false, :default => 0
+      t.column "section_context",        :string,  :limit => 32,    :null => false, :default => ""
+      t.column "data_source",            :string,  :limit => 32,    :null => false, :default => ""
+      t.column "data_filter",            :string,  :limit => 32,    :null => false, :default => ""
       t.column "is_enabled",             :boolean,                  :null => false, :default => true
       # this node is copy from another tree, ex. center area is a layout tree, we prebuilt it for user.
       # value is layout tree's root_id.  

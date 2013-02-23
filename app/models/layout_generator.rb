@@ -7,7 +7,7 @@ class TagBase
   attr_accessor :section # hash, attributes  of model page_layout
   attr_accessor :section_piece # hash attributes of model section
       
-  #Usage�� call this in template to initialize current section and section_piece
+  #Usage: call this in template to initialize current section and section_piece
   #        should call this before call any method.
   #Params: section, in fact, it is record of table page_layout. represent a section instance
   #        section_piece, it is record of table section, represent a section_piece instance
@@ -94,12 +94,14 @@ end
 class MenusTag <TagBase
   
   class WrappedMenu
-    attr_accessor :menus_tag, :menu_model, :blog_posts_tag
+    attr_accessor :menus_tag, :menu_model, :blog_posts_tags_cache
     
     def initialize(tag, menu)
       self.menu_model = menu
       self.menus_tag = tag
-      self.blog_posts_tag = nil
+      # blog_posts is hash, cache all named blog_posts of current page.
+      # key is data_source name, value is proper blog_posts_tag
+      self.blog_posts_tags_cache = {}
     end
     
     def children
@@ -127,11 +129,13 @@ class MenusTag <TagBase
       self.menus_tag.layout_generator.menu.id == self.menu_model.id
     end
     
+    # since a page could have many blog_post list, get it by current section's data source
     def blog_posts
-      if blog_posts_tag.nil?
-        self.blog_posts_tag = BlogPostsTag.new(self.menus_tag.layout_generator, self)
+      data_source = self.section.current_data_source
+      if blog_posts_tags_cache[data_source].nil?
+        self.blog_posts_tags_cache[data_source] = BlogPostsTag.new(self.menus_tag.layout_generator, self)
       end
-      self.blog_posts_tag
+      self.blog_posts_tags_cache[data_source]
     end
     
   end
@@ -315,7 +319,7 @@ class LayoutGenerator
   #ruby embeded source
   attr_accessor :ehtml, :ecss, :ejs 
   #these attributes are for templates
-  attr_accessor :param_values_tag, :websites_tag, :menus_tag, :blog_posts_tag
+  attr_accessor :param_values_tag, :websites_tag, :menus_tag
   attr_accessor :context
   attr_accessor :is_preview
   def initialize( param_theme_id,param_layout_id, param_menu_id, options={})
@@ -342,8 +346,7 @@ class LayoutGenerator
     self.param_values_tag = ParamValuesTag.new(self)    
     self.websites_tag = WebsitesTag.new(self)    
     self.menus_tag = MenusTag.new(self)    
-    self.blog_posts_tag = self.menus_tag.current.blog_posts
-    self.context = {:param_values=>param_values_tag,:website=>websites_tag, :menus=>menus_tag, :blog_posts=>blog_posts_tag}  
+    self.context = {:param_values=>param_values_tag,:website=>websites_tag, :menus=>menus_tag}  
   end
   
   def has_editor?

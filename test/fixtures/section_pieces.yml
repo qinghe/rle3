@@ -429,7 +429,7 @@ blog_post_list:
   css: ""
   perma_name: blog_post_list
   js: ""
-blog_post:
+blog_post_body:
   id: 12
   html: |          
     <li>
@@ -443,11 +443,10 @@ blog_post:
   css: ""
   perma_name: blog_post
   js: ""    
-blog_post_detail:
+blog_post_title:
   id: 13
   html: |    
-    <? if @blog_posts.current ?>          
-    <p>   <?=@blog_posts.current.published_at ?> </p>
+    <? if @blog_posts.current.present? ?>          
     <p>   <?=@blog_posts.current.title ?> </p>
     <p>   <?=@blog_posts.current.body ?>  </p>
     <? end ?>

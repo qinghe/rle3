@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -17,8 +18,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "blog_post_id"
     t.integer  "menu_id"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "blog_comments", :force => true do |t|
@@ -28,8 +29,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.string   "email"
     t.text     "body"
     t.string   "state"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "blog_comments", ["id"], :name => "index_blog_comments_on_id"
@@ -39,16 +40,16 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.text     "body"
     t.boolean  "is_published"
     t.datetime "published_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "blog_posts", ["id"], :name => "index_blog_posts_on_id"
 
   create_table "editors", :force => true do |t|
     t.string   "perma_name", :limit => 200, :default => "", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "html_attributes", :force => true do |t|
@@ -85,8 +86,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "detail_theme_id",  :default => 0,    :null => false
     t.integer  "ptheme_id",        :default => 0,    :null => false
     t.integer  "pdetail_theme_id", :default => 0,    :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "page_layouts", :force => true do |t|
@@ -99,11 +100,13 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.string   "perma_name",        :limit => 200, :default => "",    :null => false
     t.integer  "section_id",        :limit => 3,   :default => 0
     t.integer  "section_instance",  :limit => 2,   :default => 0,     :null => false
+    t.string   "section_context",   :limit => 32,  :default => "",    :null => false
+    t.string   "data_source",       :limit => 32,  :default => "",    :null => false
     t.boolean  "is_enabled",                       :default => true,  :null => false
     t.integer  "copy_from_root_id",                :default => 0,     :null => false
     t.boolean  "is_full_html",                     :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
   end
 
   create_table "param_categories", :force => true do |t|
@@ -111,8 +114,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "position",   :limit => 3,   :default => 0
     t.string   "perma_name", :limit => 200, :default => "",   :null => false
     t.boolean  "is_enabled",                :default => true, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
   end
 
   create_table "param_values", :force => true do |t|
@@ -127,8 +130,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.string   "computed_pvalue"
     t.string   "preview_pvalue",                :default => "",  :null => false
     t.string   "preview_unset",                 :default => "0", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "section_params", :force => true do |t|
@@ -139,8 +142,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.string   "default_value"
     t.boolean  "is_enabled",             :default => true
     t.string   "disabled_ha_ids",        :default => "",   :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
   create_table "section_piece_params", :force => true do |t|
@@ -164,15 +167,15 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.boolean  "is_container",                   :default => false, :null => false
     t.boolean  "is_selectable",                  :default => false, :null => false
     t.boolean  "is_menu",                        :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
   end
 
   create_table "section_texts", :force => true do |t|
     t.string   "lang"
     t.string   "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "sections", :force => true do |t|
@@ -196,8 +199,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.string   "file_name"
     t.integer  "width"
     t.integer  "height"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "template_themes", :force => true do |t|
@@ -215,8 +218,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "detail_template",  :default => 0, :null => false
     t.integer  "plist_template",   :default => 0, :null => false
     t.integer  "pdetail_template", :default => 0, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
 end

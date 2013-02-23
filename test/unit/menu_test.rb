@@ -8,7 +8,7 @@ class MenuTest < ActiveSupport::TestCase
   
   test "menu_level" do
     root = Menu.root    
-    child = root.children.fist
+    child = root.children.first
     root.inheritance = false
     
     assert child.menu_level.nil?

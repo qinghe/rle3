@@ -21,10 +21,13 @@ section_hash= objects.inject({}){|h,sp| h[sp.perma_name] = sp; h}
 website_id = section_hash['root'].website_id
   
 # blog_post_list_or_detail
-blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'], "blog_post_list_or_detail", :website_id=>website_id) 
-blog_post_list_or_detail.add_section(section_hash['blog_post_list'].id)
-blog_post_list_or_detail.add_section(section_hash['blog_post_detail'].id)
-  
+blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'], "blog_list_or_detail", :website_id=>website_id) 
+blog_list = blog_post_list_or_detail.add_section(section_hash['container'].id,:perma_name=>"blog_list")
+blog_detail = blog_post_list_or_detail.add_section(section_hash['container'].id,:perma_name=>"blog_detail")
+blog_list.update_section_context( PageLayout::ContextEnum.list )
+blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
+blog_detail.update_section_context( PageLayout::ContextEnum.detail )
+blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
 # center area
 center_area = PageLayout.create_layout(section_hash['center_area'], "center_area", :website_id=>website_id)
 center_area.add_section(section_hash['center_part'].id,:perma_name=>"center_part")

@@ -1,12 +1,45 @@
 class PageLayout < ActiveRecord::Base
-  belongs_to :section  
-  has_many :themes, :class_name => "TemplateTheme",:foreign_key=>:layout_id
   acts_as_nested_set :scope=>"root_id" # scope is for :copy, no need to modify parent_id, lft, rgt.
   #has_many :param_values, :foreign_key=>:layout_id, :primary_key=>root.id
+  belongs_to :section  
+  has_many :themes, :class_name => "TemplateTheme",:foreign_key=>:layout_id
+
+  # use string instead of symbol, parameter from client is string 
+  ContextEnum=Struct.new(:list,:detail,:cart,:accout)[:list,:detail,:cart,:accout]
+  ContextEither = :""
+  Contexts = [ContextEnum.values,ContextEither].flatten
+  ContextDataSourceMap = { ContextEnum.list=>[:gpvs],ContextEnum.detail=>[:this_product]}
+  DataSourceChainMap = {:gpvs=>[:gpv_product,:gpv_group, :gpv_either],
+    :gpv_product=>[:product_images,:product_options], 
+    :gpv_group=>[:group_products,:group_images],    
+    :group_products=>[:product_images,:product_options],
+    :this_product=>[]
+    #keys should inclde all data_sources, test required.
+    }
+  DataSourceEmpty = :""
   # remove section relatives after page_layout destroyed.
   before_destroy :remove_section
   
-  scope :full_html, where(:is_full_html=>true)
+  scope :full_html_roots, where(:is_full_html=>true,:parent_id=>nil)
+
+  #notice: attribute section_id, perma_name required
+  # section.root.section_piece_id should be 'root'
+  def self.create_layout(section, title, attrs={})
+    #create record in table page_layouts
+    obj = create!(:section_id=>section.id) do |l|
+      l.title = title
+      l.perma_name = title.underscore
+      l.attributes = attrs unless attrs.empty?
+      l.section_instance = 1
+      l.is_full_html = section.section_piece.is_root?
+    end
+    obj.update_attribute("root_id",obj.id)
+    #create a theme for it.
+    TemplateTheme.create!({:website_id=>obj.website_id,:layout_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
+    #copy the default section param value to the layout
+    obj.add_param_value()
+    obj
+  end
   
   # a page_layout tree could be whole html or partial html, it depend's on self.section.section_piece.is_root?,  
   # it is only for root.
@@ -17,11 +50,12 @@ class PageLayout < ActiveRecord::Base
   def has_child?
     return (rgt-lft)>1
   end
-        
-  def children
-    tree = self.root.self_and_descendants
-    tree.select{|node| node.parent_id==self.id}
-  end      
+  
+  # has_many :children in awesome_nested_set      
+  #def children
+  #  tree = self.root.self_and_descendants
+  #  tree.select{|node| node.parent_id==self.id}
+  #end      
   
   # param values of self.
   def param_values(theme_id,editor_id=0)
@@ -44,24 +78,6 @@ class PageLayout < ActiveRecord::Base
      :conditions=>["root_layout_id=? and theme_id=?", self.id, theme_id],
      :order=>"section_piece_params.editor_id, param_categories.position")
    
-  end
-  #notice: attribute section_id, perma_name required
-  # section.root.section_piece_id should be 'root'
-  def self.create_layout(section, title, attrs={})
-    #create record in table page_layouts
-    obj = create!(:section_id=>section.id) do |l|
-      l.title = title
-      l.perma_name = title.underscore
-      l.attributes = attrs unless attrs.empty?
-      l.section_instance = 1
-      l.is_full_html = section.section_piece.is_root?
-    end
-    obj.update_attribute("root_id",obj.id)
-    #create a theme for it.
-    TemplateTheme.create!({:website_id=>obj.website_id,:layout_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
-    #copy the default section param value to the layout
-    obj.add_param_value()
-    obj
   end
 
 
@@ -275,6 +291,107 @@ class PageLayout < ActiveRecord::Base
       @subscribe_event_nodes_hash[some_event.event_name] = nodes
     end
     @subscribe_event_nodes_hash[some_event.event_name]
+  end
+  
+  begin 'handle context'
+    
+    # * section_context is inheritable value, current_context means self.section_context or inherited value 
+    def current_context
+     self.section_context.present? ? self.section_context.to_sym : self.inherited_context 
+    end
+    
+    def inherited_context
+      #ancestors order by lft
+      ancestor_context = self.ancestors.where('section_context!=?','').collect{|page_layout| page_layout.section_context }.last      
+      ancestor_context.present? ? ancestor_context.to_sym : ContextEither
+    end
+    
+    # * params
+    #   * new_context - one value of Contexts 
+    def update_section_context( new_context)
+      new_context  = new_context.to_sym
+      return if self.inherited_context != ContextEither # ancestor has assigned context. 
+      return if self.current_context == new_context
+      raise ArgumentError unless Contexts.include? new_context
+      # test would check section_context,so keep it as string
+      self.section_context = new_context.to_s
+      self.save!
+      if new_context != ContextEither
+        #update descendant's context
+        #strange self.descendants raise  no .update_all for []:Array
+        self.descendants.update_all(:section_context=>ContextEither)
+        
+        #TODO correct descendants's data_source
+      end
+    end
+  end
+
+  begin 'handle data source'
+    # * data source has two parts, data and filter, separated by '|'
+    # * current data_source could be nil
+    def current_data_source
+      self.data_source.present? ? self.data_source.to_sym : DataSourceEmpty 
+
+    end
+    
+    def inherited_data_source      
+      return DataSourceEmpty if self.root?
+      ancestor_data_source = self.ancestors.collect{|page_layout| page_layout.data_source }.last      
+      ancestor_data_source.present? ? ancestor_data_source.to_sym : DataSourceEmpty
+      
+    end
+    
+    # verify new_data_source
+    def update_data_source( new_data_source )
+      # update self data_source
+      original_data_source = self.data_source 
+      self.data_source = new_data_source
+      if new_data_source.blank? or self.is_valid_data_source?
+        self.save!
+        #verify descendants, fix them.
+        verify_required_descendants = self.descendants.where('data_source!=?', DataSourceEmpty)
+        for node in verify_required_descendants
+          unless node.is_valid_data_source?
+            node.update_data_source(DataSourceEmpty)
+          end
+        end
+        
+      else
+        self.data_source = original_data_source
+      end
+      self
+    end
+    
+    # * is self.data_source valid to ancestors
+    def is_valid_data_source?
+      is_valid = false
+      if self.current_data_source != DataSourceEmpty
+        if self.inherited_data_source == DataSourceEmpty # top level data source 
+          available_data_sources =  ContextDataSourceMap[self.current_context]
+          is_valid = ( available_data_sources.include? self.current_data_source )          
+        else #sub level data source
+          is_valid = ( DataSourceChainMap[self.inherited_data_source].include? self.current_data_source)
+        end
+      else
+        is_valid = true  
+      end      
+      is_valid
+    end
+    
+    # get available data sources for self
+    def available_data_sources
+      data_sources = []
+      the_context = self.current_context 
+      if  the_context != ContextEither
+        the_data_source = self.inherited_data_source
+        if the_data_source == DataSourceEmpty # top level data source 
+          data_sources =  ContextDataSourceMap[the_context]
+        else
+          data_sources = DataSourceChainMap[the_data_source]
+        end
+      end
+      data_sources
+    end    
   end
   
   private
