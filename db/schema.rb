@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "section_instance",  :limit => 2,   :default => 0,     :null => false
     t.string   "section_context",   :limit => 32,  :default => "",    :null => false
     t.string   "data_source",       :limit => 32,  :default => "",    :null => false
+    t.string   "data_filter",       :limit => 32,  :default => "",    :null => false
     t.boolean  "is_enabled",                       :default => true,  :null => false
     t.integer  "copy_from_root_id",                :default => 0,     :null => false
     t.boolean  "is_full_html",                     :default => false, :null => false
@@ -119,25 +120,20 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   end
 
   create_table "param_values", :force => true do |t|
-    t.integer  "root_layout_id",   :limit => 2, :default => 0,   :null => false
-    t.integer  "layout_id",        :limit => 2, :default => 0,   :null => false
-    t.integer  "section_id",       :limit => 2, :default => 0,   :null => false
-    t.integer  "section_instance", :limit => 2, :default => 0,   :null => false
-    t.integer  "section_param_id", :limit => 2, :default => 0,   :null => false
-    t.integer  "theme_id",         :limit => 2, :default => 0,   :null => false
+    t.integer  "page_layout_root_id", :limit => 2, :default => 0, :null => false
+    t.integer  "page_layout_id",      :limit => 2, :default => 0, :null => false
+    t.integer  "section_param_id",    :limit => 2, :default => 0, :null => false
+    t.integer  "theme_id",            :limit => 2, :default => 0, :null => false
     t.string   "pvalue"
     t.string   "unset"
     t.string   "computed_pvalue"
-    t.string   "preview_pvalue",                :default => "",  :null => false
-    t.string   "preview_unset",                 :default => "0", :null => false
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
   end
 
   create_table "section_params", :force => true do |t|
+    t.integer  "section_root_id"
     t.integer  "section_id"
-    t.integer  "section_piece_id"
-    t.integer  "section_piece_instance"
     t.integer  "section_piece_param_id"
     t.string   "default_value"
     t.boolean  "is_enabled",             :default => true
@@ -193,21 +189,21 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   end
 
   create_table "template_files", :force => true do |t|
-    t.integer  "layout_id"
+    t.integer  "page_layout_id"
     t.integer  "theme_id"
     t.string   "file_uid"
     t.string   "file_name"
     t.integer  "width"
     t.integer  "height"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "template_themes", :force => true do |t|
-    t.integer "website_id",               :default => 0
-    t.integer "layout_id",                :default => 0,  :null => false
-    t.string  "title",      :limit => 64, :default => "", :null => false
-    t.string  "perma_name", :limit => 64, :default => "", :null => false
+    t.integer "website_id",                        :default => 0
+    t.integer "page_layout_root_id",               :default => 0,  :null => false
+    t.string  "title",               :limit => 64, :default => "", :null => false
+    t.string  "perma_name",          :limit => 64, :default => "", :null => false
   end
 
   create_table "websites", :force => true do |t|

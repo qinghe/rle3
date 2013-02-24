@@ -2,7 +2,7 @@
 %>
 <%    for hav in updated_html_attribute_values
         # go next if it is not belong to source section instance.
-        next unless (hav.param_value.layout_id== source_param_value.layout_id )
+        next unless (hav.param_value.page_layout_id== source_param_value.page_layout_id )
         param_value = hav.param_value
         html_attribute =hav.html_attribute              
         div = "pv_#{param_value.id}_#{html_attribute.id}" #it should be same as html_attribute_value.html.erb.

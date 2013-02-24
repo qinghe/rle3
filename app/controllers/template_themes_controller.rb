@@ -289,7 +289,7 @@ end
     editor_ids = @editors.collect{|e|e.id}
     page_layout ||= theme.page_layout
     #get param_values for each editors
-    for pv in page_layout.param_values(theme.id)
+    for pv in theme.param_values()
       #only get pv blong to root section
       #next if pv.section_id != layout.section_id or pv.section_instance != layout.section_instance
       idx = (editor_ids.index pv.section_param.section_piece_param.editor_id)
@@ -347,7 +347,7 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
               do_update_param_value(@param_value, param_value_params, param_value_event, editing_html_attribute_id) 
               # get all param values by selected editor
               # since we redirect to editors, these are unused
-              @param_values = @param_value.page_layout.param_values(@param_value.theme_id, @editor.id)
+              @param_values = @param_value.template_theme.full_param_values(@editor.id)
               # update param value
               render :partial=>'after_upload_dialog' 
         end
@@ -388,20 +388,18 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   
     # build ehtml,css,js
   def do_build( theme_id, layout_id, options={})
-    options[:serialize_html] = true
-    options[:serialize_css] = true
+    options[:serialize_ehtml] = true
+    options[:serialize_ecss] = true
     
       theme = TemplateTheme.find(theme_id)
-      @lg = LayoutGenerator.new( theme_id, layout_id)
+      @lg = PageGenerator.new( theme_id, layout_id)
       html, css = @lg.build
-      if options[:serialize_html]
-        path = File.join(LayoutGenerator.layout_base_path, theme.file_name('ehtml'))      
-        open(path, 'w') do |f|  f.puts html; end
+      if options[:serialize_ehtml]
+        @lg.serialize_page(:ehtml)
       end
       html, css = @lg.generate
       if options[:serialize_css]      
-        path = File.join(LayoutGenerator.layout_base_path, theme.file_name('css'))
-        open(path, 'w') do |f|  f.puts css; end
+        @lg.serialize_page(:css)
       end
       return html, css      
   end
@@ -409,15 +407,13 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   def do_preview( theme_id, layout_id, menu_id, options={})
       options[:preview_url] = true #preview_template_themes_url
       theme = TemplateTheme.find(theme_id)
-      @lg = LayoutGenerator.new( theme_id, layout_id, menu_id, options)
+      @lg = PageGenerator.new( theme_id, layout_id, menu_id, options)
       html, css = @lg.generate
       if options[:serialize_html]
-        path = File.join(LayoutGenerator.layout_base_path, theme.file_name('html'))      
-        open(path, 'w') do |f|  f.puts html; end
+        @lg.serialize_page(:html)
       end
       if options[:serialize_css]      
-        path = File.join(self.layout_base_path, theme.file_name('css'))
-        open(path, 'w') do |f|  f.puts css; end
+        @lg.serialize_page(:css)
       end
       return html, css  
   end
@@ -425,10 +421,8 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   def do_generate( theme_id, layout_id, menu_id, options={})
 
       theme = TemplateTheme.find(theme_id)
-      @lg = LayoutGenerator.new( theme_id, layout_id, menu_id, options)
-      path = File.join(LayoutGenerator.layout_base_path, theme.file_name('ehtml'))
-      erb_html =  open(path) do |f|  f.read end
-      html, css = @lg.generate_from_erb(erb_html)
+      @lg = PageGenerator.new( theme_id, layout_id, menu_id, options)
+      html, css = @lg.generate_from_erb_file
       return html, css      
   end
     

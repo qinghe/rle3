@@ -1,9 +1,10 @@
 class CreateSectionParams < ActiveRecord::Migration
   def self.up
     create_table :section_params do |t|
-      t.integer :section_id
-      t.integer :section_piece_id
-      t.integer :section_piece_instance
+      t.integer :section_root_id #it is section_root_id
+      t.integer :section_id 
+      #t.integer :section_piece_id
+      #t.integer :section_piece_instance
       t.integer :section_piece_param_id
       t.string  :default_value   #,   :null => false, :default => ""
       t.boolean :is_enabled,     :default=>true

@@ -3,6 +3,7 @@ class ParamValue < ActiveRecord::Base
   belongs_to :section_param
   belongs_to :page_layout, :foreign_key=>"layout_id"
   belongs_to :section
+  belongs_to :template_theme, :foreign_key=>"theme_id"
   
   serialize :pvalue, Hash
   after_save :trigger_events
@@ -172,7 +173,7 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
     ( self.html_attribute_extra(html_attribute_id, 'unset')== HtmlAttribute::UNSET_FALSE) ? false : true    
   end
      
-  # use in layout_generator
+  # use in page_generator
   def hidden?(html_attribute_id)
     # all computed are hidden
     ( self.html_attribute_extra(html_attribute_id,'hidden')== HtmlAttribute::BOOL_TRUE or computed?) ?  true : false  

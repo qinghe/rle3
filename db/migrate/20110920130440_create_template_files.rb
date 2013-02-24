@@ -1,7 +1,7 @@
 class CreateTemplateFiles < ActiveRecord::Migration
   def self.up
     create_table :template_files do |t|
-      t.integer :layout_id
+      t.integer :page_layout_id
       t.integer :theme_id
       t.string :file_uid
       t.string :file_name

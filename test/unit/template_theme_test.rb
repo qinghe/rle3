@@ -5,4 +5,17 @@ class TemplateThemeTest < ActiveSupport::TestCase
   test "the truth" do
     assert true
   end
+  
+  test 'copy to new' do
+    
+  end
+  
+  test 'should get full_param_values' do
+    
+  end
+  
+  test 'add_param_values' do
+    
+  end
+  
 end

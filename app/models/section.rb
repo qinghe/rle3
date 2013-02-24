@@ -56,12 +56,11 @@ class Section < ActiveRecord::Base
     # section_id, section_piece_param_id, section_piece_id, section_piece_instance, is_enabled, disabled_ha_ids
     section_piece_params = section_piece.section_piece_params
     exclude_keys = [:disabled_ha_ids]
-    section_id = self.root.id
+    section_root_id = self.root.id
       for spp in section_piece_params
-        section_param = SectionParam.create(:section_id=>section_id) do |sp|
+        section_param = SectionParam.create(:section_root_id=>section_root_id) do |sp|
+          sp.section_id = self.id
           sp.section_piece_param_id = spp.id
-          sp.section_piece_id = self.section_piece_id
-          sp.section_piece_instance = self.section_piece_instance
           #sp.is_enabled =
           if default_param_values.key?(spp[:class_name])
             dpvs = default_param_values.fetch spp[:class_name]
@@ -87,60 +86,60 @@ class Section < ActiveRecord::Base
     @subscribed_global_event_array
   end
   
-  
-  def build_html_piece(tree, node, section_piece_hash)
-    # .dup, do not alter the model, or affect other method. it may be in cache. 
-     piece = node.section_piece.html.dup
-     piece.insert(0,get_header_script(node))
-     unless node.leaf?              
-       children = tree.select{|n| n.parent_id==node.id}
-       for child in children
-         subpiece = build_html_piece(tree, child, section_piece_hash)
-         if(pos = (piece=~/~~content~~/))           
-           piece.insert(pos,subpiece)
-         else           
+  begin 'build html, css, js for section'  
+    def build_html_piece(tree, node, section_piece_hash)
+      # .dup, do not alter the model, or affect other method. it may be in cache. 
+       piece = node.section_piece.html.dup
+       piece.insert(0,get_header_script(node))
+       unless node.leaf?              
+         children = tree.select{|n| n.parent_id==node.id}
+         for child in children
+           subpiece = build_html_piece(tree, child, section_piece_hash)
+           if(pos = (piece=~/~~content~~/))           
+             piece.insert(pos,subpiece)
+           else           
+             piece.concat(subpiece)
+           end
+         end
+       end
+       piece
+    end
+    
+    def build_css_piece(tree, node, section_piece_hash)
+      #duplicate the css, then modify it.
+       piece = section_piece_hash[node.section_piece_id].css.dup
+       piece.insert(0,get_header_script(node))
+       unless node.leaf?              
+         children = tree.select{|n| n.parent_id==node.id}
+         for child in children
+           subpiece = build_css_piece(tree, child, section_piece_hash)               
            piece.concat(subpiece)
          end
        end
-     end
-     piece
-  end
-  
-  def build_css_piece(tree, node, section_piece_hash)
-    #duplicate the css, then modify it.
-     piece = section_piece_hash[node.section_piece_id].css.dup
-     piece.insert(0,get_header_script(node))
-     unless node.leaf?              
-       children = tree.select{|n| n.parent_id==node.id}
-       for child in children
-         subpiece = build_css_piece(tree, child, section_piece_hash)               
-         piece.concat(subpiece)
-       end
-     end
-     piece
-  end
-  
-  def build_js_piece(tree)
-    js_ids = ''               
-    for node in tree
-      js_ids.concat(section_piece_hash[node.section_piece_id].js)
+       piece
     end
-    piece = ''
-    unless js_ids.empty?
-      jss = Js.find(js_ids.split(','))
-      piece = jss.inject(''){|sum, js| sum.concat(js.content); sum}
+    
+    def build_js_piece(tree)
+      js_ids = ''               
+      for node in tree
+        js_ids.concat(section_piece_hash[node.section_piece_id].js)
+      end
+      piece = ''
+      unless js_ids.empty?
+        jss = Js.find(js_ids.split(','))
+        piece = jss.inject(''){|sum, js| sum.concat(js.content); sum}
+      end
+      piece
     end
-    piece
+    
+    def get_header_script(node)
+      reject_keys = ["created_at","created_on","updated_at", "udpated_on"]
+      header = "<? section_piece=#{node.attributes.except(*reject_keys).inspect}; ?>#{$/}"
+      #only set @param_values, @menus for root piece.
+      header << "<? @param_values.setup(section,section_piece) ?>#{$/}" 
+      header << "<? @menus.setup(section,section_piece) ?>#{$/}" if node.section_piece.is_menu?
+      header
+    end 
+    
   end
-  
-  def get_header_script(node)
-    reject_keys = ["created_at","created_on","updated_at", "udpated_on"]
-    header = "<? section_piece=#{node.attributes.except(*reject_keys).inspect}; ?>#{$/}"
-    #only set @param_values, @menus for root piece.
-    header << "<? @param_values.setup(section,section_piece) ?>#{$/}" 
-    header << "<? @menus.setup(section,section_piece) ?>#{$/}" if node.section_piece.is_menu?
-    header
-  end 
-  
-
 end

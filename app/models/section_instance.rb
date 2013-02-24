@@ -13,7 +13,7 @@ class SectionInstance
     
     layout_id = page_layouts.first.root_id
     # class_name = [block, inner, page, layout]
-    pvs = ParamValue.all(:conditions=>["root_layout_id=?",layout_id ], :include=>[{:section_param=>:section_piece_param},:section])  
+    pvs = ParamValue.all(:conditions=>["layout_root_id=?",layout_id ], :include=>[{:section_param=>:section_piece_param},:section])  
         
     for page_layout in page_layouts
       pvs_for_layout = pvs.select{|pv| pv.section_id==page_layout.section_id and pv.section_instance==page_layout.section_instance}

@@ -1,8 +1,7 @@
 class PageLayout < ActiveRecord::Base
   acts_as_nested_set :scope=>"root_id" # scope is for :copy, no need to modify parent_id, lft, rgt.
-  #has_many :param_values, :foreign_key=>:layout_id, :primary_key=>root.id
   belongs_to :section  
-  has_many :themes, :class_name => "TemplateTheme",:foreign_key=>:layout_id
+  has_many :themes, :class_name => "TemplateTheme",:foreign_key=>:page_layout_root_id
 
   # use string instead of symbol, parameter from client is string 
   ContextEnum=Struct.new(:list,:detail,:cart,:accout)[:list,:detail,:cart,:accout]
@@ -35,7 +34,7 @@ class PageLayout < ActiveRecord::Base
     end
     obj.update_attribute("root_id",obj.id)
     #create a theme for it.
-    TemplateTheme.create!({:website_id=>obj.website_id,:layout_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
+    TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
     #copy the default section param value to the layout
     obj.add_param_value()
     obj
@@ -57,30 +56,9 @@ class PageLayout < ActiveRecord::Base
   #  tree.select{|node| node.parent_id==self.id}
   #end      
   
-  # param values of self.
-  def param_values(theme_id,editor_id=0)
-    if editor_id>0
-    ParamValue.find(:all, :include=>[:section_param=>[:section_piece_param=>:param_category]], 
-     :conditions=>["layout_id=? and theme_id=? and section_piece_params.editor_id=?", self.id, theme_id, editor_id],
-     :order=>"section_piece_params.editor_id, param_categories.position")
-      
-    else
-    ParamValue.find(:all, :include=>[:section_param=>[:section_piece_param=>:param_category]], 
-     :conditions=>["layout_id=? and theme_id=?", self.id, theme_id],
-     :order=>"section_piece_params.editor_id, param_categories.position")
-        
-    end
-  end
-
-  # param values of whole layout tree.
-  def whole_param_values(theme_id)
-    ParamValue.find(:all, :include=>[:section_param=>[:section_piece_param=>:param_category]], 
-     :conditions=>["root_layout_id=? and theme_id=?", self.id, theme_id],
-     :order=>"section_piece_params.editor_id, param_categories.position")
-   
-  end
 
 
+  # since we add feature 'section_context' and 'data_source', should not allow user use this method, it may cause section_context conflict.
   # user copy prebuild layout tree to another layout tree as child.
   # copy it self and decendants to new parent. this only for root layout.
   # include theme param values. add theme param values to all themes which available to the new parent.
@@ -122,12 +100,11 @@ class PageLayout < ActiveRecord::Base
     # copy param values to all available themes
     for theme in clone_node.root.themes
       table_column_values  = table_column_names.dup
-      table_column_values[table_column_values.index('root_layout_id')] = clone_node.root_id
-      table_column_values[table_column_values.index('layout_id')] = clone_node.id
+      table_column_values[table_column_values.index('page_layout_root_id')] = clone_node.root_id
+      table_column_values[table_column_values.index('page_layout_id')] = clone_node.id
       table_column_values[table_column_values.index('theme_id')] = theme.id
-      table_column_values[table_column_values.index('section_instance')] =  clone_node.section_instance
     
-      sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((root_layout_id=#{self.root_id} and layout_id =#{self.id}) and (theme_id =#{copy_theme.id}) and section_id=#{self.section_id} and section_instance=#{self.section_instance})! 
+      sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((page_layout_root_id=#{self.root_id} and page_layout_id =#{self.id}) and theme_id =#{copy_theme.id} )! 
       self.class.connection.execute(sql) 
     end 
         
@@ -195,66 +172,20 @@ class PageLayout < ActiveRecord::Base
   def remove_section
     remove_param_value()
   end
-  
-  def build_content(theme_id=0)
-    tree = self.self_and_descendants.all(:include=>[:section=>:section_piece])
-    # have to Section.all, we do not know how many section_pieces each section contained.
-    sections = Section.all(:include=>:section_piece)
-    section_hash = sections.inject({}){|h, s| h[s.id] = s; h}
-    css = build_css(tree, self, section_hash, theme_id)
-    html = build_html(tree,  section_hash)
-    return html, css
-  end
-  # Usage: build html, js, css for a layout
-  # Params: theme_id, 
-  #         if passed, build css for that theme, or build css for default theme   
-  #
-  def build_html(tree, section_hash)
-    build_section_html(tree, self, section_hash)
-  end
-  
-  def build_css(tree, node, section_hash, theme_id=0)
-    css = section_hash[node.section_id].build_css
-    css.insert(0, get_header_script(node))    
-    unless node.leaf?              
-      children = tree.select{|n| n.parent_id==node.id}
-      for child in children
-        subcss = build_css(tree, child, section_hash)               
-        css.concat(subcss)
-      end
-    end
-    css
-  end
-
-  def build_js(tree, sections)
-    section_ids = tree.collect{|node|node.section_id}
-    section_piece_ids = sections.select{|s| section_ids.include?(s.root_id) or section_ids.include?(s.id) }.collect{|s| s.section_piece_id}
-    js_ids = ''
-    unless section_piece_ids.empty?
-      section_pieces = SectionPiece.find(section_piece_ids)
-      js_ids = section_pieces.inject(''){|sum, sp| sum.concat(sp.js); sum}
-    end    
-    unless js_ids.empty?
-      
-    end
-    return ''
-  end
-  
   #Usage:  add param_value of section into this layout  
   def add_param_value()
     # section_id, section_piece_param_id, section_piece_id, section_piece_instance, is_enabled, disabled_ha_ids
     # all section_params belong to section tree.
     # section_tree = self.section.self_and_descendants
     # get default values of this section
-    section_id = self.section.id
     layout_id = self.id
-    root_layout_id = self.root.id
-    themes = TemplateTheme.find(:all,:conditions=>['layout_id=?',root_layout_id])
+    layout_root_id = self.root_id
+    themes = TemplateTheme.by_layout(layout_root_id)
     for theme in themes
         section_params = self.section.section_params
         for sp in section_params
           #use root section_id
-          ParamValue.create(:root_layout_id=>root_layout_id, :section_id=>section_id, :layout_id=>layout_id, :section_instance=>self.section_instance) do |pv|
+          ParamValue.create(:page_layout_root_id=>layout_root_id, :page_layout_id=>layout_id) do |pv|
             pv.section_param_id = sp.id
             pv.theme_id = theme.id
 # puts "sp.default_value=#{sp.default_value.inspect}"            
@@ -266,12 +197,58 @@ class PageLayout < ActiveRecord::Base
   end 
    
   def remove_param_value()
-    layout_id = self.root.id
-    themes = TemplateTheme.find(:all,:conditions=>['layout_id=?',layout_id])
-    ParamValue.delete_all(["layout_id=?  and section_id=? and section_instance=? and theme_id in (?)", self.root.id,  self.section_id, self.section_instance, themes.collect{|obj|obj.id }])    
-
+    layout_root_id = self.root_id
+    themes = TemplateTheme.find(:all,:conditions=>['layout_id=?',layout_root_id])
+    ParamValue.delete_all(["page_layout_id=? and theme_id in (?)", self.id, themes.collect{|obj|obj.id }])    
   end
    
+  
+  begin 'section content, html, css, js'
+    def build_content(theme_id=0)
+      tree = self.self_and_descendants.all(:include=>[:section=>:section_piece])
+      # have to Section.all, we do not know how many section_pieces each section contained.
+      sections = Section.all(:include=>:section_piece)
+      section_hash = sections.inject({}){|h, s| h[s.id] = s; h}
+      css = build_css(tree, self, section_hash, theme_id)
+      html = build_html(tree,  section_hash)
+      return html, css
+    end
+    # Usage: build html, js, css for a layout
+    # Params: theme_id, 
+    #         if passed, build css for that theme, or build css for default theme   
+    #
+    def build_html(tree, section_hash)
+      build_section_html(tree, self, section_hash)
+    end
+    
+    def build_css(tree, node, section_hash, theme_id=0)
+      css = section_hash[node.section_id].build_css
+      css.insert(0, get_header_script(node))    
+      unless node.leaf?              
+        children = tree.select{|n| n.parent_id==node.id}
+        for child in children
+          subcss = build_css(tree, child, section_hash)               
+          css.concat(subcss)
+        end
+      end
+      css
+    end
+  
+    def build_js(tree, sections)
+      section_ids = tree.collect{|node|node.section_id}
+      section_piece_ids = sections.select{|s| section_ids.include?(s.root_id) or section_ids.include?(s.id) }.collect{|s| s.section_piece_id}
+      js_ids = ''
+      unless section_piece_ids.empty?
+        section_pieces = SectionPiece.find(section_piece_ids)
+        js_ids = section_pieces.inject(''){|sum, sp| sum.concat(sp.js); sum}
+      end    
+      unless js_ids.empty?
+        
+      end
+      return ''
+    end
+  end
+
   #param: some_event could be a global_param_value changed event or a section_event.
   def subscribe_event?( some_event)
     section_events = self.section.subscribed_global_event_array
@@ -322,6 +299,7 @@ class PageLayout < ActiveRecord::Base
         self.descendants.update_all(:section_context=>ContextEither)
         
         #TODO correct descendants's data_source
+        self.update_data_source( DataSourceEmpty )
       end
     end
   end
