@@ -204,12 +204,12 @@ class PageLayout < ActiveRecord::Base
    
   
   begin 'section content, html, css, js'
-    def build_content(theme_id=0)
+    def build_content()
       tree = self.self_and_descendants.all(:include=>[:section=>:section_piece])
       # have to Section.all, we do not know how many section_pieces each section contained.
       sections = Section.all(:include=>:section_piece)
       section_hash = sections.inject({}){|h, s| h[s.id] = s; h}
-      css = build_css(tree, self, section_hash, theme_id)
+      css = build_css(tree, self, section_hash)
       html = build_html(tree,  section_hash)
       return html, css
     end
@@ -401,7 +401,6 @@ class PageLayout < ActiveRecord::Base
   end
 
   def get_header_script(node)
-    reject_keys = ["created_at","created_on","updated_at", "udpated_on"]
-    header = "<? section=#{node.attributes.except(*reject_keys).inspect}?>#{$/}"
+    header = "<? page_layout_id=#{node.id}?>#{$/}"
   end   
 end

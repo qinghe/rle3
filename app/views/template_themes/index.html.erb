@@ -12,6 +12,8 @@
     <td><%= link_to 'Destroy', theme, :confirm => 'Are you sure?', :method => :delete %></td>
     <td><%= link_to 'copy', {:action=>"copy",:id=>theme}, {:method=>:post} %></td>
     <td><%= link_to 'Editor', editor_template_theme_path(theme) %></td>
+    <td><%= link_to 'Build', build_template_theme_path(theme) %></td>
+    <td><%= link_to 'GenerateAssets', generate_assets_template_theme_path(theme)   %></td>
   </tr>
 <% end %>
 </table>

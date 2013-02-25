@@ -10,7 +10,7 @@ class TemplateTheme < ActiveRecord::Base
   
   begin 'for page generator'  
     def file_name(usage)
-      "#{layout_id}_#{id}.#{usage}"
+      "#{page_layout_root_id}_#{id}.#{usage}"
     end
   end
   # Usage: user want to copy this layout&theme to new for editing or backup.

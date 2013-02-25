@@ -16,8 +16,8 @@ module PageTag
     
     def initialize(page_generator_instance)
       super(page_generator_instance)
-      self.website_tag = Website.new(page_generator_instance)
-      self.template_tag = Template.new(page_generator_instance)
+      self.website_tag = ::PageTag::Website.new(page_generator_instance)
+      self.template_tag = ::PageTag::Template.new(page_generator_instance)
     end
     
   end

@@ -94,6 +94,19 @@ class TemplateThemesController < ApplicationController
     end
   end
   
+  def build
+    theme_id = params[:id]
+    html, css = "", ""
+    if TemplateTheme.exists?(theme_id)
+      theme = TemplateTheme.find(theme_id)
+      @lg = PageGenerator.builder(theme)
+      html,css = @lg.build
+      @lg.serialize_page(:ehtml)      
+      @lg.serialize_page(:ecss)      
+    end
+  end
+ 
+  
   # params for preview
   #    d: domain of website
   #    c: menu_id
@@ -112,7 +125,7 @@ class TemplateThemesController < ApplicationController
       the_menu = Menu.find_by_id(the_website.index_page)  
     end
     the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    html,css = do_preview(the_theme.id, the_theme.layout_id, the_menu.id,{:blog_post_id=>(the_resource.nil? ? nil:the_resource.id),:editor=>editor})
+    html,css = do_preview(the_theme, the_menu, {:blog_post_id=>(the_resource.nil? ? nil:the_resource.id),:editor=>editor})
     #insert css to html
     style = %Q!<style type="text/css">#{css}</style>!
     html.insert(html.index("</head>"),style)
@@ -267,29 +280,17 @@ class TemplateThemesController < ApplicationController
       format.js  {render :partial=>'update_param_value',:locals=>{:source_param_value=>source_param_value,:updated_html_attribute_values=>updated_html_attribute_values}}
     end    
     
-end
-  
-  
-  def test_create_layout
-   # PageLayout.delete_all              
-    objects = Section.roots
-    section_hash= objects.inject({}){|h,sp| h[sp.perma_name] = sp; h}
-    puts "section_hash=#{section_hash.keys}"
-    root = PageLayout.create_layout(section_hash['root'].id, :perma_name=>"layout1")
-    header = root.add_section(section_hash['container'].id)
-    body = root.add_section(section_hash['container'].id)
-    footer = root.add_section(section_hash['container'].id)
-    body.add_section(section_hash['menu'].id)
-
   end
   
+    
   def prepare_params_for_editors(theme,editor=nil,page_layout = nil)
     @editors = Editor.all
     @param_values_for_editors = Array.new(@editors.size){|i| []}
     editor_ids = @editors.collect{|e|e.id}
     page_layout ||= theme.page_layout
+    param_values =theme.param_values().where(:page_layout_id=>page_layout.id).includes([:section_param=>[:section_piece_param=>:param_category]]) 
     #get param_values for each editors
-    for pv in theme.param_values()
+    for pv in param_values
       #only get pv blong to root section
       #next if pv.section_id != layout.section_id or pv.section_instance != layout.section_instance
       idx = (editor_ids.index pv.section_param.section_piece_param.editor_id)
@@ -381,33 +382,31 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
     if not theme_ids.empty?
       for theme_id in theme_ids
         theme = TemplateTheme.find(theme_id)
-        do_build(theme.id, theme.layout_id)
+        do_build(theme)
       end
     end
   end
   
     # build ehtml,css,js
-  def do_build( theme_id, layout_id, options={})
+  def do_build( theme, options={})
     options[:serialize_ehtml] = true
     options[:serialize_ecss] = true
     
-      theme = TemplateTheme.find(theme_id)
-      @lg = PageGenerator.new( theme_id, layout_id)
+      @lg = PageGenerator.builder( theme)
       html, css = @lg.build
       if options[:serialize_ehtml]
         @lg.serialize_page(:ehtml)
       end
-      html, css = @lg.generate
+      css = @lg.generate_assets
       if options[:serialize_css]      
         @lg.serialize_page(:css)
       end
       return html, css      
   end
   
-  def do_preview( theme_id, layout_id, menu_id, options={})
+  def do_preview( theme,  menu, options={})
       options[:preview_url] = true #preview_template_themes_url
-      theme = TemplateTheme.find(theme_id)
-      @lg = PageGenerator.new( theme_id, layout_id, menu_id, options)
+      @lg = PageGenerator.generator( menu, theme, options)
       html, css = @lg.generate
       if options[:serialize_html]
         @lg.serialize_page(:html)

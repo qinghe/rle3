@@ -2,7 +2,7 @@ module PageTag
   class Website < Base
     
     def website
-      page_generator.website
+      page_generator.theme.website
     end
     
     def get(function_name)

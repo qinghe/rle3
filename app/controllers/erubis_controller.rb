@@ -7,29 +7,13 @@ class ErubisController < ApplicationController
     @page_layouts = PageLayout.roots
   end
   
-  def build
-    layout_id = params[:layout_id]
-    theme_id = params[:theme_id]
-    html, css = "", ""
-    if PageLayout.exists?(layout_id)
-      theme = TemplateTheme.find(theme_id)
-      @lg = PageGenerator.new(theme_id, layout_id)
-      html, css = @lg.build
-      path = File.join(self.layout_base_path, "e#{theme.file_name('html')}")
-      open(path, 'w') do |f|  f.puts html; end
-      path = File.join(self.layout_base_path, "e#{theme.file_name('css')}")
-      open(path, 'w') do |f|  f.puts css; end      
-    end
-    
-  end
-  
   def publish    
     # find all theme used by website
     theme_ids = Menu.assigned_theme_ids()
     if not theme_ids.empty?
       for theme_id in theme_ids
         theme = TemplateTheme.find(theme_id)
-        do_build(theme.id, theme.layout_id)
+        do_build(theme)
       end
     end
      render_message("yes, published!")
@@ -79,21 +63,19 @@ class ErubisController < ApplicationController
   end
   
   # build ehtml,css,js
-  def do_build( theme_id, layout_id, options={})
+  def do_build( theme, options={})
     options[:serialize_html] = true
     options[:serialize_css] = true
     
-      theme = TemplateTheme.find(theme_id)
-      @lg = PageGenerator.new( theme_id, layout_id)
+      
+      @lg = PageGenerator.builder( theme)
       html, css = @lg.build
       if options[:serialize_html]
-        path = File.join(self.layout_base_path, theme.file_name('ehtml'))      
-        open(path, 'w') do |f|  f.puts html; end
+        @lg.serialize_page(:ehtml)      
       end
-      html, css = @lg.generate
+      css = @lg.generate_assets
       if options[:serialize_css]      
-        path = File.join(self.layout_base_path, theme.file_name('css'))
-        open(path, 'w') do |f|  f.puts css; end
+        @lg.serialize_page(:css)      
       end
       return html, css      
   end

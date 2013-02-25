@@ -44,6 +44,8 @@ Rle3::Application.routes.draw do
          post :copy
          post :update_param_value
          post :update_layout_tree
+         get :build
+         get :generate_assets
        end
   
        collection do

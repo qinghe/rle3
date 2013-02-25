@@ -6,22 +6,34 @@ class PageGenerator
   cattr_accessor :pattern
   self.pattern = '<\? \?>'
   
-  attr_accessor :website, :menu, :layout, :theme, :resource # resource could be blog_post, flash, file, image...
-  attr_accessor :layout_id, :theme_id, :editor
+  attr_accessor :website, :menu, :theme, :resource # resource could be blog_post, flash, file, image...
+  attr_accessor :editor
   attr_accessor :url_prefix
   attr_accessor :html, :css, :js
   #ruby embeded source
   attr_accessor :ehtml, :ecss, :ejs 
   #these attributes are for templates
-  attr_accessor :param_values_tag, :website_tag, :menus_tag, :current_page_tag
+  attr_accessor :current_page_tag
   attr_accessor :context
   attr_accessor :is_preview
-  def initialize( param_theme_id,param_layout_id, param_menu_id, options={})
-    self.menu = Menu.find(param_menu_id) 
-    self.layout = PageLayout.find(param_layout_id)
-    self.theme = TemplateTheme.find(param_theme_id)
-    self.website = self.theme.website
-    self.layout_id, self.theme_id = param_layout_id, param_theme_id
+  
+  class << self
+    #page generator has two interface, builder and generator
+    #builder only build content: ehtml,js,css
+    def builder( theme )
+      self.new( theme, menu=nil)      
+    end
+    
+    #generator generate content: html,js,css
+    def generator(menu, theme=nil,  options={})
+      self.new( theme, menu, options)
+    end
+  end
+  
+  def initialize( theme, menu, options={})
+    self.menu = menu
+    self.theme = theme
+    self.resource = nil
     if options[:preview_url]
       self.url_prefix = "/preview"
     else
@@ -29,7 +41,6 @@ class PageGenerator
     end
     
     self.editor = options[:editor]
-    self.resource = nil
     if options[:blog_post_id]
       self.resource = BlogPost.find(options[:blog_post_id])
     end
@@ -37,10 +48,9 @@ class PageGenerator
     ehtml = ecss = ejs = nil
     #init template variables, used in templates
     self.is_preview = false
-    self.param_values_tag = PageTag::ParamValues.new(self)    
-    self.website_tag = PageTag::Website.new(self)    
-    self.menus_tag = PageTag::Menus.new(self)    
-    self.context = {:param_values=>param_values_tag,:website=>website_tag, :menus=>menus_tag}  
+    self.current_page_tag =   PageTag::CurrentPage.new(self)
+    initialize_context_variables
+      
   end
   
   def has_editor?
@@ -49,7 +59,7 @@ class PageGenerator
 
   #build html, css sourse
   def build
-    self.ehtml, self.ecss = layout.build_content(theme.id)      
+    self.ehtml, self.ecss = self.theme.page_layout.build_content()      
     return self.ehtml, self.ecss
   end
   
@@ -60,9 +70,17 @@ class PageGenerator
     end
     html_eruby = Erubis::Eruby.new(self.ehtml,:pattern=>self.class.pattern)
     self.html = html_eruby.evaluate(context)  
+    return self.html
+  end
+
+  #generate css and js, they are do not need current menu
+  def generate_assets
+    if self.ecss.nil? 
+      self.build()
+    end
     css_eruby = Erubis::Eruby.new(self.ecss,:pattern=>self.class.pattern)
     self.css = css_eruby.evaluate(context)
-    return self.html, self.css
+    return self.css, self.js
   end
     
   def generate_from_erb_file()
@@ -76,11 +94,7 @@ class PageGenerator
     return self.html, self.css
   end
     
-  def init_availables
-    
-    
-  end
-  
+ 
   def build_url(options={})
     menu_id = options[:menu_id]
     blog_post_id = options[:blog_post_id]  
@@ -92,14 +106,22 @@ class PageGenerator
   # *specific_attribute - ehtml,ecss, html, css
   def serialize_page(specific_attribute)
     specific_attribute_collection = [:html,:css,:js,:ehtml,:ecss,:ejs]
-    raise ArgumentError unlessspecific_attribute_collection.include?(specific_attribute)
-    page_content = send(file_type)
+    raise ArgumentError unless specific_attribute_collection.include?(specific_attribute)
+    page_content = send(specific_attribute)
     if page_content.present?
       path = File.join(self.class.layout_base_path, self.theme.file_name('ehtml'))      
       open(path, 'w') do |f|  f.puts html; end
     end
     
   end
-  
+
+
+  private
+  # erb context variables 
+  def initialize_context_variables
+    self.context = {:current_page_tag=>current_page_tag, 
+      :website=>current_page_tag.website_tag, :template=>current_page_tag.template_tag
+      }    
+  end  
 end
 

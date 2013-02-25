@@ -23,6 +23,20 @@ class PageLayoutTest < ActiveSupport::TestCase
     assert PageLayout.count == original_count.succ
   end
   
+  test "should create page layout tree" do    
+   # PageLayout.delete_all              
+    section_roots = Section.roots
+    section_hash = section_roots.inject({}){|h,sp| h[sp.perma_name] = sp; h}
+    puts "section_hash=#{section_hash.keys}"
+    root = PageLayout.create_layout(section_hash['root'].id, :perma_name=>"layout1")
+    header = root.add_section(section_hash['container'].id)
+    body = root.add_section(section_hash['container'].id)
+    footer = root.add_section(section_hash['container'].id)
+    body.add_section(section_hash['menu'].id)
+
+  end
+  
+  
   test "should get themes" do
     
     root = PageLayout.root

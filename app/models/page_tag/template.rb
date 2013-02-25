@@ -7,13 +7,13 @@ module PageTag
   class Template < ModelCollection
     class WrappedPageLayout < WrappedModel
       self.accessable_attributes=[:id]
-      attribute :section_instance, :section_piece_instance
+      attr_accessor :section_id, :page_layout_id
       
-      def initialize(collection_tag, section_instance, section_piece_instance)
+      def initialize(collection_tag, page_layout_id, section_id)
         
         self.collection_tag = collection_tag
-        self.model = self.section_instance = section_instance        
-        self.section_piece_instance = section_piece_instance
+        self.model = self.page_layout_id = page_layout_id        
+        self.section_id = section_id
       end
       
       def wrapped_param_values()
@@ -30,20 +30,20 @@ module PageTag
       
       #Usage: get unique for current section piece instance
       def to_key        
-        if self.section and self.section_piece
-          "#{section['section_id']}_#{section['section_instance']}_#{section_piece['section_piece_id']}_#{section_piece['section_piece_instance']}"
+        if self.page_layout_id and self.section_id
+          "#{page_layout_id}_#{section_id}"
         end
       end
         
     end
     
-    attr_accessor :param_values_tag, :menus_tag
+    attr_accessor :param_values_tag, :menus_tag, :blog_post_tag
 
     def initialize(page_generator_instance)
       super(page_generator_instance)
-      self.param_values_tag = ParamValues.new(page_generator_instance)
-      self.menus_tag = Menus.new(page_generator_instance)
-      self.blog_post_tag = BlogPosts.new(page_generator_instance)
+      self.param_values_tag = ::PageTag::ParamValues.new(page_generator_instance)
+      self.menus_tag = ::PageTag::Menus.new(page_generator_instance)
+      self.blog_post_tag = ::PageTag::BlogPosts.new(page_generator_instance)
     end
     
     def id
@@ -54,9 +54,10 @@ module PageTag
     #        should call this before call any method.
     #Params: section, in fact, it is record of table page_layout. represent a section instance
     #        section_piece, it is record of table section, represent a section_piece instance
-    def setup(section_instance, section_piece_instance)
+    def select(page_layout_id, section_id)
+      
       #current selected section instance, page_layout record
-      self.current = WrappedPageLayout.new(self, section_instance, section_piece_instance)
+      self.current = WrappedPageLayout.new(self, page_layout_id, section_id)
     end
     
     def wrapped_menu_root

@@ -134,11 +134,9 @@ class Section < ActiveRecord::Base
     
     def get_header_script(node)
       reject_keys = ["created_at","created_on","updated_at", "udpated_on"]
-      header = "<? section_piece=#{node.attributes.except(*reject_keys).inspect}; ?>#{$/}"
+      header = "<? section_id=#{node.id}; ?>#{$/}"
       #only set @param_values, @menus for root piece.
-      header << "<? @param_values.setup(section,section_piece) ?>#{$/}" 
-      header << "<? @menus.setup(section,section_piece) ?>#{$/}" if node.section_piece.is_menu?
-      header
+      header << "<? @template.select(page_layout_id,section_id) ?>#{$/}"       
     end 
     
   end
