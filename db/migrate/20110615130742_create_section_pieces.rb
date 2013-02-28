@@ -10,8 +10,8 @@ class CreateSectionPieces < ActiveRecord::Migration
       t.column :is_root,        :boolean,                   :null => false, :default => false
       t.column :is_container,        :boolean,                   :null => false, :default => false
       t.column :is_selectable,       :boolean,                   :null => false, :default => false
-      # this section piece contain menu
-      t.column :is_menu,       :boolean,                   :null => false, :default => false
+      # could assign kinds of resources to this piece
+      t.column :resources,           :string, :limit => 10,      :null => false, :default => ""
       t.timestamps
     end
   end

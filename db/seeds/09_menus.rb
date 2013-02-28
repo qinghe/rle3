@@ -6,7 +6,7 @@ objs=[
   
 Menu.delete_all
 website = Website.first()
-main_menu = Menu.create("website_id"=>website.id, "title"=>"Main Menu")
+main_menu = Menu.create("website_id"=>website.id, "title"=>"Main menu")
 main_menu.children.create("website_id"=>website.id,"title"=>"Index")
 main_menu.children.create("website_id"=>website.id,"title"=>"Blogs")
 main_menu.children.create("website_id"=>website.id,"title"=>"About me")

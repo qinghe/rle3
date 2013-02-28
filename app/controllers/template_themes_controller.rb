@@ -114,18 +114,18 @@ class TemplateThemesController < ApplicationController
     #for debug
     params[:d] = 'www.rubyecommerce.com'
     editor = params[:editor]
-    the_website=the_menu=the_layout=the_theme = the_resource = nil
-    the_website = Website.find_by_url(params[:d])
+    website=menu=layout=theme = resource = nil
+    website = Website.find_by_url(params[:d])
     if params[:c]
-      the_menu = Menu.find_by_id(params[:c])
+      menu = Menu.find_by_id(params[:c])
       if params[:r]
-        the_resource = BlogPost.find_by_id(params[:r])
+        resource = BlogPost.find_by_id(params[:r])
       end  
     else
-      the_menu = Menu.find_by_id(the_website.index_page)  
+      menu = Menu.find_by_id(website.index_page)  
     end
-    the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    html,css = do_preview(the_theme, the_menu, {:blog_post_id=>(the_resource.nil? ? nil:the_resource.id),:editor=>editor})
+    theme = TemplateTheme.find(menu.find_theme_id(is_preview=true))
+    html,css = do_preview(theme, menu, {:blog_post_id=>(resource.nil? ? nil:resource.id),:editor=>editor})
     #insert css to html
     style = %Q!<style type="text/css">#{css}</style>!
     html.insert(html.index("</head>"),style)
@@ -407,14 +407,15 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   def do_preview( theme,  menu, options={})
       options[:preview_url] = true #preview_template_themes_url
       @lg = PageGenerator.generator( menu, theme, options)
-      html, css = @lg.generate
+      html = @lg.generate
+      css,js  = @lg.generate_assets
       if options[:serialize_html]
         @lg.serialize_page(:html)
       end
       if options[:serialize_css]      
         @lg.serialize_page(:css)
       end
-      return html, css  
+      return html, css, js  
   end
 
   def do_generate( theme_id, layout_id, menu_id, options={})
@@ -428,15 +429,15 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   def public
     params[:d] = 'www.rubyecommerce.com'
     
-    the_website=the_menu=the_layout=the_theme = nil
-    the_website = Website.find_by_url(params[:d])
+    website=menu=layout=theme = nil
+    website = Website.find_by_url(params[:d])
     if params[:c]
-      the_menu = Menu.find_by_id(params[:c])
+      menu = Menu.find_by_id(params[:c])
     else
-      the_menu = Menu.find_by_id(the_website.index_page)  
+      menu = Menu.find_by_id(website.index_page)  
     end
-    the_theme = TemplateTheme.find(the_menu.find_theme_id(is_preview=true))
-    html, css = do_generate(the_theme.id, the_theme.layout_id, the_menu.id)
+    theme = TemplateTheme.find(menu.find_theme_id(is_preview=true))
+    html, css = do_generate(theme.id, theme.layout_id, menu.id)
     render :text => html
 
   end

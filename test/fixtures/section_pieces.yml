@@ -1,6 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 root:
   id: 1
+  is_selectable: true
+  is_container: true
+  is_root: true
   html: |-
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
@@ -27,9 +30,6 @@ root:
       </div><!-- /#page -->
     </body>
     </html>
-  is_selectable: true
-  is_container: true
-  is_root: true
   css: |-
     body
       { font-size: 100%;
@@ -222,6 +222,8 @@ root:
 
 container:
   id: 2
+  is_selectable: "1"
+  is_container: "1"
   html: |-
     <!-- container  -->
     <div class="<?=g_piece_selector?> c_pageparams.parent_section_instance section" >
@@ -229,8 +231,6 @@ container:
           ~~content~~
           </div>          
     </div> 
-  is_selectable: "1"
-  is_container: "1"
   css: |-
     /* background, margin, border, skinnables */
     #<?=g_piece_selector?>
@@ -315,6 +315,9 @@ container:
   
 hmenu:
   id: 3
+  is_selectable: "0"
+  is_container: "1"
+  resources: m
   html: |-
     <ul class="<?=g_piece_selector?>" >
     <? if @template.menu.present? ?>
@@ -323,9 +326,6 @@ hmenu:
     <? end ?>
     <? end ?>
     </ul>
-  is_selectable: "0"
-  is_container: "1"
-  is_menu: true
   css: |-
     #<?=g_piece_selector?> li{ 
       list-style-type:none;
@@ -338,6 +338,10 @@ hmenu:
   js: ""
 vmenu:
   id: 4
+  is_selectable: "0"
+  is_container: "1"
+  resources: m
+  perma_name: vmenu
   html: |-
     <ul class="<?=g_piece_selector?>">
     <? if @template.menu.present? ?>
@@ -346,17 +350,16 @@ vmenu:
     <? end ?>
     <? end ?>
     </ul>
-  is_selectable: "0"
-  is_container: "1"
-  is_menu: true
   css: |-
       #<?=g_piece_selector?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
 
-  perma_name: vmenu
   js: ""
    
 menuitem:
   id: 6
+  is_selectable: "0"
+  is_container: "0"
+  perma_name: menuitem
   html: |
     <li class="<?=g_piece_selector?>">
       <? if page.clickable? ?>
@@ -369,10 +372,6 @@ menuitem:
         <a id="pi<?= g_piece_selector?>_page.id" class="noclick"> <?= page.title ?> </a>    
       <? end ?>
     </li>
-  created_at: 2011-06-23 11:40:07
-  is_selectable: "0"
-  updated_at: 2011-06-23 11:40:07
-  is_container: "0"
   css: |-
       #<?=g_piece_selector?> a{
        <?= @template.css :ainner ?>
@@ -386,34 +385,37 @@ menuitem:
         }
       #<?=g_piece_selector?> a.selected:hover{  <?= @template.css :ahs ?> }
       #<?=g_piece_selector?> a.noclick{ <?= @template.css :au ?> }
-  perma_name: menuitem
   js: ""
 image:
   id: 7
-  html: |
-          <a href="~~PageParams.get:logourl~~">
-             <img <?= @template.css :logo ?>  border="0" />
-          </a>
-  created_at: 2011-09-20 19:40:07
-  is_selectable: "0"
-  updated_at: 2011-09-20 19:40:07
-  is_container: "0"
-  css: ""
   perma_name: image
+  is_selectable: "0"
+  is_container: "0"
+  resources: i
+  html: | 
+       <a href="~~PageParams.get:logourl~~">
+         <img <?= @template.css :logo ?>  border="0" />
+       </a>
+  created_at: 2011-09-20 19:40:07
+  updated_at: 2011-09-20 19:40:07
+  css: ""
   js: ""
 text:
   id: 8
+  perma_name: text
+  is_selectable: "0"
+  is_container: "0"
   html: |          
           <?= @template.css :text ?> 
   created_at: 2011-09-20 19:40:07
-  is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
-  is_container: "0"
   css: ""
-  perma_name: text
   js: ""
 blog_post_list:
   id: 11
+  perma_name: blog_post_list
+  is_selectable: "0"
+  is_container: "0"
   html: |         
     <? if @blog_posts.current.nil? ?> 
     <ul>
@@ -423,36 +425,33 @@ blog_post_list:
     </ul>
     <? end ?>
   created_at: 2011-09-20 19:40:07
-  is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
-  is_container: "0"
   css: ""
-  perma_name: blog_post_list
   js: ""
 blog_post_body:
   id: 12
+  perma_name: blog_post
+  is_selectable: "0"
+  is_container: "0"
   html: |          
     <li>
        <a href="<?= blog_post.url ?>"> <?=blog_post.title ?> </a>
        <?=blog_post.body ?>
     </li>
   created_at: 2011-09-20 19:40:07
-  is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
-  is_container: "0"
   css: ""
-  perma_name: blog_post
   js: ""    
 blog_post_title:
   id: 13
+  perma_name: blog_post_detail
+  is_selectable: "0"
+  is_container: "0"
   html: |    
     <? if @blog_posts.current.present? ?>          
     <p>   <?=@blog_posts.current.title ?> </p>
     <p>   <?=@blog_posts.current.body ?>  </p>
     <? end ?>
   created_at: 2011-09-20 19:40:07
-  is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
-  is_container: "0"
-  perma_name: blog_post_detail
   js: ""

@@ -59,23 +59,39 @@ class TemplateTheme < ActiveRecord::Base
     ParamValue.delete_all(["theme_id=?", self.id])
   end
   
-  # all menus used by this theme, from param values which pclass='db'
-  # param_value.pvalue should be menu root id
-  # return menu roots
-  def assigned_menus
-    pvs = self.param_values.all(:conditions=>["section_piece_params.pclass=?","db"],:include=>[:section_param=>:section_piece_param])
-    pvs.collect{|pv| mid = pv.first_pvalue.to_i; mid>0 ? Menu.find(mid) : nil }.compact
-  end
-  
-  # get assigned menu by specified page_layout_id
-  def assigned_menu_id( page_layout_id)
-    menu_id = 0
-    if assigned_resource_ids.present? and assigned_resource_ids.key?(page_layout_id)
-      if assigned_resource_ids[page_layout_id][:menu_ids].present?
-        menu_id = assigned_resource_ids[page_layout_id][:menu_ids].first
-      end
+  begin 'assigned resource'
+    # all menus used by this theme, from param values which pclass='db'
+    # param_value.pvalue should be menu root id
+    # return menu roots
+    def assigned_menus
+      pvs = self.param_values.all(:conditions=>["section_piece_params.pclass=?","db"],:include=>[:section_param=>:section_piece_param])
+      pvs.collect{|pv| mid = pv.first_pvalue.to_i; mid>0 ? Menu.find(mid) : nil }.compact
     end
-    menu_id
+    
+    # get assigned menu by specified page_layout_id
+    def assigned_resource_id( resource_class, page_layout_id)
+      resource_id = 0
+      resource_key = get_resource_class_key(resource.class)
+      if assigned_resource_ids.present? 
+        if assigned_resource_ids[page_layout_id][resource_key].present?
+          resource_id = assigned_resource_ids[page_layout_id][resource_key].first
+        end
+      end
+      resource_id
+    end
+  
+    # assign resource to page_layout node
+    def assign_resource( resource, page_layout)
+      #assigned_resource_ids={page_layout_id={:menu_ids=>[]}}
+      self.assigned_resource_ids = Hash.new{|hash,key| hash[key]=Hash.new{|ih,ik| ih[ik]=[] }} unless assigned_resource_ids.present?
+      
+      resource_key = get_resource_class_key(resource.class)
+      unless self.assigned_resource_ids[page_layout.id][resource_key].include?( resource.id )
+        self.assigned_resource_ids[page_layout.id][resource_key].push( resource.id )
+      end
+      Rails.logger.debug "assigned_resource_ids=#{assigned_resource_ids.inspect}"
+      self.save! 
+    end
   end
   
   begin 'param values'  
@@ -94,6 +110,10 @@ class TemplateTheme < ActiveRecord::Base
       end
     end
   
+  
+    def get_resource_class_key( resource_class)
+      resource_class.to_s.underscore.to_sym
+    end
   end
   
 end

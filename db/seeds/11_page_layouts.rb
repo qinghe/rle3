@@ -20,14 +20,6 @@ section_hash= objects.inject({}){|h,sp| h[sp.perma_name] = sp; h}
 # puts "section_hash=#{section_hash.keys}"
 website_id = section_hash['root'].website_id
   
-# blog_post_list_or_detail
-blog_post_list_or_detail =  PageLayout.create_layout(section_hash['container'], "blog_list_or_detail", :website_id=>website_id) 
-blog_list = blog_post_list_or_detail.add_section(section_hash['container'].id,:perma_name=>"blog_list")
-blog_detail = blog_post_list_or_detail.add_section(section_hash['container'].id,:perma_name=>"blog_detail")
-blog_list.update_section_context( PageLayout::ContextEnum.list )
-blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
-blog_detail.update_section_context( PageLayout::ContextEnum.detail )
-blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
 
 # center area
 center_area = PageLayout.create_layout(section_hash['center_area'], "center_area", :website_id=>website_id)
@@ -41,7 +33,7 @@ root = PageLayout.create_layout(section_hash['root'], "layout1", :website_id=>we
 
 header = root.add_section(section_hash['container'].id,:perma_name=>"header")
 header.add_section(section_hash['logo'].id)
-header.add_section(section_hash['hmenu'].id)
+header.add_section(section_hash['hmenu'].id,:title=>"Main menu")
 
 body = root.add_section(section_hash['container'].id,:perma_name=>"content")
 footer = root.add_section(section_hash['container'].id,:perma_name=>"footer")
@@ -50,7 +42,15 @@ lftnav = body.add_section(section_hash['container'].id,:perma_name=>"lftnav")
 main_content = body.add_section(section_hash['container'].id,:perma_name=>"main_content")
 
 lftnav.add_section(section_hash['vmenu'].id,:perma_name=>"vmenu")
-main_content.add_layout_tree(blog_post_list_or_detail.id)
+
+blog_list = main_content.add_section(section_hash['container'].id,:perma_name=>"blog_list")
+blog_detail = main_content.add_section(section_hash['container'].id,:perma_name=>"blog_detail")
+blog_list.update_section_context( PageLayout::ContextEnum.list )
+blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
+blog_detail.update_section_context( PageLayout::ContextEnum.detail )
+blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
+
+
 
 footer.add_section(section_hash['hmenu'].id,:perma_name=>"footer_menu")
 footer.add_section(section_hash['text'].id,:perma_name=>"copyright")

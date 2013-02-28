@@ -29,7 +29,7 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
   end
 
   def assign_perma_name
-    self.perma_name = self.title.underscore
+    self.perma_name = self.title.parameterize
   end
   
   #we need valid 

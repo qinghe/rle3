@@ -162,7 +162,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.boolean  "is_root",                        :default => false, :null => false
     t.boolean  "is_container",                   :default => false, :null => false
     t.boolean  "is_selectable",                  :default => false, :null => false
-    t.boolean  "is_menu",                        :default => false, :null => false
+    t.string   "resources",     :limit => 10,    :default => "",    :null => false
     t.datetime "created_at",                                        :null => false
     t.datetime "updated_at",                                        :null => false
   end

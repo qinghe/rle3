@@ -33,10 +33,12 @@ class PageLayout < ActiveRecord::Base
       l.is_full_html = section.section_piece.is_root?
     end
     obj.update_attribute("root_id",obj.id)
-    #create a theme for it.
-    TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
-    #copy the default section param value to the layout
-    obj.add_param_value()
+    if obj.is_full_html? #only create template for full html page layout
+      #create a theme for it.
+      TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
+      #copy the default section param value to the layout
+      obj.add_param_value()
+    end
     obj
   end
   
@@ -50,14 +52,16 @@ class PageLayout < ActiveRecord::Base
     return (rgt-lft)>1
   end
   
-  # has_many :children in awesome_nested_set      
-  #def children
-  #  tree = self.root.self_and_descendants
-  #  tree.select{|node| node.parent_id==self.id}
-  #end      
+  # get applicable resources for self
+  def applicable_reources
+    self.section.self_and_descendants(:include=>:section_piece).select{|node|
+      node.section_piece.resources
+    }.select{|resource| resource.present?}
+    
+  end
   
 
-
+  # Do not support add_layout_tree now. Page layout should be full html, Keep it simple. 
   # since we add feature 'section_context' and 'data_source', should not allow user use this method, it may cause section_context conflict.
   # user copy prebuild layout tree to another layout tree as child.
   # copy it self and decendants to new parent. this only for root layout.
@@ -157,9 +161,11 @@ class PageLayout < ActiveRecord::Base
     if section.root? and self.section.section_piece.is_container      
       whole_tree = self.root.self_and_descendants
       section_instance = whole_tree.select{|xnode| xnode.section_id==section.id}.size.succ
-      atts = {:website_id=>website_id, :root_id=>root_id, :section_id=>section_id, :section_instance=>section_instance, :title=>"#{section.perma_name}#{section_instance}"}
-      atts[:perma_name] = atts[:title].underscore
+      atts = {:website_id=>website_id, :root_id=>root_id, :section_id=>section_id, :section_instance=>section_instance}      
       atts.merge!(attrs)
+      atts[:title]||="#{section.perma_name}#{section_instance}"
+      atts[:perma_name] = atts[:title].parameterize
+      
       obj = self.class.create!(atts)      
       obj.move_to_child_of(self)
       #copy the default section param value to the layout
@@ -371,6 +377,7 @@ class PageLayout < ActiveRecord::Base
       data_sources
     end    
   end
+  
   
   private
   def build_section_html(tree, node, section_hash) 

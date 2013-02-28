@@ -31,7 +31,7 @@ module PageTag
       end
        
       def assigned_menu_id
-        self.collection_tag.theme.assigned_menu_id(page_layout_id)
+        self.collection_tag.theme.assigned_resource_id(Menu, page_layout_id)
       end
     end
     

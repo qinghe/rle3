@@ -14,6 +14,8 @@ gem "awesome_nested_set"
 gem "dragonfly"
 gem "responds_to_parent"
 gem 'jquery-rails', '>= 1.0.12'
+
+#gem "friendly_id", "~> 4.0.9"
 # Deploy with Capistrano
 # gem 'capistrano'
 
