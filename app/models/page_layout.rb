@@ -401,6 +401,6 @@ class PageLayout < ActiveRecord::Base
   end
 
   def get_header_script(node)
-    header = "<? page_layout_id=#{node.id}?>#{$/}"
+    header = "<? g_page_layout_id=#{node.id}; ?>#{$/}"
   end   
 end

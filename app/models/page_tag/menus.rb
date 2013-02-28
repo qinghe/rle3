@@ -27,23 +27,24 @@ module PageTag
       
     end
     attr_accessor :menus_cache #store all menus of template, key is page_layout_id, value is menu tree
-    attr_accessor :menu_models, :menu_keys # keys are section_piece_param.class_name
+    attr_accessor :template_tag
     
-    def initialize(page_generator_instance)
-      super(page_generator_instance)
+    def initialize(template_tag)
+      self.template_tag = template_tag
       self.menus_cache = {}
     end
 
     # get menu root assigned to section instance
     def get( wrapped_page_layout )
-      unless menus_cache.key?[wrapped_page_layout.id]
+      key = wrapped_page_layout.to_key 
+      unless menus_cache.key? key
         menu_tree = nil
         if wrapped_page_layout.assigned_menu_id>0          
           menu_tree = Menu.find(:all, :conditions=>["root_id = ?", wrapped_page_layout.assigned_menu_id])
         end
-        menus_cache[wrapped_page_layout.id] = menu_tree     
+        menus_cache[key] = menu_tree     
       end
-      if menus_cache[wrapped_page_layout.id].present?
+      if menus_cache[key].present?
         WrappedMenu.new( self, menus_cache[wrapped_page_layout.id].first)
       else
         nil  
@@ -51,12 +52,9 @@ module PageTag
     end
     
     def menu
-      menus.first
+      get( template_tag.current_piece )
     end
     
-    def menu?
-      not menus.first.nil?
-    end
   
     def menus
       if self.menu_models.nil?

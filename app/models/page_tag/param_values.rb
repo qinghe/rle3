@@ -13,7 +13,7 @@ module PageTag
         
         @param_values_hash = param_values.inject({}){|h,pv|
           sp = pv.section_param
-          key = "#{pv.section_id}_#{pv.section_instance}_#{sp.section_piece_id}_#{sp.section_piece_instance}"
+          key = self.template_tag.current_piece.to_key
           h[key]||=[]   
           h[key]<<pv
           h
@@ -23,12 +23,14 @@ module PageTag
     end
   
     #usage
+    # key, template_tag.current_piece.to_key, look for css in current section piece
     # options: :source=>[computed|normal], get pvalue from 'pvalue' or 'computed_pvalue'  
-    def get(class_name, options={})
+    def css( class_name, options={})
       class_name = class_name.to_s
+      key = self.template_tag.current_piece.to_key
       val = ""
-      if self.param_values_hash.has_key? instance_id
-        pvs = param_values_hash[instance_id]
+      if self.param_values_hash.key? key
+        pvs = param_values_hash[key]
         for pv in pvs
   #Rails.logger.debug "pv=#{pv.id}, pv.html_attribute_ids=#{pv.html_attribute_ids}"
           # section_piece_param which have same class_name should be given same plass
@@ -75,10 +77,6 @@ module PageTag
       val
     end
         
-    # parent section
-    def parent_instance_id
-  
-    end  
     # parent section_piece
     def root_piece_instance_id
       if self.section and self.section_piece

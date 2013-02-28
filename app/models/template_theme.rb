@@ -6,7 +6,8 @@ class TemplateTheme < ActiveRecord::Base
   
   after_destroy :remove_relative_data
   scope :by_layout,  lambda { |layout_id| where(:page_layout_root_id => layout_id) }
-  
+  serialize :assigned_resource_ids, Hash
+
   
   begin 'for page generator'  
     def file_name(usage)
@@ -64,6 +65,17 @@ class TemplateTheme < ActiveRecord::Base
   def assigned_menus
     pvs = self.param_values.all(:conditions=>["section_piece_params.pclass=?","db"],:include=>[:section_param=>:section_piece_param])
     pvs.collect{|pv| mid = pv.first_pvalue.to_i; mid>0 ? Menu.find(mid) : nil }.compact
+  end
+  
+  # get assigned menu by specified page_layout_id
+  def assigned_menu_id( page_layout_id)
+    menu_id = 0
+    if assigned_resource_ids.present? and assigned_resource_ids.key?(page_layout_id)
+      if assigned_resource_ids[page_layout_id][:menu_ids].present?
+        menu_id = assigned_resource_ids[page_layout_id][:menu_ids].first
+      end
+    end
+    menu_id
   end
   
   begin 'param values'  

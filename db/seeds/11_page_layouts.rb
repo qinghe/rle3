@@ -28,6 +28,7 @@ blog_list.update_section_context( PageLayout::ContextEnum.list )
 blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
 blog_detail.update_section_context( PageLayout::ContextEnum.detail )
 blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
+
 # center area
 center_area = PageLayout.create_layout(section_hash['center_area'], "center_area", :website_id=>website_id)
 center_area.add_section(section_hash['center_part'].id,:perma_name=>"center_part")

@@ -133,10 +133,14 @@ class Section < ActiveRecord::Base
     end
     
     def get_header_script(node)
-      reject_keys = ["created_at","created_on","updated_at", "udpated_on"]
-      header = "<? section_id=#{node.id}; ?>#{$/}"
+      
       #only set @param_values, @menus for root piece.
-      header << "<? @template.select(page_layout_id,section_id) ?>#{$/}"       
+      header= <<-EOS
+         <? g_section_id=#{node.id};
+            @template.select(g_page_layout_id, g_section_id);
+            g_piece_selector = @template.current.piece_selector;
+            ?> 
+         EOS
     end 
     
   end

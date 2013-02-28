@@ -200,10 +200,11 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   end
 
   create_table "template_themes", :force => true do |t|
-    t.integer "website_id",                        :default => 0
-    t.integer "page_layout_root_id",               :default => 0,  :null => false
-    t.string  "title",               :limit => 64, :default => "", :null => false
-    t.string  "perma_name",          :limit => 64, :default => "", :null => false
+    t.integer "website_id",                          :default => 0
+    t.integer "page_layout_root_id",                 :default => 0,  :null => false
+    t.string  "title",                 :limit => 64, :default => "", :null => false
+    t.string  "perma_name",            :limit => 64, :default => "", :null => false
+    t.string  "assigned_resource_ids",               :default => "", :null => false
   end
 
   create_table "websites", :force => true do |t|

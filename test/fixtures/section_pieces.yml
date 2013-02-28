@@ -35,11 +35,11 @@ root:
       { font-size: 100%;
         margin: 0;
         padding: 0;
-        <?= @param_values.get :body ?>
+        <?= @template.css :body ?>
       }    
       body, caption, th, td, input, textarea, select, option, legend, fieldset
       {
-        <? if @param_values.get(:font_family)== 'serif' ?>
+        <? if @template.css(:font_family)== 'serif' ?>
         font-family: Times, "Times New Roman", Georgia, "Bitstream Vera Serif", serif;
         <? else ?>
         font-family: Tahoma, Verdana, Arial, Helvetica, "Bitstream Vera Sans", Sans, sans-serif;
@@ -91,63 +91,63 @@ root:
       { margin: 0;
         padding: 0;
       }
-    <? if @param_values.get :use_bbtl ?>
+    <? if @template.css :use_bbtl ?>
     div#bbtl
     { position:absolute;
       top:0;
       left:0;
-      <?= @param_values.get :bbtl ?>
+      <?= @template.css :bbtl ?>
     }
     <? end ?>
-    <? if @param_values.get :use_bbtr ?>
+    <? if @template.css :use_bbtr ?>
     div#bbtr
     { position:absolute;
       top:0;
       right:0;
-      <?= @param_values.get :bbtr ?>
+      <?= @template.css :bbtr ?>
     }
     <? end ?>
-    <? if @param_values.get :use_pbbl ?>
+    <? if @template.css :use_pbbl ?>
     div#pbbl
     { position:absolute;
       bottom:0;
       left:0;
-      <?= @param_values.get :pbbl ?>
+      <?= @template.css :pbbl ?>
     }
     <? end ?>
-    <? if @param_values.get :use_pbbr ?>
+    <? if @template.css :use_pbbr ?>
     div#pbbr
     { position:absolute;
       bottom:0;
       right:0;
-      <?= @param_values.get :pbbr ?>
+      <?= @template.css :pbbr ?>
     }
     <? end ?>
       #page
       {
-        <? if @param_values.get(:font_size)== 10?>
+        <? if @template.css(:font_size)== 10?>
         font-size: 0.625em; /* 16px x .625 = 10px */
         line-height: 1.4em; /* 10px x 1.4 = 14px */
-        <? elsif @param_values.get(:font_size)== 12?>
+        <? elsif @template.css(:font_size)== 12?>
         font-size: 0.75em; /* 16px x .75 = 12px */
         line-height: 1.333em; /* 12px x 1.333 = 16px */
-        <? elsif @param_values.get(:font_size)== 14?>
+        <? elsif @template.css(:font_size)== 14?>
         font-size: 0.875em; /* 16px x .875 = 14px */
         line-height: 1.286; /* 14px x 1.286 = 18px */
-        <? elsif @param_values.get(:font_size)== 16?>
+        <? elsif @template.css(:font_size)== 16?>
         font-size: 1em; /* 16px x 1 = 16px */
         line-height: 1.13; /* 16px x 1.13 = 18px */
         <? end ?>
-        <? if @param_values.get :layout_fixed ?>
+        <? if @template.css :layout_fixed ?>
         margin-left: auto;
         margin-right: auto;
         <? end ?>
-        <?= @param_values.get :page ?>
-        <?= @param_values.get :background ?>
+        <?= @template.css :page ?>
+        <?= @template.css :background ?>
       }
         #page-inner
         { position:relative;
-        <? @param_values.get :inner ?>
+        <? @template.css :inner ?>
         }
           #navigation-top, #navigation
           { position: absolute;
@@ -179,7 +179,7 @@ root:
           }
     #page .section
     {  
-      <? if @param_values.get(:content_layout).to_i > 0 ?>
+      <? if @template.css(:content_layout).to_i > 0 ?>
       clear:none;
       <? else ?>
       clear:both;
@@ -224,8 +224,8 @@ container:
   id: 2
   html: |-
     <!-- container  -->
-    <div id="s_<?=@param_values.instance_id?>" class="c_pageparams.parent_section_instance section" >
-          <div class="c_<?=@param_values.instance_id?>-inner clear-block">
+    <div class="<?=g_piece_selector?> c_pageparams.parent_section_instance section" >
+          <div class="<?=g_piece_selector?>_inner clear-block">
           ~~content~~
           </div>          
     </div> 
@@ -233,81 +233,81 @@ container:
   is_container: "1"
   css: |-
     /* background, margin, border, skinnables */
-    #s_<?=@param_values.instance_id?>
+    #<?=g_piece_selector?>
     { overflow:hidden;  padding:0;  margin:0; 
       position:relative;
-      <?=@param_values.get(:block)?>
+      <?=@template.css(:block)?>
     }
     /* background, margin, border, padding */
-    #s_<?=@param_values.instance_id?> .c_<?=@param_values.instance_id?>-inner
+    #<?=g_piece_selector?> .c_<?=g_piece_selector?>_inner
     {
-      <?=@param_values.get(:inner)?>
-      <?=@param_values.get(:background)?>
+      <?=@template.css(:inner)?>
+      <?=@template.css(:background)?>
     }
-    #s_<?=@param_values.instance_id?> .section
+    #<?=g_piece_selector?> .section
     {
-      <?if @param_values.get(:content_layout).to_i > 0 ?>
+      <?if @template.css(:content_layout).to_i > 0 ?>
       clear:none;
       <?else?>
       clear:both;
       <?end?>
     }
     
-      <? if @param_values.get :use_img_tlc ?>
-    #s_<?= @param_values.instance_id?>_tlc
+      <? if @template.css :use_img_tlc ?>
+    #<?= g_piece_selector?>_tlc
     {
-      <?= @param_values.get :img_tlc ?>
+      <?= @template.css :img_tlc ?>
       background-position: 0% 0%;
       background-repeat:no-repeat;
     }
       <? end ?>
-      <? if @param_values.get :use_img_trc ?>
-    #s_<?= @param_values.instance_id?>_trc
+      <? if @template.css :use_img_trc ?>
+    #<?= g_piece_selector?>_trc
     {
-      <?= @param_values.get :img_trc ?>
+      <?= @template.css :img_trc ?>
       background-position: 100% 0%;
       background-repeat:no-repeat;
     }
       <? end ?>
-      <? if @param_values.get :use_img_blc ?>
-    #s_<?= @param_values.instance_id?>_blc
+      <? if @template.css :use_img_blc ?>
+    #<?= g_piece_selector?>_blc
     {
-      <?= @param_values.get :img_blc ?>
+      <?= @template.css :img_blc ?>
       background-position: 0% 100%;
       background-repeat:no-repeat;
     }
       <? end ?>
-      <? if @param_values.get :use_img_brc ?>
-    #s_<?= @param_values.instance_id?>_brc
+      <? if @template.css :use_img_brc ?>
+    #<?= g_piece_selector?>_brc
     {
-      <?= @param_values.get :img_brc ?>
+      <?= @template.css :img_brc ?>
       background-position: 100% 100%;
       background-repeat:no-repeat;
     }
       <? end ?>
-      <? if @param_values.get :use_img_tb ?>
-    #s_<?= @param_values.instance_id?>_tb
+      <? if @template.css :use_img_tb ?>
+    #<?= g_piece_selector?>_tb
     {
-      <?= @param_values.get :img_tb ?>
+      <?= @template.css :img_tb ?>
     }
       <? end ?>
-      <? if @param_values.get :use_img_bb ?>
-    #s_<?= @param_values.instance_id?>_bb
+      <? if @template.css :use_img_bb ?>
+    #<?= g_piece_selector?>_bb
     {
-      <?= @param_values.get :img_bb ?>
+      <?= @template.css :img_bb ?>
       background-position: 50% 100%;
     }
       <? end ?>
-      <? if @param_values.get :use_img_rb ?>
-    #s_<?= @param_values.instance_id?>_rb
+      <? if @template.css :use_img_rb ?>
+    #<?= g_piece_selector?>_rb
     {
-      <?= @param_values.get :img_rb ?>
+      <?= @template.css :img_rb ?>
     }
       <? end ?>
-      <? if @param_values.get :use_img_lb ?>
-    #s_<?= @param_values.instance_id?>_lb
+      <? if @template.css :use_img_lb ?>
+    #<?= g_piece_selector?>_lb
     {
-      <?= @param_values.get :img_lb ?>
+      <?= @template.css :img_lb ?>
     }
       <? end ?>
   perma_name: container
@@ -316,9 +316,9 @@ container:
 hmenu:
   id: 3
   html: |-
-    <ul>
-    <? if @menus.menu? ?>
-    <? for page in @menus.menu.children ?>
+    <ul class="<?=g_piece_selector?>" >
+    <? if @template.menu.present? ?>
+    <? for page in @template.menu.children ?>
        ~~content~~
     <? end ?>
     <? end ?>
@@ -327,10 +327,10 @@ hmenu:
   is_container: "1"
   is_menu: true
   css: |-
-    #s_<?=@param_values.root_piece_instance_id?> li{ 
+    #<?=g_piece_selector?> li{ 
       list-style-type:none;
       display:inline;}
-    #s_<?=@param_values.root_piece_instance_id?> a{ 
+    #<?=g_piece_selector?> a{ 
      display:inline-block;
      float:left;
      margin:0; /* non-editable */}
@@ -339,9 +339,9 @@ hmenu:
 vmenu:
   id: 4
   html: |-
-    <ul>
-    <? if @menus.menu? ?>
-    <? for page in @menus.menu.children ?>
+    <ul class="<?=g_piece_selector?>">
+    <? if @template.menu.present? ?>
+    <? for page in @template.menu.children ?>
        ~~content~~
     <? end ?>
     <? end ?>
@@ -350,7 +350,7 @@ vmenu:
   is_container: "1"
   is_menu: true
   css: |-
-      #s_<?=@param_values.root_piece_instance_id?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
+      #<?=g_piece_selector?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
 
   perma_name: vmenu
   js: ""
@@ -358,15 +358,15 @@ vmenu:
 menuitem:
   id: 6
   html: |
-    <li>
+    <li class="<?=g_piece_selector?>">
       <? if page.clickable? ?>
         <? if page.current? ?>
-         <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
+         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
         <? else ?>
-         <a id="pi<?= @param_values.instance_id?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
+         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
         <? end ?>
       <? else ?>
-        <a id="pi<?= @param_values.instance_id?>_page.id" class="noclick"> <?= page.title ?> </a>    
+        <a id="pi<?= g_piece_selector?>_page.id" class="noclick"> <?= page.title ?> </a>    
       <? end ?>
     </li>
   created_at: 2011-06-23 11:40:07
@@ -374,25 +374,25 @@ menuitem:
   updated_at: 2011-06-23 11:40:07
   is_container: "0"
   css: |-
-      #s_<?=@param_values.root_piece_instance_id?> a{
-       <?= @param_values.get :ainner ?>
-       <?= @param_values.get :a ?>  
+      #<?=g_piece_selector?> a{
+       <?= @template.css :ainner ?>
+       <?= @template.css :a ?>  
        }
-      #s_<?=@param_values.root_piece_instance_id?> a:hover{  
-        <?= @param_values.get :ah ?> 
+      #<?=g_piece_selector?> a:hover{  
+        <?= @template.css :ah ?> 
         }
-      #s_<?=@param_values.root_piece_instance_id?> a.selected{ 
-        <?= @param_values.get :as ?> 
+      #<?=g_piece_selector?> a.selected{ 
+        <?= @template.css :as ?> 
         }
-      #s_<?=@param_values.root_piece_instance_id?> a.selected:hover{  <?= @param_values.get :ahs ?> }
-      #s_<?=@param_values.root_piece_instance_id?> a.noclick{ <?= @param_values.get :au ?> }
+      #<?=g_piece_selector?> a.selected:hover{  <?= @template.css :ahs ?> }
+      #<?=g_piece_selector?> a.noclick{ <?= @template.css :au ?> }
   perma_name: menuitem
   js: ""
 image:
   id: 7
   html: |
           <a href="~~PageParams.get:logourl~~">
-             <img <?= @param_values.get :logo ?>  border="0" />
+             <img <?= @template.css :logo ?>  border="0" />
           </a>
   created_at: 2011-09-20 19:40:07
   is_selectable: "0"
@@ -404,7 +404,7 @@ image:
 text:
   id: 8
   html: |          
-          <?= @param_values.get :text ?> 
+          <?= @template.css :text ?> 
   created_at: 2011-09-20 19:40:07
   is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
@@ -454,6 +454,5 @@ blog_post_title:
   is_selectable: "0"
   updated_at: 2011-09-20 19:40:07
   is_container: "0"
-  css: ""
   perma_name: blog_post_detail
-  js: ""      
+  js: ""
