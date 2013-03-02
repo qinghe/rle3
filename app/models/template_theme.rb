@@ -71,11 +71,10 @@ class TemplateTheme < ActiveRecord::Base
     # get assigned menu by specified page_layout_id
     def assigned_resource_id( resource_class, page_layout_id)
       resource_id = 0
-      resource_key = get_resource_class_key(resource.class)
-      if assigned_resource_ids.present? 
-        if assigned_resource_ids[page_layout_id][resource_key].present?
-          resource_id = assigned_resource_ids[page_layout_id][resource_key].first
-        end
+      resource_key = get_resource_class_key(resource_class)
+Rails.logger.debug "resource_key=#{resource_key}, page_layout_id=#{page_layout_id}"      
+      if assigned_resource_ids.try(:[],page_layout_id).try(:[],resource_key).present?
+        resource_id = assigned_resource_ids[page_layout_id][resource_key].first
       end
       resource_id
     end
@@ -83,10 +82,12 @@ class TemplateTheme < ActiveRecord::Base
     # assign resource to page_layout node
     def assign_resource( resource, page_layout)
       #assigned_resource_ids={page_layout_id={:menu_ids=>[]}}
-      self.assigned_resource_ids = Hash.new{|hash,key| hash[key]=Hash.new{|ih,ik| ih[ik]=[] }} unless assigned_resource_ids.present?
+      self.assigned_resource_ids = {} unless assigned_resource_ids.present?
       
       resource_key = get_resource_class_key(resource.class)
-      unless self.assigned_resource_ids[page_layout.id][resource_key].include?( resource.id )
+      unless self.assigned_resource_ids[page_layout.id].try(:[],resource_key).try(:include?, resource.id )
+        self.assigned_resource_ids[page_layout.id]||={}
+        self.assigned_resource_ids[page_layout.id][resource_key]||=[]
         self.assigned_resource_ids[page_layout.id][resource_key].push( resource.id )
       end
       Rails.logger.debug "assigned_resource_ids=#{assigned_resource_ids.inspect}"

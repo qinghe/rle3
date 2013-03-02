@@ -35,16 +35,16 @@ header = root.add_section(section_hash['container'].id,:perma_name=>"header")
 header.add_section(section_hash['logo'].id)
 header.add_section(section_hash['hmenu'].id,:title=>"Main menu")
 
-body = root.add_section(section_hash['container'].id,:perma_name=>"content")
-footer = root.add_section(section_hash['container'].id,:perma_name=>"footer")
+body = root.add_section(section_hash['container'].id,:title=>"content")
+footer = root.add_section(section_hash['container'].id,:title=>"footer")
 
-lftnav = body.add_section(section_hash['container'].id,:perma_name=>"lftnav")
-main_content = body.add_section(section_hash['container'].id,:perma_name=>"main_content")
+lftnav = body.add_section(section_hash['container'].id,:title=>"lftnav")
+main_content = body.add_section(section_hash['container'].id,:title=>"main content")
 
-lftnav.add_section(section_hash['vmenu'].id,:perma_name=>"vmenu")
+lftnav.add_section(section_hash['vmenu'].id,:title=>"Blog category")
 
-blog_list = main_content.add_section(section_hash['container'].id,:perma_name=>"blog_list")
-blog_detail = main_content.add_section(section_hash['container'].id,:perma_name=>"blog_detail")
+blog_list = main_content.add_section(section_hash['container'].id,:title=>"blog list")
+blog_detail = main_content.add_section(section_hash['container'].id,:title=>"blog detail")
 blog_list.update_section_context( PageLayout::ContextEnum.list )
 blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
 blog_detail.update_section_context( PageLayout::ContextEnum.detail )
@@ -52,5 +52,5 @@ blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::Con
 
 
 
-footer.add_section(section_hash['hmenu'].id,:perma_name=>"footer_menu")
+footer.add_section(section_hash['hmenu'].id,:perma_name=>"footer menu")
 footer.add_section(section_hash['text'].id,:perma_name=>"copyright")

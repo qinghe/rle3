@@ -13,7 +13,6 @@ Rle3::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  match 'preview(/:c(/:r))' => 'template_themes#preview', :as => :preview
 
   resources :template_files
   resources :menus do
@@ -88,6 +87,9 @@ Rle3::Application.routes.draw do
   #     resources :products
   #   end
 
+  match '(/:c(/:r))' => 'template_themes#preview', :c => /[\d]+/
+  match 'preview' => 'template_themes#preview' #preview home
+  
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   # root :to => "welcome#index"

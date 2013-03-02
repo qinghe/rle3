@@ -6,3 +6,8 @@ main_menu_section = template.page_layout.self_and_descendants.where(:title=>titl
 main_menu = Menu.find_by_title(title)
 
 template.assign_resource(main_menu, main_menu_section)
+
+title="Blog category"
+blog_category_section = template.page_layout.self_and_descendants.where(:title=>title).first
+blog_category = Menu.find_by_title(title)
+template.assign_resource(blog_category, blog_category_section)

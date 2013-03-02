@@ -94,4 +94,8 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
     nodes = whole_tree.select{|node| node.lft<= self.lft and node.rgt>=self.rgt }
   end
   
+  def path
+    "/#{self.id}"
+  end
+  
 end

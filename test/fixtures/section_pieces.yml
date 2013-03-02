@@ -233,18 +233,18 @@ container:
     </div> 
   css: |-
     /* background, margin, border, skinnables */
-    #<?=g_piece_selector?>
+    .<?=g_piece_selector?>
     { overflow:hidden;  padding:0;  margin:0; 
       position:relative;
       <?=@template.css(:block)?>
     }
     /* background, margin, border, padding */
-    #<?=g_piece_selector?> .c_<?=g_piece_selector?>_inner
+    .<?=g_piece_selector?> .<?=g_piece_selector?>_inner
     {
       <?=@template.css(:inner)?>
       <?=@template.css(:background)?>
     }
-    #<?=g_piece_selector?> .section
+    .<?=g_piece_selector?> .section
     {
       <?if @template.css(:content_layout).to_i > 0 ?>
       clear:none;
@@ -327,10 +327,10 @@ hmenu:
     <? end ?>
     </ul>
   css: |-
-    #<?=g_piece_selector?> li{ 
+    .<?=g_piece_selector?> li{ 
       list-style-type:none;
       display:inline;}
-    #<?=g_piece_selector?> a{ 
+    .<?=g_piece_selector?> a{ 
      display:inline-block;
      float:left;
      margin:0; /* non-editable */}
@@ -351,7 +351,7 @@ vmenu:
     <? end ?>
     </ul>
   css: |-
-      #<?=g_piece_selector?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
+      .<?=g_piece_selector?> a{ float: left;  clear: left;  text-align: left;  margin: 0px;  border: 0px;  }
 
   js: ""
    
@@ -364,27 +364,27 @@ menuitem:
     <li class="<?=g_piece_selector?>">
       <? if page.clickable? ?>
         <? if page.current? ?>
-         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.url ?>" class="selected" ><?= page.title ?> </a>
+         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.path ?>" class="selected" ><?= page.title ?> </a>
         <? else ?>
-         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.url ?>" ><?= page.title ?> </a>
+         <a id="pi<?= g_piece_selector?>_page.id" href="<?= page.path ?>" ><?= page.title ?> </a>
         <? end ?>
       <? else ?>
         <a id="pi<?= g_piece_selector?>_page.id" class="noclick"> <?= page.title ?> </a>    
       <? end ?>
     </li>
   css: |-
-      #<?=g_piece_selector?> a{
+      .<?=g_piece_selector?> a{
        <?= @template.css :ainner ?>
        <?= @template.css :a ?>  
        }
-      #<?=g_piece_selector?> a:hover{  
+      .<?=g_piece_selector?> a:hover{  
         <?= @template.css :ah ?> 
         }
-      #<?=g_piece_selector?> a.selected{ 
+      .<?=g_piece_selector?> a.selected{ 
         <?= @template.css :as ?> 
         }
-      #<?=g_piece_selector?> a.selected:hover{  <?= @template.css :ahs ?> }
-      #<?=g_piece_selector?> a.noclick{ <?= @template.css :au ?> }
+      .<?=g_piece_selector?> a.selected:hover{  <?= @template.css :ahs ?> }
+      .<?=g_piece_selector?> a.noclick{ <?= @template.css :au ?> }
   js: ""
 image:
   id: 7
@@ -435,7 +435,7 @@ blog_post_body:
   is_container: "0"
   html: |          
     <li>
-       <a href="<?= blog_post.url ?>"> <?=blog_post.title ?> </a>
+       <a href="<?= blog_post.path ?>"> <?=blog_post.title ?> </a>
        <?=blog_post.body ?>
     </li>
   created_at: 2011-09-20 19:40:07

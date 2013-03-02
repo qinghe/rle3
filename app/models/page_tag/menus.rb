@@ -1,26 +1,24 @@
 module PageTag
   class Menus < Base
     class WrappedMenu < WrappedModel
-      self.accessable_attributes=[:id,:title,:clickable?]
+      self.accessable_attributes=[:id,:title, :path, :clickable?]
+      delegate *self.accessable_attributes, :to => :model
 
       def children
-        self.menu_model.children.collect{|item| WrappedMenu.new(self.menus_tag, item)}
+        self.model.children.collect{|item| WrappedMenu.new(self.collection_tag, item)}
       end
           
       # url link to the menu itme's page(each menu itme link to a page).
-      def url
-        self.menus_tag.page_generator.build_url(:menu_id=>menu_model.id)
-      end
       
       def current?
-        self.menus_tag.page_generator.menu.id == self.menu_model.id
+        self.collection_tag.template_tag.page_generator.menu.id == self.model.id
       end
       
       # since a page could have many blog_post list, get it by current section's data source
       def blog_posts
         data_source = self.section.current_data_source
         if blog_posts_tags_cache[data_source].nil?
-          self.blog_posts_tags_cache[data_source] = BlogPostsTag.new(self.menus_tag.page_generator, self)
+          self.blog_posts_tags_cache[data_source] = BlogPostsTag.new(self.collection_tag.page_generator, self)
         end
         self.blog_posts_tags_cache[data_source]
       end
@@ -45,7 +43,7 @@ module PageTag
         menus_cache[key] = menu_tree     
       end
       if menus_cache[key].present?
-        WrappedMenu.new( self, menus_cache[wrapped_page_layout.id].first)
+        WrappedMenu.new( self, menus_cache[key].first)
       else
         nil  
       end
@@ -57,7 +55,7 @@ module PageTag
     
   
     def menus
-      if self.menu_models.nil?
+      if self.collection_tags.nil?
         self.menu_models = []
         param_values =  ParamValue.find(:all,:conditions=>["layout_root_id=? and theme_id=? and param_values.section_id=? and param_values.section_instance=? and section_piece_params.pclass=?", 
           page_generator.layout_id, page_generator.theme_id, self.section['section_id'], self.section['section_instance'], 'db'],
