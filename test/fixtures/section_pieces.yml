@@ -393,9 +393,11 @@ image:
   is_container: "0"
   resources: i
   html: | 
-       <a href="~~PageParams.get:logourl~~">
-         <img <?= @template.css :logo ?>  border="0" />
-       </a>
+    <? if @template.image.present? ?>    
+         <img src="<?= @template.image.url ?>"  border="0" />
+    <? else ?>
+         <img alt='no image'  border="0" />         
+    <? end ?>
   created_at: 2011-09-20 19:40:07
   updated_at: 2011-09-20 19:40:07
   css: ""

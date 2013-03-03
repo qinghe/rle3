@@ -29,13 +29,6 @@ class ApplicationController < ActionController::Base
     #self.shop = Shop.first
     self.website = Website.first
     Website.current = self.website
-    TemplateFile.image_accessor :file do
-      storage_opts do |a|
-        {
-          :path => File.join("#{Website.current.id}/template_files", a.name )
-        }
-      end
-    end
     Menu.scope :roots_within_website, :conditions => ["website_id=? and parent_id is ?", website.id, nil ], :order => "lft"
   end
   

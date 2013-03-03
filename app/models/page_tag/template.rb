@@ -33,12 +33,16 @@ module PageTag
       def assigned_menu_id
         self.collection_tag.theme.assigned_resource_id(Menu, page_layout_id)
       end
+      def assigned_image_id
+        self.collection_tag.theme.assigned_resource_id(TemplateFile, page_layout_id)
+      end
     end
     
     attr_accessor :page_layout_tree
-    attr_accessor :param_values_tag, :menus_tag, :blog_post_tag
+    attr_accessor :param_values_tag, :menus_tag, :image_tag, :blog_post_tag
     delegate :css, :to => :param_values_tag 
     delegate :menu, :to => :menus_tag
+    delegate :image, :to => :image_tag
     delegate :theme, :to => :page_generator
     alias_method :current_piece, :current #current piece is more readable?
 
@@ -46,6 +50,7 @@ module PageTag
       super(page_generator_instance)
       self.param_values_tag = ::PageTag::ParamValues.new(self)
       self.menus_tag = ::PageTag::Menus.new(self)
+      self.image_tag = ::PageTag::TemplateImage.new(self)
       self.blog_post_tag = ::PageTag::BlogPosts.new(page_generator_instance)
       #self.page_layout_tree = page_generator_instance.theme.page_layout.self_and_descendants(:include=>[:section])
     end

@@ -27,7 +27,7 @@ class PageLayout < ActiveRecord::Base
     #create record in table page_layouts
     obj = create!(:section_id=>section.id) do |l|
       l.title = title
-      l.perma_name = title.underscore
+      l.perma_name = title.parameterize
       l.attributes = attrs unless attrs.empty?
       l.section_instance = 1
       l.is_full_html = section.section_piece.is_root?
@@ -35,7 +35,7 @@ class PageLayout < ActiveRecord::Base
     obj.update_attribute("root_id",obj.id)
     if obj.is_full_html? #only create template for full html page layout
       #create a theme for it.
-      TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>"theme for layout#{obj.id}",:perma_name=>"theme#{obj.id}"}) 
+      TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>title,:perma_name=>title.parameterize}) 
       #copy the default section param value to the layout
       obj.add_param_value()
     end

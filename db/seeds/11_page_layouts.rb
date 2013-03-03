@@ -29,10 +29,10 @@ center_area.add_section(section_hash['right_part'].id,:perma_name=>"right_part")
   
   
   
-root = PageLayout.create_layout(section_hash['root'], "layout1", :website_id=>website_id)
+root = PageLayout.create_layout(section_hash['root'], "Template One", :website_id=>website_id)
 
 header = root.add_section(section_hash['container'].id,:perma_name=>"header")
-header.add_section(section_hash['logo'].id)
+header.add_section(section_hash['logo'].id,:title=>"Logo")
 header.add_section(section_hash['hmenu'].id,:title=>"Main menu")
 
 body = root.add_section(section_hash['container'].id,:title=>"content")

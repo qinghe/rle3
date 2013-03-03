@@ -11,7 +11,8 @@ gem "acts_as_list"
 gem "acts_as_tree"
 gem "awesome_nested_set"
 
-gem "dragonfly"
+#use paperclip instead of dragonfly,  dragonfly have no way to configure image path
+gem "paperclip", "~> 3.0"
 gem "responds_to_parent"
 gem 'jquery-rails', '>= 1.0.12'
 

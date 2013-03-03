@@ -191,12 +191,11 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   create_table "template_files", :force => true do |t|
     t.integer  "page_layout_id"
     t.integer  "theme_id"
-    t.string   "file_uid"
-    t.string   "file_name"
-    t.integer  "width"
-    t.integer  "height"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
   end
 
   create_table "template_themes", :force => true do |t|

@@ -1,7 +1,6 @@
 class Website < ActiveRecord::Base
   cattr_accessor :current
   
-  
   def previewable?
     ret = true
     if self.index_page > 0

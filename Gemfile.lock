@@ -35,9 +35,10 @@ GEM
     awesome_nested_set (2.1.6)
       activerecord (>= 3.0.0)
     builder (3.0.4)
-    dragonfly (0.9.14)
-      multi_json (~> 1.0)
-      rack
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.1)
+      climate_control (>= 0.0.3, < 1.0)
     erubis (2.7.0)
     hike (1.2.1)
     i18n (0.6.1)
@@ -55,6 +56,12 @@ GEM
     mysql2 (0.3.11)
     mysql2 (0.3.11-x86-mingw32)
     mysql2 (0.3.11-x86-mswin32)
+    paperclip (3.4.1)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.0)
+      mime-types
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -102,8 +109,8 @@ DEPENDENCIES
   acts_as_list
   acts_as_tree
   awesome_nested_set
-  dragonfly
   jquery-rails (>= 1.0.12)
   mysql2
+  paperclip (~> 3.0)
   rails (= 3.2.8)
   responds_to_parent
