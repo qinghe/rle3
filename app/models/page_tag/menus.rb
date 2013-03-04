@@ -66,7 +66,7 @@ module PageTag
           menu_roots = Menu.find(:all, :conditions=>["id in (?)",menu_root_ids])
           
           self.menu_models = menu_roots.collect{|menu| WrappedMenu.new(self, menu)} 
-          self.menu_keys = pv.html_attribute_values_hash.values.collect{|hav| hav.html_attribute['perma_name']}
+          self.menu_keys = pv.html_attribute_values_hash.values.collect{|hav| hav.html_attribute['slug']}
         end
       end
       self.menu_models

@@ -3,7 +3,7 @@ class Section < ActiveRecord::Base
   has_many :section_params
   acts_as_nested_set #:scope=>"root_id"
   
-  # usage: attribute section_piece_id, perma_name required
+  # usage: attribute section_piece_id, title required
   # params: default_param_value,  is a hash,  class_name=>{htmal_attribute_id=>default_value,..}
   def self.create_section(section_piece_id,attrs = {}, default_param_value={})
     #create record in table sections
@@ -26,7 +26,7 @@ class Section < ActiveRecord::Base
     section_piece = SectionPiece.find(section_piece_id)
     tree = self.root.self_and_descendants
     section_piece_instance = tree.select{|xnode| xnode.section_piece_id==section_piece_id}.size.succ
-    atts = {:website_id=>website_id, :section_piece_id=>section_piece_id, :section_piece_instance=>section_piece_instance, :perma_name=>"#{section_piece.perma_name}#{section_piece_instance}"}
+    atts = {:website_id=>website_id, :section_piece_id=>section_piece_id, :section_piece_instance=>section_piece_instance}
     obj = nil
     self.class.transaction do      
       obj = self.class.create!(atts)

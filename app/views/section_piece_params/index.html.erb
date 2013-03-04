@@ -13,9 +13,9 @@
 
 <% @section_piece_params.each do |section_piece_param| %>
   <tr>
-    <td><%=h section_piece_param.section_piece_id %>:<%=h section_piece_param.section_piece.perma_name %></td>
-    <td><%=h section_piece_param.editor_id %>:<%=h section_piece_param.editor.perma_name %></td>
-    <td><%=h section_piece_param.param_category_id %>:<%=h section_piece_param.param_category.perma_name %></td>
+    <td><%=h section_piece_param.section_piece_id %>:<%=h section_piece_param.section_piece.slug %></td>
+    <td><%=h section_piece_param.editor_id %>:<%=h section_piece_param.editor.slug %></td>
+    <td><%=h section_piece_param.param_category_id %>:<%=h section_piece_param.param_category.slug %></td>
     <td><%=h section_piece_param.pclass %></td>
     <td><%=h section_piece_param.class_name %></td>
     <td><%=h section_piece_param.html_attribute_ids %></td>

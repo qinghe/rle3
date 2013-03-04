@@ -87,11 +87,5 @@ class SectionsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
-  def test_create
-    if Section.exists?(params[:id]) 
-      root = Section.create_section(params[:id], :perma_name=>"container")    
-    end
-  end
-  
+    
 end

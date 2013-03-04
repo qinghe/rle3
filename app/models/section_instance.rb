@@ -48,7 +48,7 @@ class SectionInstance
   
   def children_hash
     if @children_hash.nil?
-      @children_hash = children.inject({}){|h, c| h[c.perma_name] = c;h;}      
+      @children_hash = children.inject({}){|h, c| h[c.slug] = c;h;}      
     end
     @children_hash
   end
@@ -64,7 +64,7 @@ class SectionInstance
       self.page_layout.subscribe_event?(xevent)
       event_name = xevent.event_name
       handler_name = xevent.kind_of?(ParamValueEvent) ? 
-        "#{xevent.html_attribute.perma_name[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
+        "#{xevent.html_attribute.slug[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
 Rails.logger.debug "handler_name=#{handler_name},#{event_name}"      
       send handler_name, xevent      
       updated_html_attribute_value_array.concat( self.save )
@@ -74,7 +74,7 @@ Rails.logger.debug "handler_name=#{handler_name},#{event_name}"
   end
       
   # set or get html_attribute_value by key.
-  # key is section_param.class_name+html_attribute.perma_name. ex."block_width"
+  # key is section_param.class_name+html_attribute.slug. ex."block_width"
   # new_attribute_values, instance of HtmlAttributeValue, 
   def html_attribute_values(key)
     if @html_attribute_value_hash.nil?
@@ -82,7 +82,7 @@ Rails.logger.debug "handler_name=#{handler_name},#{event_name}"
       for pv in self.param_values
         class_name = pv.section_param.section_piece_param.class_name
         pv.html_attribute_values_hash.values.each{|hav|
-          unique_key = hav.computed? ?  "computed_#{class_name}_#{hav.html_attribute.perma_name}" : "#{class_name}_#{hav.html_attribute.perma_name}"
+          unique_key = hav.computed? ?  "computed_#{class_name}_#{hav.html_attribute.slug}" : "#{class_name}_#{hav.html_attribute.slug}"
           @html_attribute_value_hash[unique_key]=hav
         }        
       end
@@ -125,10 +125,10 @@ Rails.logger.debug "handler_name=#{handler_name},#{event_name}"
     part_triggered = ['center_part','left_part','right_part'].include? source_section_name
     page_triggered = ['root'].include? source_section_name
     # width of one in these three changed.       
-    if self.section_perma_name=='center_area'
-      left_part = self.children.select{|s| s.section_perma_name=='left_part'}.first
-      right_part = self.children.select{|s| s.section_perma_name=='right_part'}.first
-      center_part = self.children.select{|s| s.section_perma_name=='center_part'}.first
+    if self.section_slug=='center_area'
+      left_part = self.children.select{|s| s.section_slug=='left_part'}.first
+      right_part = self.children.select{|s| s.section_slug=='right_part'}.first
+      center_part = self.children.select{|s| s.section_slug=='center_part'}.first
 Rails.logger.debug "left_part=#{left_part}, right_part=#{right_part}, center_part=#{center_part}"        
       if part_triggered
         if false #is_fixed, enable fixed center_area later. 
@@ -196,7 +196,7 @@ Rails.logger.debug "left_part=#{left_part}, right_part=#{right_part}, center_par
     block_width = html_attribute_values("block_width")
     block_margin =  html_attribute_values("block_margin")
     block_inner_margin = html_attribute_values("inner_margin")
-Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_name}"    
+Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.slug}"    
 
     if is_fixed
       to_fixed()
@@ -218,9 +218,9 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
         block_min_width['unset']  = HtmlAttribute::UNSET_FALSE
         block_min_width['hidden']  = HtmlAttribute::BOOL_FALSE
       self.updated_html_attribute_values.push(block_width,block_min_width,block_margin )
-    elsif self.section.perma_name=='container'
+    elsif self.section.slug=='container'
   
-    elsif self.section.perma_name=='center_area'
+    elsif self.section.slug=='center_area'
       # parent_width is unset
   
         
@@ -243,9 +243,9 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
         block_margin['psvalue'] = 'auto'  
       
       self.updated_html_attribute_values.push(block_width,block_min_width,block_margin )
-    elsif self.section.perma_name=='container'
+    elsif self.section.slug=='container'
   
-    elsif self.section.perma_name=='center_area'
+    elsif self.section.slug=='center_area'
       # parent_width is unset
     end
   end
@@ -340,7 +340,7 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.perma_
     not html_attribute_values("content_layout_horizontal").bool_true?
   end
   
-  def section_perma_name
-    self.section.perma_name
+  def section_slug
+    self.section.slug
   end  
 end

@@ -10,7 +10,7 @@
     <ul class="tabs clear-block">
     <% for tab in @editors%>
       <li data-id="<%=tab.id%>">
-<%=  link_to_function(tab.perma_name,"void(0)", {"class"=>(tab.id==@editor.id ? "selected":"")})%>
+<%=  link_to_function(tab.slug,"void(0)", {"class"=>(tab.id==@editor.id ? "selected":"")})%>
       </li>
     <% end%>
     </ul>

@@ -1,4 +1,5 @@
 class HtmlAttribute < ActiveRecord::Base
+  extend FriendlyId
   BOOL_TRUE='1'
   BOOL_FALSE='0'
  
@@ -6,16 +7,19 @@ class HtmlAttribute < ActiveRecord::Base
   UNSET_FALSE= '0'
   
   cattr_accessor :psv_for_manual_entry_enum, :unit_collection, :special_enum
-  # perma_name db,bool,text,src pvalue are special
+  # slug db,bool,text,src pvalue are special
   #possible selected value for manual entry
   self.psv_for_manual_entry_enum =  {:href=>'0u', :bool=>'0b', :text=>'0t', :size=>'l1', :color=>'0c', :src=>'0i',:db=>'0d'}
   self.unit_collection = {:l=>['px']}
+  
+  friendly_id :title, :use => :slugged
+
   
   @@html_attribute_hash = nil
   def self.all_to_hash
     if @@html_attribute_hash.nil?
       html_attributes = HtmlAttribute.all
-      @@html_attribute_hash = html_attributes.inject({}){|h, ha| h[ha.id] = ha;h[ha.perma_name] = ha; h}
+      @@html_attribute_hash = html_attributes.inject({}){|h, ha| h[ha.id] = ha;h[ha.slug] = ha; h}
     end
     @@html_attribute_hash
   end

@@ -18,7 +18,7 @@
   <%= f.fields_for :assignment do |assignment_fields| %>
   <p>
     <%= label_tag :assignment_menu_id, "Menu" %><br />    
-    <%= grouped_collection_select(:assignment, :menu_id, Menu.roots, :children, :title, :id, :perma_name) %>
+    <%= grouped_collection_select(:assignment, :menu_id, Menu.roots, :children, :title, :id, :slug) %>
   </p>
   <% end %>
   

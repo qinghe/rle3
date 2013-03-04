@@ -3,14 +3,14 @@ require 'test_helper'
 class PageLayoutTest < ActiveSupport::TestCase
   # Replace this with your real tests.
   test "should create new layout" do
-    atts={"is_enabled"=>"1", "section_id"=>"1", "perma_name"=>"layout1", "section_instance"=>"0", "parent_id"=>""}
+    atts={"is_enabled"=>"1", "section_id"=>"1", "slug"=>"layout1", "section_instance"=>"0", "parent_id"=>""}
     page_layout = PageLayout.new
     page_layout.attributes= atts
     assert page_layout.save
   end
   
   test "should create a root" do
-    root_attrs = { "perma_name"=>"xyz"}
+    root_attrs = { "slug"=>"xyz"}
     root = PageLayout.create(root_attrs) 
     assert root.root?
   end
@@ -26,9 +26,9 @@ class PageLayoutTest < ActiveSupport::TestCase
   test "should create page layout tree" do    
    # PageLayout.delete_all              
     section_roots = Section.roots
-    section_hash = section_roots.inject({}){|h,sp| h[sp.perma_name] = sp; h}
+    section_hash = section_roots.inject({}){|h,sp| h[sp.slug] = sp; h}
     puts "section_hash=#{section_hash.keys}"
-    root = PageLayout.create_layout(section_hash['root'].id, :perma_name=>"layout1")
+    root = PageLayout.create_layout(section_hash['root'].id, :slug=>"layout1")
     header = root.add_section(section_hash['container'].id)
     body = root.add_section(section_hash['container'].id)
     footer = root.add_section(section_hash['container'].id)

@@ -10,7 +10,7 @@
 
   <p>
     <%= f.label :parent_id %><br />
-    <%= select("menu", "parent_id", Menu.all().collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+    <%= select("menu", "parent_id", Menu.all().collect {|p| [ p.slug, p.id ] }, { :include_blank => true }) %>
   </p>
 
   <p>

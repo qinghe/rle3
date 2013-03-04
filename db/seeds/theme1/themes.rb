@@ -1,5 +1,5 @@
 objs=[
-  {"title"=>"theme for layout1", "website_id"=>1, "id"=>1, "perma_name"=>"theme1", "layout_id"=>1}]
+  {"title"=>"theme for layout1", "website_id"=>1, "id"=>1, "slug"=>"theme1", "layout_id"=>1}]
 object_class = TemplateTheme
 
 for ha in objs

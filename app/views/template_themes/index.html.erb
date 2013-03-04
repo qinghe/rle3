@@ -7,7 +7,7 @@
 
 <% @themes.each do |theme| %>
   <tr>
-    <td><%=h theme.perma_name %></td>
+    <td><%=h theme.slug %></td>
 
     <td><%= link_to 'Destroy', theme, :confirm => 'Are you sure?', :method => :delete %></td>
     <td><%= link_to 'copy', {:action=>"copy",:id=>theme}, {:method=>:post} %></td>

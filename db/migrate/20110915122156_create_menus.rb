@@ -3,7 +3,7 @@ class CreateMenus < ActiveRecord::Migration
     create_table :menus do |t|
       t.integer :website_id, :null=> false, :default=>0
       t.string :title
-      t.string :perma_name
+      t.string :slug
       t.integer :root_id
       t.integer :parent_id # keep it default null,  awesome_nested_set required.
       t.integer :lft

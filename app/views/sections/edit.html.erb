@@ -5,19 +5,19 @@
 
   <p>
     <%= f.label :root_id %><br />
-    <%= select("section", "root_id", Section.all(:conditions=>'id=root_id').collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+    <%= select("section", "root_id", Section.all(:conditions=>'id=root_id').collect {|p| [ p.slug, p.id ] }, { :include_blank => true }) %>
   </p>
   <p>
     <%= f.label :parent_id %><br />
-    <%= select("section", "parent_id", Section.all().collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+    <%= select("section", "parent_id", Section.all().collect {|p| [ p.slug, p.id ] }, { :include_blank => true }) %>
   </p>
   <p>
-    <%= f.label :perma_name %><br />
-    <%= f.text_field :perma_name %>
+    <%= f.label :slug %><br />
+    <%= f.text_field :slug %>
   </p>
   <p>
     <%= f.label :section_piece_id %><br />
-    <%= select("section", "section_piece_id", SectionPiece.all().collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+    <%= select("section", "section_piece_id", SectionPiece.all().collect {|p| [ p.slug, p.id ] }, { :include_blank => true }) %>
   </p>
   <p>
     <%= f.label :section_piece_instance %><br />

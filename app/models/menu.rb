@@ -1,14 +1,15 @@
 class Menu < ActiveRecord::Base
+  extend FriendlyId
   acts_as_nested_set
 
   has_one :menu_level, :primary_key=>"root_id", :foreign_key=>"menu_id", :conditions=>proc{"menu_levels.level=#{self.level} and #{!self.root.inheritance}"}
   
   has_many :assignments
   has_many :blog_posts,:through =>:assignments
+  belongs_to :website
   
-  before_save :assign_perma_name
   after_save  :store_root_id
-
+  friendly_id :title, :use => :scoped, :scope => :website
   
   # assigned themes within website's menu 
   def self.assigned_theme_ids()
@@ -28,10 +29,6 @@ Rails.logger.debug   "assigned_theme_ids-> theme_ids=#{theme_ids.inspect}"
     theme_ids
   end
 
-  def assign_perma_name
-    self.perma_name = self.title.parameterize
-  end
-  
   #we need valid 
   def store_root_id
     if self.root_id.nil?

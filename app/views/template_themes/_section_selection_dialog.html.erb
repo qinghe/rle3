@@ -3,14 +3,14 @@
     
     <ul class="fl titles" style="width:120px;">
       <% sections.each_index{|i| s = sections[i]-%>
-      <li <%= 'class=selected' if i==0%> <%="data-section-id=#{s.id}"%> ><%=s.perma_name%></li>
+      <li <%= 'class=selected' if i==0%> <%="data-section-id=#{s.id}"%> ><%=s.slug%></li>
       <% }-%>
     </ul>
   
   <div class="fl details" style="width:120px;">
       <% sections.each_index{|i| s = sections[i]-%>
       <div <%= 'class=selected' if i==0%>>
-        <%= s.perma_name%>
+        <%= s.slug%>
       </div>
       <% }-%>
   </div>

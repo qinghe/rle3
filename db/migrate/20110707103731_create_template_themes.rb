@@ -4,7 +4,7 @@ class CreateTemplateThemes < ActiveRecord::Migration
       t.column :website_id,              :integer, :null => true, :default => 0 # this is an id in the page_layouts table
       t.column :page_layout_root_id,               :integer, :null => false, :default => 0 # this is an id in the page_layouts table
       t.column :title,                   :string,  :limit => 64,      :null => false, :default => ""  # the name of the property      
-      t.column :perma_name,              :string,  :limit => 64,      :null => false, :default => ""  # the name of the property      
+      t.column :slug,                    :string,  :limit => 64,      :null => false, :default => ""  # the name of the property      
       #  keep all assigned resource ids to the template, it is hash
       #  {:page_layout_id={:image_ids=[], :menu_ids=[]}}
       t.column :assigned_resource_ids,   :string,  :limit => 255,      :null => false, :default => ""        

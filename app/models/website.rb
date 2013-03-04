@@ -1,4 +1,7 @@
 class Website < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :title, :use => :slugged
+
   cattr_accessor :current
   
   def previewable?

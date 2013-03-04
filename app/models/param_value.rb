@@ -26,16 +26,16 @@ class ParamValue < ActiveRecord::Base
   end
   
   # usage: return all html_attribute_values this param value contains. 
-  #   return a hash, values are instance of HtmlAttributeValue, keys are html_attribute_id and html_attribute.perma_name. 
-  #   key is section_param.section_piece_param.class_name+html_attribute.perma_name. ex."block_width"
-  #   unique_key = hav.computed? ?  "computed_#{class_name}_#{hav.html_attribute.perma_name}" : "#{class_name}_#{hav.html_attribute.perma_name}"
+  #   return a hash, values are instance of HtmlAttributeValue, keys are html_attribute_id and html_attribute.slug. 
+  #   key is section_param.section_piece_param.class_name+html_attribute.slug. ex."block_width"
+  #   unique_key = hav.computed? ?  "computed_#{class_name}_#{hav.html_attribute.slug}" : "#{class_name}_#{hav.html_attribute.slug}"
 
   def html_attribute_values_hash
     ha_array = HtmlAttribute.find_by_ids(self.html_attribute_ids)
     
     hav_hash = ha_array.inject({}){|h, ha| hav = HtmlAttributeValue.parse_from(self,ha); 
       h[ha.id]=hav;
-      unique_key = "#{hav.param_value.section_param.section_piece_param.class_name}_#{hav.html_attribute.perma_name}"
+      unique_key = "#{hav.param_value.section_param.section_piece_param.class_name}_#{hav.html_attribute.slug}"
       h[unique_key]=hav; h 
     }
 

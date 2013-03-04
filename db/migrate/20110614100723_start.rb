@@ -1,7 +1,8 @@
 class Start < ActiveRecord::Migration
   def self.up
     create_table :websites do |t|
-      t.string :perma_name
+      t.string :title,:limit => 24,     :null => false
+      t.string :slug,:limit => 24,     :null => false
       t.string :url
       t.integer :index_page,     :null => false, :default => 0
       t.integer :list_template,     :null => false, :default => 0
@@ -10,12 +11,14 @@ class Start < ActiveRecord::Migration
       t.integer :pdetail_template,     :null => false, :default => 0
       t.timestamps
     end  
-       
+    add_index :websites, :slug, :unique => true
+    
     # This table contains the css specification, copied from the w3 website.
     # Ok, it also includes html elment attributes, but only the ones that can't be put in css
     # Users do not use this table.
     create_table :html_attributes, :force=>true do |t|
-      t.column :perma_name,              :string,                    :null => false, :default => ""  # the name of the property
+      t.column :title,              :string,                    :null => false, :default => ""  # the name of the property
+      t.column :slug,               :string,                    :null => false, :default => ""  # the name of the property
       t.column :pvalues,                 :string,                    :null => false, :default => "" # comma separate list of possible values to choose from
                                  # or 0?=see below, 1=length, 2=x y, 4=t r b l, 
       t.column :pvalues_desc,            :string,                    :null => false, :default => "" # comma separate list of possible values to choose from
@@ -26,7 +29,8 @@ class Start < ActiveRecord::Migration
       # If pvalues is manual entry only then the default manual entry. 0 = we define the default value
       t.column :pvspecial,               :string,   :limit => 7,     :null => false, :default => "" # xy, trbl or inherit
     end
-    
+    add_index :html_attributes, :slug, :unique => true
+
     
   end
   

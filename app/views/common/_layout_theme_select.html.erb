@@ -7,8 +7,8 @@ selected_value = 0
 
 <select onchange="<%=onchange%>" name="<%=select_name%>" id="<%=select_name%>">
   <% for pl in page_layouts -%>
-  <optgroup label="<%=pl.perma_name%>">
-    <% options = pl.themes.collect{|theme| [theme.perma_name, theme.id] }-%>
+  <optgroup label="<%=pl.slug%>">
+    <% options = pl.themes.collect{|theme| [theme.slug, theme.id] }-%>
     <%=  options_for_select(options, selected_value) -%>
   </optgroup>  
   <% end-%>

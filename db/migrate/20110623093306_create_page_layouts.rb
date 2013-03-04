@@ -9,7 +9,7 @@ class CreatePageLayouts < ActiveRecord::Migration
       t.column "lft",                    :integer, :limit => 2,     :null => false, :default => 0
       t.column "rgt",                    :integer, :limit => 2,     :null => false, :default => 0
       t.column "title",                  :string,  :limit => 200,   :null => false, :default => ""
-      t.column "perma_name",             :string,  :limit => 200,   :null => false, :default => ""
+      t.column "slug",             :string,  :limit => 200,   :null => false, :default => ""
       t.column "section_id",             :integer, :limit => 3,     :null => true,  :default => 0
       # id of sections, only root could be here.
       t.column "section_instance",       :integer, :limit => 2,     :null => false, :default => 0

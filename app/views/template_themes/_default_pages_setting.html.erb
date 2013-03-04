@@ -5,7 +5,7 @@
 <table>
   <tr>
     <th> default index page </th>
-    <td><%=  grouped_collection_select("website", "index_page", Menu.roots, :descendants, "perma_name", "id", "perma_name")%>  
+    <td><%=  grouped_collection_select("website", "index_page", Menu.roots, :descendants, "slug", "id", "slug")%>  
     </td>    
   </tr>
   <tr>

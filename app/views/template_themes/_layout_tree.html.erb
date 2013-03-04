@@ -11,7 +11,7 @@
     <%=raw("&nbsp;"*layout.level)%>
     <%# do not call form.submit. 
     %>
-    <%= link_to_function(layout.perma_name, 
+    <%= link_to_function(layout.slug, 
       "$('#selected_page_layout_id').val(#{layout.id});$('#layout_editor_form').trigger('submit')",
       {"class"=>(layout.id==selected_id ? "selected":""),"data-lid"=>layout.id})
       %>

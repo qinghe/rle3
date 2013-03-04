@@ -217,7 +217,8 @@ root:
     { width:100%;
       height:100%;
     }
-  perma_name: root
+  title: root
+  slug: root
   js: ""
 
 container:
@@ -310,8 +311,8 @@ container:
       <?= @template.css :img_lb ?>
     }
       <? end ?>
-  perma_name: container
-  js: ""
+  title: container
+  slug: container
   
 hmenu:
   id: 3
@@ -334,14 +335,15 @@ hmenu:
      display:inline-block;
      float:left;
      margin:0; /* non-editable */}
-  perma_name: hmenu
-  js: ""
+  title: hmenu
+  slug: hmenu
 vmenu:
   id: 4
   is_selectable: "0"
   is_container: "1"
   resources: m
-  perma_name: vmenu
+  title: vmenu
+  slug: vmenu
   html: |-
     <ul class="<?=g_piece_selector?>">
     <? if @template.menu.present? ?>
@@ -359,7 +361,8 @@ menuitem:
   id: 6
   is_selectable: "0"
   is_container: "0"
-  perma_name: menuitem
+  title: menuitem
+  slug: menuitem
   html: |
     <li class="<?=g_piece_selector?>">
       <? if page.clickable? ?>
@@ -388,7 +391,8 @@ menuitem:
   js: ""
 image:
   id: 7
-  perma_name: image
+  title: image
+  slug: image
   is_selectable: "0"
   is_container: "0"
   resources: i
@@ -404,7 +408,8 @@ image:
   js: ""
 text:
   id: 8
-  perma_name: text
+  title: text
+  slug: text
   is_selectable: "0"
   is_container: "0"
   html: |          
@@ -415,7 +420,8 @@ text:
   js: ""
 blog_post_list:
   id: 11
-  perma_name: blog_post_list
+  title: blog_post_list
+  slug: blog_post_list
   is_selectable: "0"
   is_container: "0"
   html: |         
@@ -432,7 +438,8 @@ blog_post_list:
   js: ""
 blog_post_body:
   id: 12
-  perma_name: blog_post
+  title: blog_post
+  slug: blog_post
   is_selectable: "0"
   is_container: "0"
   html: |          
@@ -446,7 +453,8 @@ blog_post_body:
   js: ""    
 blog_post_title:
   id: 13
-  perma_name: blog_post_detail
+  title: blog_post_detail
+  slug: blog_post_detail
   is_selectable: "0"
   is_container: "0"
   html: |    

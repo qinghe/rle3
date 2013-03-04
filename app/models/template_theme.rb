@@ -1,14 +1,17 @@
 #it is a theme of page_layout
 class TemplateTheme < ActiveRecord::Base
+  extend FriendlyId
+
   belongs_to :website
   belongs_to :page_layout, :foreign_key=>"page_layout_root_id", :dependent=>:destroy
   has_many :param_values, :foreign_key=>"theme_id" #  :dependent=>:destroy, do not use dependent, it cause load each one of param_value
   has_many :template_files, :foreign_key=>"theme_id" #  :dependent=>:destroy, do not use dependent, it cause load each one of param_value
   
-  after_destroy :remove_relative_data
   scope :by_layout,  lambda { |layout_id| where(:page_layout_root_id => layout_id) }
   serialize :assigned_resource_ids, Hash
+  friendly_id :title,:use => :scoped, :scope => :website
 
+  after_destroy :remove_relative_data
   
   begin 'for page generator'  
     def file_name(usage)
@@ -25,7 +28,6 @@ class TemplateTheme < ActiveRecord::Base
     new_layout = original_layout.copy_to_new
     #create theme record
     new_theme = self.dup
-    new_theme.perma_name = 'copy_'+self.perma_name
     new_theme.layout_id = new_layout.id
     new_theme.save!
     

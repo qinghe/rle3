@@ -47,9 +47,9 @@ module PageTag
                   if file_name
                     if spp.pclass==SectionPieceParam::PCLASS_STYLE
                       # replace ':' with '='
-                      val << %Q!#{ha.perma_name}="#{build_path(file_name)}"!
+                      val << %Q!#{ha.slug}="#{build_path(file_name)}"!
                     else
-                      val << "#{ha.perma_name}:url(#{build_path(file_name)});"
+                      val << "#{ha.slug}:url(#{build_path(file_name)});"
                     end
                   end
                 else
@@ -59,8 +59,8 @@ module PageTag
                   pv_for_ha = pv.pvalue_for_haid(ha.id)
                   if !unset 
                     if spp.pclass==SectionPieceParam::PCLASS_STYLE
-                      ha_perma_name, ha_value = pv_for_ha.split(':')
-                      val << %Q!#{ha_perma_name}="#{ha_value}"!
+                      ha_slug, ha_value = pv_for_ha.split(':')
+                      val << %Q!#{ha_slug}="#{ha_value}"!
                     else
                       val <<  ( pv_for_ha+';' )                    
                     end

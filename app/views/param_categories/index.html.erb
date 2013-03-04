@@ -10,9 +10,9 @@
 
 <% @param_categories.each do |param_category| %>
   <tr>
-    <td><%=h param_category.editor.perma_name %></td>
+    <td><%=h param_category.editor.slug %></td>
     <td><%=h param_category.position %></td>
-    <td><%=h param_category.perma_name %></td>
+    <td><%=h param_category.slug %></td>
     <td><%=h param_category.is_enabled %></td>
     <td><%= link_to 'Show', param_category %></td>
     <td><%= link_to 'Edit', edit_param_category_path(param_category) %></td>

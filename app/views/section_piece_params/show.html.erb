@@ -1,11 +1,11 @@
 <p>
   <b>Section piece:</b>
-  <%=h @section_piece_param.section_piece.perma_name %>
+  <%=h @section_piece_param.section_piece.slug %>
 </p>
 
 <p>
   <b>Param category:</b>
-  <%=h @section_piece_param.param_category.perma_name %>
+  <%=h @section_piece_param.param_category.slug %>
 </p>
 
 <p>
@@ -23,7 +23,7 @@
   
   <%=h @section_piece_param.html_attribute_ids %>
   <%-for html_attribute in @html_attributes-%>
-  <%=h html_attribute.perma_name %>:<%=html_attribute.id%> 
+  <%=h html_attribute.slug %>:<%=html_attribute.id%> 
   <%-end-%>
 </p>
 

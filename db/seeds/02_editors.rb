@@ -1,8 +1,8 @@
 # Editor 
-editors = [{:id=>1,:perma_name=>'config'},
-  {:id=>2,:perma_name=>'position'},  
-  {:id=>3,:perma_name=>'color'}, 
-  {:id=>4,:perma_name=>'text'}  
+editors = [{:id=>1,:slug=>'config'},
+  {:id=>2,:slug=>'position'},  
+  {:id=>3,:slug=>'color'}, 
+  {:id=>4,:slug=>'text'}  
     ]
 for ha in     editors
   obj = Editor.new

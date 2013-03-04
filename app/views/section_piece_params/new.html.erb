@@ -5,15 +5,15 @@
 
   <p>
     <%= f.label :section_piece_id %><br />
-    <%= select("section_piece_param", "section_piece_id", SectionPiece.all.collect {|p| [ p.perma_name, p.id ] }) %>
+    <%= select("section_piece_param", "section_piece_id", SectionPiece.all.collect {|p| [ p.slug, p.id ] }) %>
   </p>
   <p>
     <%= f.label :editor_id %><br />
-    <%= select("section_piece_param", "editor_id", Editor.all.collect {|p| [ p.perma_name, p.id ] }) %>
+    <%= select("section_piece_param", "editor_id", Editor.all.collect {|p| [ p.slug, p.id ] }) %>
   </p>
   <p>
     <%= f.label :param_category_id %><br />
-    <%= select("section_piece_param", "param_category_id", ParamCategory.all.collect {|p| [ p.perma_name, p.id ] }) %>
+    <%= select("section_piece_param", "param_category_id", ParamCategory.all.collect {|p| [ p.slug, p.id ] }) %>
   </p>
   <p>
     <%= f.label :pclass %><br />
@@ -26,7 +26,7 @@
   <p>
     <%- haids = @section_piece_param.html_attribute_ids.split.collect{|s|s.to_i}-%>
     <%- for html_attribute in @html_attributes -%>            
-      <span class="option_item"><%=html_attribute.perma_name%><%=check_box_tag "html_attribute_ids[]", html_attribute.id, haids.include?(html_attribute.id)%>
+      <span class="option_item"><%=html_attribute.slug%><%=check_box_tag "html_attribute_ids[]", html_attribute.id, haids.include?(html_attribute.id)%>
       </span>    
     <%- end -%>      
   </p>

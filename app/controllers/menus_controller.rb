@@ -82,7 +82,6 @@ class MenusController < ApplicationController
   # POST /menus.xml
   def create
     @menu = Menu.new(params[:menu])
-    @menu.perma_name = @menu.title.underscore
     respond_to do |format|
       if @menu.save
         format.html { redirect_to(@menu, :notice => 'Menu was successfully created.') }

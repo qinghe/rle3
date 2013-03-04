@@ -35,7 +35,7 @@ class GlobalParamValueEvent < AbstractSectionEvent
   #event_name+'_event_handler', is handler name of this event. 
   def event_name
     # ex. page_layout + fixed =  page_layout_fixed
-    self.param_value.section_param.section_piece_param.class_name+'_'+self.html_attribute.perma_name
+    self.param_value.section_param.section_piece_param.class_name+'_'+self.html_attribute.slug
   end
   # original html attribute value - new html attribute value
   def difference #delta
@@ -45,7 +45,7 @@ class GlobalParamValueEvent < AbstractSectionEvent
   
   
   def source_section_name
-    self.new_html_attribute_value.param_value.section.perma_name
+    self.new_html_attribute_value.param_value.section.slug
   end
   
 end

@@ -63,7 +63,7 @@ class HtmlAttributeValue
       else # css and pvalue_string
         if pvalue_string.present?  
 Rails.logger.debug "pvalue_string=#{pvalue_string}"
-          html_attribute_perma_name, vals = pvalue_string.split(':')
+          html_attribute_slug, vals = pvalue_string.split(':')
           # 'width:'.split(':') -> ['width'], in this case vals is nil, 
           # it happened while user select a manul entry and have not enter anything. we should show the empty entry.
           repeats = html_attribute.repeats
@@ -86,7 +86,7 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
           object_properties.merge!( html_attribute.default_properties )
         end
       end
-Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribute.perma_name},pvalue_string=#{pvalue_string.inspect}, pclass=#{param_value_class},properties=#{object_properties.inspect}"
+Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribute.slug},pvalue_string=#{pvalue_string.inspect}, pclass=#{param_value_class},properties=#{object_properties.inspect}"
     object_properties
   end
   
@@ -104,7 +104,7 @@ Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribu
         html_attribute.manual_entry?(pvalue_properties["psvalue#{i}"]) ? 
           "#{pvalue_properties["pvalue#{i}"]}#{pvalue_properties["unit#{i}"]}" : pvalue_properties["psvalue#{i}"]
       }
-      pvalue_string = html_attribute.perma_name+':'+ vals.join(' ')
+      pvalue_string = html_attribute.slug+':'+ vals.join(' ')
     end
     pvalue_string
   end

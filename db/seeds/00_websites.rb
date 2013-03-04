@@ -1,4 +1,4 @@
-objs = [{:id=>1,:perma_name=>'fist website', :url=>'www.rubyecommerce.com'}
+objs = [{:id=>1,:title=>'fist website', :url=>'www.rubyecommerce.com'}
     ]
 for ha in  objs
   obj = Website.new

@@ -6,7 +6,7 @@ class CreateParamCategories < ActiveRecord::Migration
     create_table :param_categories, :force=>true do |t|
       t.column "editor_id",              :integer, :limit => 3,     :null => false, :default => 0
       t.column "position",               :integer, :limit => 3,     :null => true,  :default => 0
-      t.column "perma_name",             :string,   :limit => 200,   :null => false, :default => ""
+      t.column "slug",             :string,   :limit => 200,   :null => false, :default => ""
       t.column "is_enabled",              :boolean,                   :null => false, :default => true
       t.timestamps
     end

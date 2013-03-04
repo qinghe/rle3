@@ -47,13 +47,14 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   add_index "blog_posts", ["id"], :name => "index_blog_posts_on_id"
 
   create_table "editors", :force => true do |t|
-    t.string   "perma_name", :limit => 200, :default => "", :null => false
+    t.string   "slug",       :limit => 200, :default => "", :null => false
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
 
   create_table "html_attributes", :force => true do |t|
-    t.string  "perma_name",                 :default => "",    :null => false
+    t.string  "title",                      :default => "",    :null => false
+    t.string  "slug",                       :default => "",    :null => false
     t.string  "pvalues",                    :default => "",    :null => false
     t.string  "pvalues_desc",               :default => "",    :null => false
     t.string  "punits",                     :default => "",    :null => false
@@ -61,6 +62,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer "default_value", :limit => 2, :default => 0,     :null => false
     t.string  "pvspecial",     :limit => 7, :default => "",    :null => false
   end
+
+  add_index "html_attributes", ["slug"], :name => "index_html_attributes_on_slug", :unique => true
 
   create_table "menu_levels", :force => true do |t|
     t.integer "menu_id",          :limit => 3, :default => 0, :null => false
@@ -74,7 +77,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   create_table "menus", :force => true do |t|
     t.integer  "website_id",       :default => 0,    :null => false
     t.string   "title"
-    t.string   "perma_name"
+    t.string   "slug"
     t.integer  "root_id"
     t.integer  "parent_id"
     t.integer  "lft"
@@ -97,7 +100,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer  "lft",               :limit => 2,   :default => 0,     :null => false
     t.integer  "rgt",               :limit => 2,   :default => 0,     :null => false
     t.string   "title",             :limit => 200, :default => "",    :null => false
-    t.string   "perma_name",        :limit => 200, :default => "",    :null => false
+    t.string   "slug",              :limit => 200, :default => "",    :null => false
     t.integer  "section_id",        :limit => 3,   :default => 0
     t.integer  "section_instance",  :limit => 2,   :default => 0,     :null => false
     t.string   "section_context",   :limit => 32,  :default => "",    :null => false
@@ -113,7 +116,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   create_table "param_categories", :force => true do |t|
     t.integer  "editor_id",  :limit => 3,   :default => 0,    :null => false
     t.integer  "position",   :limit => 3,   :default => 0
-    t.string   "perma_name", :limit => 200, :default => "",   :null => false
+    t.string   "slug",       :limit => 200, :default => "",   :null => false
     t.boolean  "is_enabled",                :default => true, :null => false
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
@@ -155,7 +158,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   end
 
   create_table "section_pieces", :force => true do |t|
-    t.string   "perma_name",    :limit => 100,   :default => "",    :null => false
+    t.string   "title",         :limit => 100,                      :null => false
+    t.string   "slug",          :limit => 100,                      :null => false
     t.string   "html",          :limit => 12000, :default => "",    :null => false
     t.string   "css",           :limit => 8000,  :default => "",    :null => false
     t.string   "js",            :limit => 60,    :default => "",    :null => false
@@ -166,6 +170,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.datetime "created_at",                                        :null => false
     t.datetime "updated_at",                                        :null => false
   end
+
+  add_index "section_pieces", ["slug"], :name => "index_section_pieces_on_slug", :unique => true
 
   create_table "section_texts", :force => true do |t|
     t.string   "lang"
@@ -180,7 +186,7 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer "parent_id",                :limit => 3
     t.integer "lft",                      :limit => 2,   :default => 0,    :null => false
     t.integer "rgt",                      :limit => 2,   :default => 0,    :null => false
-    t.string  "perma_name",               :limit => 200, :default => "",   :null => false
+    t.string  "slug",                     :limit => 200, :default => "",   :null => false
     t.integer "section_piece_id",         :limit => 3,   :default => 0
     t.integer "section_piece_instance",   :limit => 2,   :default => 0
     t.boolean "is_enabled",                              :default => true, :null => false
@@ -189,7 +195,6 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
   end
 
   create_table "template_files", :force => true do |t|
-    t.integer  "page_layout_id"
     t.integer  "theme_id"
     t.datetime "created_at"
     t.string   "attachment_file_name"
@@ -202,20 +207,23 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer "website_id",                          :default => 0
     t.integer "page_layout_root_id",                 :default => 0,  :null => false
     t.string  "title",                 :limit => 64, :default => "", :null => false
-    t.string  "perma_name",            :limit => 64, :default => "", :null => false
+    t.string  "slug",                  :limit => 64, :default => "", :null => false
     t.string  "assigned_resource_ids",               :default => "", :null => false
   end
 
   create_table "websites", :force => true do |t|
-    t.string   "perma_name"
+    t.string   "title",            :limit => 24,                :null => false
+    t.string   "slug",             :limit => 24,                :null => false
     t.string   "url"
-    t.integer  "index_page",       :default => 0, :null => false
-    t.integer  "list_template",    :default => 0, :null => false
-    t.integer  "detail_template",  :default => 0, :null => false
-    t.integer  "plist_template",   :default => 0, :null => false
-    t.integer  "pdetail_template", :default => 0, :null => false
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.integer  "index_page",                     :default => 0, :null => false
+    t.integer  "list_template",                  :default => 0, :null => false
+    t.integer  "detail_template",                :default => 0, :null => false
+    t.integer  "plist_template",                 :default => 0, :null => false
+    t.integer  "pdetail_template",               :default => 0, :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
   end
+
+  add_index "websites", ["slug"], :name => "index_websites_on_slug", :unique => true
 
 end

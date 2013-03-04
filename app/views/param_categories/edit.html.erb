@@ -5,11 +5,11 @@
 
   <p>
     <%= f.label :editor_id %><br />
-    <%= select("param_category", "editor_id", Editor.all.collect {|p| [ p.perma_name, p.id ] }, { :include_blank => true }) %>
+    <%= select("param_category", "editor_id", Editor.all.collect {|p| [ p.slug, p.id ] }, { :include_blank => true }) %>
   </p>
   <p>
-    <%= f.label :perma_name %><br />
-    <%= f.text_field :perma_name %>
+    <%= f.label :slug %><br />
+    <%= f.text_field :slug %>
   </p>
   <p>
     <%= f.label :is_enabled %><br />

@@ -1,7 +1,10 @@
 class PageLayout < ActiveRecord::Base
+  extend FriendlyId
   acts_as_nested_set :scope=>"root_id" # scope is for :copy, no need to modify parent_id, lft, rgt.
   belongs_to :section  
   has_many :themes, :class_name => "TemplateTheme",:foreign_key=>:page_layout_root_id
+  belongs_to :website
+  friendly_id :title, :use => :scoped, :scope => :website
 
   # use string instead of symbol, parameter from client is string 
   ContextEnum=Struct.new(:list,:detail,:cart,:accout)[:list,:detail,:cart,:accout]
@@ -21,13 +24,12 @@ class PageLayout < ActiveRecord::Base
   
   scope :full_html_roots, where(:is_full_html=>true,:parent_id=>nil)
 
-  #notice: attribute section_id, perma_name required
+  #notice: attribute section_id, title required
   # section.root.section_piece_id should be 'root'
   def self.create_layout(section, title, attrs={})
     #create record in table page_layouts
     obj = create!(:section_id=>section.id) do |l|
       l.title = title
-      l.perma_name = title.parameterize
       l.attributes = attrs unless attrs.empty?
       l.section_instance = 1
       l.is_full_html = section.section_piece.is_root?
@@ -35,7 +37,7 @@ class PageLayout < ActiveRecord::Base
     obj.update_attribute("root_id",obj.id)
     if obj.is_full_html? #only create template for full html page layout
       #create a theme for it.
-      TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>title,:perma_name=>title.parameterize}) 
+      TemplateTheme.create!({:website_id=>obj.website_id,:page_layout_root_id=>obj.id,:title=>title}) 
       #copy the default section param value to the layout
       obj.add_param_value()
     end
@@ -140,7 +142,6 @@ class PageLayout < ActiveRecord::Base
   def copy_to_new(new_attributes = nil)
     #create new root first, get new root id.
     new_layout = self.dup
-    new_layout.perma_name = "copy_"+self.perma_name
     new_layout.root_id = 0 # reset the lft,rgt.
     new_layout.save!
     new_layout.update_attribute("root_id", new_layout.id)  
@@ -163,8 +164,7 @@ class PageLayout < ActiveRecord::Base
       section_instance = whole_tree.select{|xnode| xnode.section_id==section.id}.size.succ
       atts = {:website_id=>website_id, :root_id=>root_id, :section_id=>section_id, :section_instance=>section_instance}      
       atts.merge!(attrs)
-      atts[:title]||="#{section.perma_name}#{section_instance}"
-      atts[:perma_name] = atts[:title].parameterize
+      atts[:title]||="#{section.slug}#{section_instance}"
       
       obj = self.class.create!(atts)      
       obj.move_to_child_of(self)

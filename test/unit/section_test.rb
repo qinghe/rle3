@@ -8,7 +8,7 @@ class SectionTest < ActiveSupport::TestCase
   
   test "should update section" do
     @section = Section.find(2)
-    section={"is_enabled"=>"1",  "perma_name"=>"root", }
+    section={"is_enabled"=>"1",  "slug"=>"root", }
     @section.attributes=section
     assert @section.save
     assert @section.update_attribute "root_id", @section[:id]
@@ -25,7 +25,7 @@ Rails.logger.debug "content:#{@section.build_html}"
   
   test "should create a section named container" do
     spp = SectionPieceParam.find(:all, :conditions=>["section_piece_id=?",2])
-    root = Section.create_section(2, :perma_name=>"container")
+    root = Section.create_section(2, :slug=>"container")
     assert root
     assert root.section_params.size == spp.size
   end

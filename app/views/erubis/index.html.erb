@@ -11,9 +11,9 @@
 <% @page_layouts.each do |page_layout| %>
   <% page_layout.themes.each do |theme| %>
   <tr>
-    <td><%=h page_layout.perma_name %></td>
+    <td><%=h page_layout.slug %></td>
     <td><%=h page_layout.section_id %></td>
-    <td><%=h theme.perma_name%></td>
+    <td><%=h theme.slug%></td>
     <td><%=h page_layout.is_enabled %></td>
     <td><%= link_to 'Build', :action=>"build",:layout_id=>page_layout.id, :theme_id=>theme.id %></td>
     <td><%= link_to 'Generate', :action=>"generate",:layout_id=>page_layout.id, :theme_id=>theme.id   %></td>
