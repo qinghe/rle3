@@ -119,7 +119,7 @@ class PageGenerator
   private
   # erb context variables 
   def initialize_context_variables
-    self.context = {:current_page_tag=>current_page_tag, 
+    self.context = {:current_page=>current_page_tag, 
       :website=>current_page_tag.website_tag, :template=>current_page_tag.template_tag
       }    
   end  

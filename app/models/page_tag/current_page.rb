@@ -11,22 +11,19 @@
 # template.current_section.param_values == template.param_values.select
 module PageTag
   class CurrentPage < Base
-    cattr_accessor :accessable_attributes
-    self.accessable_attributes=[:id,:title, :path, :clickable?]
-    delegate *self.accessable_attributes, :to =>:menu 
 
     attr_accessor :website_tag, :template_tag
-
+    delegate :menu, :to => :page_generator
+    
     def initialize(page_generator_instance)
       super(page_generator_instance)
       self.website_tag = ::PageTag::Website.new(page_generator_instance)
       self.template_tag = ::PageTag::Template.new(page_generator_instance)
-      self.menu = page_generator_instance.menu
     end
     
-    #full title is current page title,  resource.title-menu.title-website.title
-    def full_title
-      
+    #title is current page title,  resource.title-menu.title-website.title
+    def title
+      "#{menu.title}-#{menu.website.title}"
     end
     
   end
