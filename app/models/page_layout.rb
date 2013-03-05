@@ -395,16 +395,34 @@ class PageLayout < ActiveRecord::Base
      if node.root?
 #       piece.insert(0,init_vars)  
      end
-               
-     if(pos = (piece=~/~~content~~/))           
+     
+     #piece may contain several ~~content~~, the deepest one is first.           
+     if(pos = (piece=~/~~content~~/))
+       if self.data_source.present?
+         subpieces = <<-EOS1 
+         <? if @current_page.resources.present ?>
+         @current_page.resources.each{|#{self.data_source.singularize}|
+         #{subpieces}
+         }
+         <? end ?>
+         EOS1
+       end
+                  
+       if self.section_context.present?
+         subpieces = <<-EOS2
+         <? if @current_page.valid_context? ?>
+         #{subpieces}
+         <? end ?>
+         EOS2
+       end           
        piece.insert(pos,subpieces)
-     else           
-       piece.concat(subpieces)
+#     else           
+#       piece.concat(subpieces)
      end
      # remove ~~content~~ however, node could be a container.
+     # in section.build_html, ~~content~~ have not removed. 
      # there could be more than one ~~content~~, use gsub!
      piece.gsub!(/~~content~~/,'')       
-
   end
 
   def get_header_script(node)

@@ -1,5 +1,5 @@
 <%-
-  #params: @layout_roots, @theme, 
+  #params: @template_themes, @theme, 
   #@page_layout, current selected page_layout, it could be root or not. 
   #@editors, 
   #@param_values_for_editors
@@ -7,14 +7,13 @@
 
 <div >
   <div>
-    <%=render :partial=>"layout_selection", :locals=>{:page_layouts=>@layout_roots, :selected=>@theme} %>
+    <%=render :partial=>"layout_selection", :locals=>{:template_themes=>@template_themes, :selected=>@theme} %>
     <% if Website.current.previewable?%>
         <%= link_to_function "Preview", "window.open('#{preview_template_themes_path}','rle-preview')"%>
-        <%= link_to_function "Edit&Preview", "window.open('#{preview_template_themes_path}?editor=true','rle-preview')"%>
-
     <% else%>
     <%= link_to "Preview setting", publish_template_themes_url%>
     <% end%>
+    <%= link_to "Edit layout", edit_layout_template_theme_url(@theme)%>
   </div>
   <div class="clear-block">
     <%=render :partial=>"layout_editor"%>

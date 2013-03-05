@@ -38,7 +38,8 @@ Rle3::Application.routes.draw do
 
   resources :template_themes do
        member do
-         get 'editor'
+         get :editor
+         get :edit_layout # modify page_layout
          post :get_param_values # to support post data>1024byte
          post :copy
          post :update_param_value
@@ -48,7 +49,7 @@ Rle3::Application.routes.draw do
        end
   
        collection do
-         get 'preview' # add function preview_template_themes_path
+         get :preview # add function preview_template_themes_path
          get 'publish'
          get 'upload_file_dialog'
          post :assign

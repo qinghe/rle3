@@ -181,6 +181,10 @@ class TemplateThemesController < ApplicationController
     
     render :partial=>"menu_and_template"
   end
+  
+  def edit_layout
+    
+  end
     
   def editor
     theme_id = 0
@@ -188,7 +192,7 @@ class TemplateThemesController < ApplicationController
     theme = TemplateTheme.find(params[:id])
     prepare_params_for_editors(theme)
     
-    @layout_roots = PageLayout.roots
+    @template_themes = TemplateTheme.all
   end  
 
   def update_layout_tree

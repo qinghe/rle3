@@ -14,12 +14,13 @@
 ActiveRecord::Schema.define(:version => 20120113124312) do
 
   create_table "assignments", :id => false, :force => true do |t|
-    t.integer  "website_id",   :default => 0, :null => false
-    t.integer  "blog_post_id"
-    t.integer  "menu_id"
+    t.integer  "website_id",   :default => 0,  :null => false
+    t.integer  "blog_post_id", :default => 0,  :null => false
+    t.integer  "menu_id",      :default => 0,  :null => false
     t.integer  "position"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.string   "name",         :default => "", :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "blog_comments", :force => true do |t|

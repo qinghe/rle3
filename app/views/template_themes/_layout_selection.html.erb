@@ -5,10 +5,6 @@
 -%>
 
 <select onchange="window.location.href=this.value" name="theme[id]" id="theme_id">
-  <% for pl in page_layouts -%>
-  <optgroup label="<%=pl.slug%>">
-    <% options = pl.themes.collect{|theme| [theme.slug, editor_template_theme_path(theme)] }-%>
+    <% options = template_themes.collect{|theme| [theme.title, editor_template_theme_path(theme)] }-%>
     <%=  options_for_select(options, editor_template_theme_path(selected)) -%>
-  </optgroup>  
-  <% end-%>
 </select>

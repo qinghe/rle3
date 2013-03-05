@@ -51,7 +51,7 @@ onchange = my_remote_function( :submit=>"layout_editor_form",
             <%elsif html_attribute.is_special?(:image) or html_attribute.is_special?(:src)-%>
                <% #selected_value = TemplateFile.find(:first, :conditions=>["file_name=?", pvalue]).id  unless pvalue.nil? or pvalue.empty?
                -%>
-               <%=select("#{pv_ele_id}","pvalue#{i}", TemplateFile.all.collect{|item| [item.file_name, item.file_name]}, {:selected=>pvalue ,:include_blank=>"Please select "},{ :onchange=>onchange}) %>
+               <%=select("#{pv_ele_id}","pvalue#{i}", TemplateFile.all.collect{|item| [item.attachment_file_name, item.attachment_file_name]}, {:selected=>pvalue ,:include_blank=>"Please select "},{ :onchange=>onchange}) %>
                <%=link_to "upload file...",{:action=>"upload_file_dialog",:param_value_id=>param_value.id, :html_attribute_id=>html_attribute.id, :selected_editor_id=>@editor.id},:method =>:get,:remote=>true %>
 
             <%else-%>
