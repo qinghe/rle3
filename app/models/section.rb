@@ -1,7 +1,9 @@
 class Section < ActiveRecord::Base
+  extend FriendlyId
   belongs_to :section_piece  
   has_many :section_params
   acts_as_nested_set #:scope=>"root_id"
+  friendly_id :title, :use => :slugged
   
   # usage: attribute section_piece_id, title required
   # params: default_param_value,  is a hash,  class_name=>{htmal_attribute_id=>default_value,..}

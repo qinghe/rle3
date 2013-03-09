@@ -28,8 +28,7 @@ class ApplicationController < ActionController::Base
   def init_shop
     #self.shop = Shop.first
     self.website = Website.first
-    Website.current = self.website
-    Menu.scope :roots_within_website, :conditions => ["website_id=? and parent_id is ?", website.id, nil ], :order => "lft"
+    Website.current = self.website    
   end
   
 end

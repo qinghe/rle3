@@ -7,9 +7,9 @@ module PageTag
 # template is collection of page_layout. each page_layout is section instance 
   class Template < ModelCollection
     class WrappedPageLayout < WrappedModel
-      self.accessable_attributes=[:id]
+      self.accessable_attributes=[:id,:section_context, :data_source,:data_filter, :context_list?, :context_detail?,:context_either?]
       attr_accessor :section_id, :page_layout
-      delegate :section_context, :data_source,:data_filter, :to => :page_layout
+      delegate *self.accessable_attributes, :to => :page_layout
       
       def initialize(collection_tag, page_layout, section_id)
         
@@ -66,7 +66,7 @@ module PageTag
     def select(page_layout_id, section_id)
       
       #current selected section instance, page_layout record
-      page_layout = page_layout_tree.select{|node| node.id == page_layout_id}.fist
+      page_layout = page_layout_tree.select{|node| node.id == page_layout_id}.first
       self.current = WrappedPageLayout.new(self, page_layout, section_id)
     end
     

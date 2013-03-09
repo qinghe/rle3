@@ -40,10 +40,12 @@ module PageTag
     end
     
     #is given section context valid to current page 
-    def valid_context?( )
-      current_context = self.template_tag.current_piece.current_context
-      
-      PageLayout::ContextEnum.list
+    def valid_context?
+      if self.resource.present? #product detail
+        self.template_tag.current_piece.context_either? or self.template_tag.current_piece.context_detail?  
+      else
+        self.template_tag.current_piece.context_either? or self.template_tag.current_piece.context_list?
+      end
 
     end
   end

@@ -1,7 +1,8 @@
 class ParamValue < ActiveRecord::Base
   EventEnum={:psv_changed=>'psv_changed',:pv_changed=>'pv_changed',:psu_changed=>'psu_changed',:unset_changed=>'unset_changed'}
   belongs_to :section_param
-  belongs_to :page_layout, :foreign_key=>"layout_id"
+  belongs_to :page_layout, :foreign_key=>"page_layout_id"
+  belongs_to :page_layout_root, :foreign_key=>"page_layout_root_id"
   belongs_to :section
   belongs_to :template_theme, :foreign_key=>"theme_id"
   
@@ -9,7 +10,7 @@ class ParamValue < ActiveRecord::Base
   after_save :trigger_events
 
   scope :within_section, lambda { |param_value|
-  where("layout_id=? and theme_id=? and param_values.section_id=? and param_values.section_instance=?", param_value.layout_id, param_value.theme_id, param_value.section_id, param_value.section_instance).includes(:section_param=>:section_piece_param)      
+  where(" theme_id=? and param_values.page_layout_id=? ", param_value.theme_id, param_value.page_layout_id).includes(:section_param=>:section_piece_param)      
      }
 
   #usage:  
@@ -18,8 +19,8 @@ class ParamValue < ActiveRecord::Base
   def self.find_within_section_piece(param_value)
     section_param = param_value.section_param
     
-    pvs = self.find(:all, :conditions=>["layout_id=? and param_values.section_id=? and section_instance=? and section_params.section_piece_id=? and section_params.section_piece_instance=?",
-      param_value.layout_id, param_value.section_id, param_value.section_instance, section_param.section_piece_id, section_param.section_piece_instance], 
+    pvs = self.find(:all, :conditions=>["theme_id=? and param_values.page_layout_id=? and section_param_id=? ",
+      param_value.theme_id, param_value.page_layout_id, param_value.section_param_id], 
     :include=>[{:section_param=>:section_piece_param}, :page_layout])
     name_pv_hash = pvs.inject({}){|h, pv| h[pv.section_param.section_piece_param.class_name] = pv; h;}
 

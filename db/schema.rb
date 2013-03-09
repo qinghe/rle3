@@ -187,7 +187,8 @@ ActiveRecord::Schema.define(:version => 20120113124312) do
     t.integer "parent_id",                :limit => 3
     t.integer "lft",                      :limit => 2,   :default => 0,    :null => false
     t.integer "rgt",                      :limit => 2,   :default => 0,    :null => false
-    t.string  "slug",                     :limit => 200, :default => "",   :null => false
+    t.string  "title",                    :limit => 64,  :default => "",   :null => false
+    t.string  "slug",                     :limit => 64,  :default => "",   :null => false
     t.integer "section_piece_id",         :limit => 3,   :default => 0
     t.integer "section_piece_instance",   :limit => 2,   :default => 0
     t.boolean "is_enabled",                              :default => true, :null => false

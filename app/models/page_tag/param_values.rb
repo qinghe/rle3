@@ -13,7 +13,7 @@ module PageTag
         
         @param_values_hash = param_values.inject({}){|h,pv|
           sp = pv.section_param
-          key = self.template_tag.current_piece.to_key
+          key =  "#{pv.page_layout_id}_#{sp.section_id}" #keep it same as WrappedPageLayout.to_key
           h[key]||=[]   
           h[key]<<pv
           h
@@ -73,7 +73,7 @@ module PageTag
           end
         end
       end
-  # Rails.logger.debug    " class_name={class_name}, val=#{val}"
+   Rails.logger.debug    " class_name={class_name}, val=#{val}"
       val
     end
         

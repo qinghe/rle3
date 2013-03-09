@@ -292,22 +292,33 @@ class PageLayout < ActiveRecord::Base
     # * params
     #   * new_context - one value of Contexts 
     def update_section_context( new_context)
+Rails.logger.debug "update_section_context#{self.id}, original=#{self.section_context}, new=#{new_context}"
+Rails.logger.debug "update_section_context#{self.id}, inherited_context=#{self.inherited_context}, current_context=#{current_context}"
       new_context  = new_context.to_sym
       return if self.inherited_context != ContextEither # ancestor has assigned context. 
       return if self.current_context == new_context
       raise ArgumentError unless Contexts.include? new_context
       # test would check section_context,so keep it as string
-      self.section_context = new_context.to_s
-      self.save!
+      self.update_attribute(:section_context,new_context.to_s)
       if new_context != ContextEither
         #update descendant's context
         #strange self.descendants raise  no .update_all for []:Array
         self.descendants.update_all(:section_context=>ContextEither)
-        
         #TODO correct descendants's data_source
         self.update_data_source( DataSourceEmpty )
       end
     end
+    
+    def context_list?
+      current_context ==ContextEnum.list
+    end
+    def context_detail?
+      current_context ==ContextEnum.detail
+    end
+    def context_either?
+      current_context ==ContextEither
+    end
+    
   end
 
   begin 'handle data source'
@@ -329,9 +340,11 @@ class PageLayout < ActiveRecord::Base
     def update_data_source( new_data_source )
       # update self data_source
       original_data_source = self.data_source 
-      self.data_source = new_data_source
+#      self.data_source = new_data_source
       if new_data_source.blank? or self.is_valid_data_source?
-        self.save!
+Rails.logger.debug "update_data_source, section_context=#{self.section_context}."        
+        self.update_attribute(:data_source,new_data_source )
+Rails.logger.debug "update section context?1"        
         #verify descendants, fix them.
         verify_required_descendants = self.descendants.where('data_source!=?', DataSourceEmpty)
         for node in verify_required_descendants
@@ -343,6 +356,7 @@ class PageLayout < ActiveRecord::Base
       else
         self.data_source = original_data_source
       end
+Rails.logger.debug "update section context?2"        
       self
     end
     
@@ -398,17 +412,18 @@ class PageLayout < ActiveRecord::Base
      
      #piece may contain several ~~content~~, the deepest one is first.           
      if(pos = (piece=~/~~content~~/))
-       if self.data_source.present?
+Rails.logger.debug "build page_layout_id=#{node.id}, data_source=#{node.data_source}"       
+       if node.data_source.present? #node.data_source.singularize
          subpieces = <<-EOS1 
-         <? if @current_page.resources.present ?>
-         @current_page.resources.each{|#{self.data_source.singularize}|
+         <? if @current_page.resources.present? ?>
+         <? @current_page.resources.each{|blog_post| ?>
          #{subpieces}
-         }
+         <? } ?>
          <? end ?>
          EOS1
        end
                   
-       if self.section_context.present?
+       if node.section_context.present?
          subpieces = <<-EOS2
          <? if @current_page.valid_context? ?>
          #{subpieces}
@@ -416,8 +431,6 @@ class PageLayout < ActiveRecord::Base
          EOS2
        end           
        piece.insert(pos,subpieces)
-#     else           
-#       piece.concat(subpieces)
      end
      # remove ~~content~~ however, node could be a container.
      # in section.build_html, ~~content~~ have not removed. 

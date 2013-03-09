@@ -10,10 +10,10 @@ class Menu < ActiveRecord::Base
   
   after_save  :store_root_id
   friendly_id :title, :use => :scoped, :scope => :website
-  
+    
   # assigned themes within website's menu 
   def self.assigned_theme_ids()
-    roots = Menu.roots_within_website
+    roots = Menu.roots
     theme_ids = []
     for menu in roots
       if menu.inheritance         
