@@ -48,18 +48,18 @@ blog_detail = main_content.add_section(section_hash['container'].id,:title=>"blo
 blog_list.add_section(section_hash['blog-post-title'].id,:title=>"Blog post title")
 
 
-#blog_detail.add_section(section_hash['blog-post-title'].id,:title=>"Blog post title")
-#blog_detail.add_section(section_hash['blog-post-body'].id,:title=>"Blog post body")
+blog_detail.add_section(section_hash['blog-post-title'].id,:title=>"Blog post title")
+blog_detail.add_section(section_hash['blog-post-body'].id,:title=>"Blog post body")
 
 blog_list.reload   #reload left, right
 blog_detail.reload #reload left, right
 blog_list.update_section_context( PageLayout::ContextEnum.list )
 blog_list.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.list].first )
 
-#blog_detail.update_section_context( PageLayout::ContextEnum.detail )
-#blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
+blog_detail.update_section_context( PageLayout::ContextEnum.detail )
+blog_detail.update_data_source( PageLayout::ContextDataSourceMap[PageLayout::ContextEnum.detail].first )
 
 
 
-#footer.add_section(section_hash['hmenu'].id,:title=>"footer menu")
-#footer.add_section(section_hash['text'].id,:title=>"copyright")
+footer.add_section(section_hash['hmenu'].id,:title=>"footer menu")
+footer.add_section(section_hash['text'].id,:title=>"copyright")

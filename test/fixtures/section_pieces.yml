@@ -22,7 +22,7 @@ root:
     </head>
     <body class="clear-block">
 
-      <div id="page"><div id="page-inner" class="clear-block">
+      <div id="page" class='page'><div id="page-inner" class="clear-block">
         <a name="top" id="navigation-top"></a>
         <div id="skip-to-nav"><a href="#navigation">Skip to Navigation</a></div>
         ~~content~~
@@ -177,9 +177,9 @@ root:
             width: auto;
             height: auto;
           }
-    #page .section
+    .section /* #page .section would override .some_block .section */
     {  
-      <? if @template.css(:content_layout).to_i > 0 ?>
+      <? if @template.css(:horizontal_content).to_i > 0 ?>
       clear:none;
       <? else ?>
       clear:both;
@@ -247,7 +247,7 @@ container:
     }
     .<?=g_piece_selector?> .section
     {
-      <?if @template.css(:content_layout).to_i > 0 ?>
+      <?if @template.css(:horizontal_content).to_i > 0 ?>
       clear:none;
       <?else?>
       clear:both;

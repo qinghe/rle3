@@ -62,152 +62,154 @@ class PageLayout < ActiveRecord::Base
     
   end
   
+  begin 'modify page layout tree'
 
-  # Do not support add_layout_tree now. Page layout should be full html, Keep it simple. 
-  # since we add feature 'section_context' and 'data_source', should not allow user use this method, it may cause section_context conflict.
-  # user copy prebuild layout tree to another layout tree as child.
-  # copy it self and decendants to new parent. this only for root layout.
-  # include theme param values. add theme param values to all themes which available to the new parent.
-  def add_layout_tree(copy_layout_id)
-    
-    copy_layout = self.class.find(copy_layout_id)
-    raise "only for root layout" unless copy_layout.root?
-    
-    copy_layout.copy_to_new_parent(self)
-    
-  end
-
-  
-  #
-  #  cached_whole_tree, it is whole tree of new parent, to compute new added section instance.
-  #  added_section_ids, new added section ids, but not in cache.
-  #  root_layout.copy_to()
-  def copy_to_new_parent(new_parent, cached_whole_tree = nil, added_section_ids=[])
-    
-    cached_whole_tree||= new_parent.root.self_and_descendants
-    
-    new_section_instance =  ( cached_whole_tree.select{|xnode| xnode.section_id==self.section_id}.size +
-      added_section_ids.select{|xid| xid==self.section_id}.size ).succ
-    
-    clone_node = self.dup # do not call clone, or modify itself
-    clone_node.parent_id = new_parent.id
-    clone_node.root_id = new_parent.root_id
-    clone_node.section_instance = new_section_instance
-    clone_node.copy_from_root_id =  self.root_id
-    
-    clone_node.save!    
-    added_section_ids << clone_node.section_id
-
-    # it should only have one theme.
-    copy_theme = self.root.themes.first
-    table_name = ParamValue.table_name    
-    table_column_names = ParamValue.column_names
-    table_column_names.delete('id')
-    # copy param values to all available themes
-    for theme in clone_node.root.themes
-      table_column_values  = table_column_names.dup
-      table_column_values[table_column_values.index('page_layout_root_id')] = clone_node.root_id
-      table_column_values[table_column_values.index('page_layout_id')] = clone_node.id
-      table_column_values[table_column_values.index('theme_id')] = theme.id
-    
-      sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((page_layout_root_id=#{self.root_id} and page_layout_id =#{self.id}) and theme_id =#{copy_theme.id} )! 
-      self.class.connection.execute(sql) 
-    end 
-        
-    for node in self.children       
-      node.copy_to_new_parent(clone_node, cached_whole_tree, added_section_ids)
+    # Do not support add_layout_tree now. Page layout should be full html, Keep it simple. 
+    # since we add feature 'section_context' and 'data_source', should not allow user use this method, it may cause section_context conflict.
+    # user copy prebuild layout tree to another layout tree as child.
+    # copy it self and decendants to new parent. this only for root layout.
+    # include theme param values. add theme param values to all themes which available to the new parent.
+    def add_layout_tree(copy_layout_id)
+      
+      copy_layout = self.class.find(copy_layout_id)
+      raise "only for root layout" unless copy_layout.root?
+      
+      copy_layout.copy_to_new_parent(self)
+      
     end
-                
-  end
   
-  # user copy decendants of a layout to new root layout while user copy theme to new theme.
-  # since copy to new root, there is no section_instance confliction.
-  def copy_decendants_to_new_parent(new_parent)
-    for node in self.children
-      clone_node = node.dup
+    
+    #
+    #  cached_whole_tree, it is whole tree of new parent, to compute new added section instance.
+    #  added_section_ids, new added section ids, but not in cache.
+    #  root_layout.copy_to()
+    def copy_to_new_parent(new_parent, cached_whole_tree = nil, added_section_ids=[])
+      
+      cached_whole_tree||= new_parent.root.self_and_descendants
+      
+      new_section_instance =  ( cached_whole_tree.select{|xnode| xnode.section_id==self.section_id}.size +
+        added_section_ids.select{|xid| xid==self.section_id}.size ).succ
+      
+      clone_node = self.dup # do not call clone, or modify itself
       clone_node.parent_id = new_parent.id
       clone_node.root_id = new_parent.root_id
-      clone_node.save!
-      if node.has_child?
-        node.copy_decendants_to_new_parent(clone_node)
+      clone_node.section_instance = new_section_instance
+      clone_node.copy_from_root_id =  self.root_id
+      
+      clone_node.save!    
+      added_section_ids << clone_node.section_id
+  
+      # it should only have one theme.
+      copy_theme = self.root.themes.first
+      table_name = ParamValue.table_name    
+      table_column_names = ParamValue.column_names
+      table_column_names.delete('id')
+      # copy param values to all available themes
+      for theme in clone_node.root.themes
+        table_column_values  = table_column_names.dup
+        table_column_values[table_column_values.index('page_layout_root_id')] = clone_node.root_id
+        table_column_values[table_column_values.index('page_layout_id')] = clone_node.id
+        table_column_values[table_column_values.index('theme_id')] = theme.id
+      
+        sql = %Q!INSERT INTO #{table_name}(#{table_column_names.join(',')}) SELECT #{table_column_values.join(',')} FROM #{table_name} WHERE ((page_layout_root_id=#{self.root_id} and page_layout_id =#{self.id}) and theme_id =#{copy_theme.id} )! 
+        self.class.connection.execute(sql) 
+      end 
+          
+      for node in self.children       
+        node.copy_to_new_parent(clone_node, cached_whole_tree, added_section_ids)
+      end
+                  
+    end
+    
+    # user copy decendants of a layout to new root layout while user copy theme to new theme.
+    # since copy to new root, there is no section_instance confliction.
+    def copy_decendants_to_new_parent(new_parent)
+      for node in self.children
+        clone_node = node.dup
+        clone_node.parent_id = new_parent.id
+        clone_node.root_id = new_parent.root_id
+        clone_node.save!
+        if node.has_child?
+          node.copy_decendants_to_new_parent(clone_node)
+        end
+      end
+      # copy_from_root_id means we have copied all decendants and do not copy them other than root 
+      if new_parent.root?
+        self.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",self.id, Time.now,Time.now],['root_id=?',new_parent.id])
       end
     end
-    # copy_from_root_id means we have copied all decendants and do not copy them other than root 
-    if new_parent.root?
-      self.class.update_all(["copy_from_root_id=?,updated_at=?, created_at=?",self.id, Time.now,Time.now],['root_id=?',new_parent.id])
-    end
-  end
-   
-  # copy whole tree
-  def copy_to_new(new_attributes = nil)
-    #create new root first, get new root id.
-    new_layout = self.dup
-    new_layout.root_id = 0 # reset the lft,rgt.
-    new_layout.save!
-    new_layout.update_attribute("root_id", new_layout.id)  
-    
-    self.copy_decendants_to_new_parent(new_layout)
-    new_layout.reload
-  end
-   
-  #
-  # Usage: modify layout, add the section instance as child of current node into the layout,
-  # Params: page_layout, instance of model PageLayout 
-  # return: added page_layout record
-  # 
-  def add_section(section_id, attrs={})
-    # check section.section_piece.is_container?
-    obj = nil
-    section = Section.find(section_id)    
-    if section.root? and self.section.section_piece.is_container      
-      whole_tree = self.root.self_and_descendants
-      section_instance = whole_tree.select{|xnode| xnode.section_id==section.id}.size.succ
-      atts = {:website_id=>website_id, :root_id=>root_id, :section_id=>section_id, :section_instance=>section_instance}      
-      atts.merge!(attrs)
-      atts[:title]||="#{section.slug}#{section_instance}"
+     
+    # copy whole tree
+    def copy_to_new(new_attributes = nil)
+      #create new root first, get new root id.
+      new_layout = self.dup
+      new_layout.root_id = 0 # reset the lft,rgt.
+      new_layout.save!
+      new_layout.update_attribute("root_id", new_layout.id)  
       
-      obj = self.class.create!(atts)      
-      obj.move_to_child_of(self)
-      #copy the default section param value to the layout
-      obj.add_param_value()
+      self.copy_decendants_to_new_parent(new_layout)
+      new_layout.reload
     end
-    obj
-  end
-  
-  # Usage: remove param_values belong to self in every theme while destroy self(page_layout record)
-  def remove_section
-    remove_param_value()
-  end
-  #Usage:  add param_value of section into this layout  
-  def add_param_value()
-    # section_id, section_piece_param_id, section_piece_id, section_piece_instance, is_enabled, disabled_ha_ids
-    # all section_params belong to section tree.
-    # section_tree = self.section.self_and_descendants
-    # get default values of this section
-    layout_id = self.id
-    layout_root_id = self.root_id
-    themes = TemplateTheme.by_layout(layout_root_id)
-    for theme in themes
-        section_params = self.section.section_params
-        for sp in section_params
-          #use root section_id
-          ParamValue.create(:page_layout_root_id=>layout_root_id, :page_layout_id=>layout_id) do |pv|
-            pv.section_param_id = sp.id
-            pv.theme_id = theme.id
-# puts "sp.default_value=#{sp.default_value.inspect}"            
-            pv.pvalue = sp.default_value   
-            #set default empty {} for now.
+     
+    #
+    # Usage: modify layout, add the section instance as child of current node into the layout,
+    # Params: page_layout, instance of model PageLayout 
+    # return: added page_layout record
+    # 
+    def add_section(section_id, attrs={})
+      # check section.section_piece.is_container?
+      obj = nil
+      section = Section.find(section_id)    
+      if section.root? and self.section.section_piece.is_container      
+        whole_tree = self.root.self_and_descendants
+        section_instance = whole_tree.select{|xnode| xnode.section_id==section.id}.size.succ
+        atts = {:website_id=>website_id, :root_id=>root_id, :section_id=>section_id, :section_instance=>section_instance}      
+        atts.merge!(attrs)
+        atts[:title]||="#{section.slug}#{section_instance}"
+        
+        obj = self.class.create!(atts)      
+        obj.move_to_child_of(self)
+        #copy the default section param value to the layout
+        obj.add_param_value()
+      end
+      obj
+    end
+    
+    # Usage: remove param_values belong to self in every theme while destroy self(page_layout record)
+    def remove_section
+      remove_param_value()
+    end
+    #Usage:  add param_value of section into this layout  
+    def add_param_value()
+      # section_id, section_piece_param_id, section_piece_id, section_piece_instance, is_enabled, disabled_ha_ids
+      # all section_params belong to section tree.
+      # section_tree = self.section.self_and_descendants
+      # get default values of this section
+      layout_id = self.id
+      layout_root_id = self.root_id
+      themes = TemplateTheme.by_layout(layout_root_id)
+      for theme in themes
+          section_params = self.section.section_params
+          for sp in section_params
+            #use root section_id
+            ParamValue.create(:page_layout_root_id=>layout_root_id, :page_layout_id=>layout_id) do |pv|
+              pv.section_param_id = sp.id
+              pv.theme_id = theme.id
+  # puts "sp.default_value=#{sp.default_value.inspect}"            
+              pv.pvalue = sp.default_value   
+              #set default empty {} for now.
+            end
           end
-        end
+      end
+    end 
+     
+    def remove_param_value()
+      layout_root_id = self.root_id
+      themes = TemplateTheme.find(:all,:conditions=>['layout_id=?',layout_root_id])
+      ParamValue.delete_all(["page_layout_id=? and theme_id in (?)", self.id, themes.collect{|obj|obj.id }])    
     end
-  end 
-   
-  def remove_param_value()
-    layout_root_id = self.root_id
-    themes = TemplateTheme.find(:all,:conditions=>['layout_id=?',layout_root_id])
-    ParamValue.delete_all(["page_layout_id=? and theme_id in (?)", self.id, themes.collect{|obj|obj.id }])    
-  end
-   
+    
+  end   
   
   begin 'section content, html, css, js'
     def build_content()

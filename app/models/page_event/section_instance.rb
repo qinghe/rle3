@@ -60,10 +60,9 @@ class SectionInstance
     #see current section instance subscribe the xevent or not?
     # param_value_event, only this section subscribed, it is sended to section_instance.
     # global_param_value_event, once it is subscribed by original section instance, it is broadcasted to all section instance of the layout.    
-    if xevent.kind_of?(ParamValueEvent) or 
-      self.page_layout.subscribe_event?(xevent)
+    if xevent.kind_of?(PageEvent::ParamValueEvent) or self.page_layout.subscribe_event?(xevent)
       event_name = xevent.event_name
-      handler_name = xevent.kind_of?(ParamValueEvent) ? 
+      handler_name = xevent.kind_of?(PageEvent::ParamValueEvent) ? 
         "#{xevent.html_attribute.slug[/\w+/]}_#{event_name}_handler" : "#{event_name}_event_handler"
 Rails.logger.debug "handler_name=#{handler_name},#{event_name}"      
       send handler_name, xevent      

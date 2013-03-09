@@ -102,12 +102,12 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
       is_updated, new_html_attribute_value, original_html_attribute_value = update_html_attribute_value(html_attribute, html_attribute_value_params, some_event)
       if is_updated
         if some_event!=EventEnum[:psv_changed]
-          pve = ParamValueEvent.new(some_event, self, html_attribute, nil, nil )
+          pve = PageEvent::ParamValueEvent.new(some_event, self, html_attribute, nil, nil )
           @param_value_events<<pve
         end    
         # tell current section, this is new html attribute value. 
         #Rails.logger.debug "self.section=#{section.inspect}"        
-        se = GlobalParamValueEvent.new(some_event, self, html_attribute,nil, new_html_attribute_value )
+        se = PageEvent::GlobalParamValueEvent.new(some_event, self, html_attribute,nil, new_html_attribute_value )
         if self.page_layout.subscribe_event?(se)
           @global_param_value_events << se
         end

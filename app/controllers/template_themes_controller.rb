@@ -225,7 +225,7 @@ class TemplateThemesController < ApplicationController
   def disable_section
     layout_id = params[:layout_id]
     layout = PageLayout.find(layout_id)
-    se = SectionEvent.new("disable_section", layout )
+    se = PageEvent::SectionEvent.new("disable_section", layout )
     se.notify
     
   end
@@ -251,7 +251,7 @@ class TemplateThemesController < ApplicationController
     selected_editor_id = params[:selected_editor_id]
     param_value_keys = params.keys.select{|k| k=~/pv[\d]+/}
     
-   for pvk in param_value_keys
+    for pvk in param_value_keys
       param_value_params = params[pvk]
       pv_id = pvk[/\d+/].to_i
       param_value = ParamValue.find(pv_id, :include=>[:section_param, :section])
