@@ -1,4 +1,10 @@
 namespace :db do
+  desc "reload section_piece.yml"
+  task :reload_section_piece => :environment do
+    require 'active_record/fixtures'
+    ActiveRecord::Fixtures.create_fixtures("#{Rails.root}/test/fixtures", "section_pieces") 
+  end
+    
   desc "export table record from database to seed file, specify talbe with TABLE=x"
   task :record2seed => :environment do
     reject_attribute_names = ['updated_at','created_at']
@@ -23,7 +29,6 @@ for ha in objs
   obj.save
 end
                 "
-      
     end
   end
   
