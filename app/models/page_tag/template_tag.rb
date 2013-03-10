@@ -5,7 +5,7 @@ module PageTag
 #                          -> current_resource( product, blog_post )
 #                          # those tags required current section_instance
 # template is collection of page_layout. each page_layout is section instance 
-  class Template < ModelCollection
+  class TemplateTag < Base
     class WrappedPageLayout < WrappedModel
       self.accessable_attributes=[:id,:section_context, :data_source,:data_filter, :context_list?, :context_detail?,:context_either?]
       attr_accessor :section_id, :page_layout
@@ -45,7 +45,7 @@ module PageTag
     delegate :menu, :to => :menus_tag
     delegate :image, :to => :image_tag
     delegate :theme, :to => :page_generator
-    alias_method :current_piece, :current #current piece is more readable?
+    attr_accessor :current_piece
 
     def initialize(page_generator_instance)
       super(page_generator_instance)
@@ -67,7 +67,7 @@ module PageTag
       
       #current selected section instance, page_layout record
       page_layout = page_layout_tree.select{|node| node.id == page_layout_id}.first
-      self.current = WrappedPageLayout.new(self, page_layout, section_id)
+      self.current_piece = WrappedPageLayout.new(self, page_layout, section_id)
     end
     
   end

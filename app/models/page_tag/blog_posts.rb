@@ -6,31 +6,15 @@ module PageTag
     
     class WrappedBlogPost < WrappedModel
       self.accessable_attributes=[:id,:title,:body,:published_at]
-      
-      def url
-        self.blog_posts_tag.page_generator.build_url(
-          :blog_post_id=>self.id, 
-          :menu_id=>blog_posts_tag.wrapped_menu.id)
-      end
+      delegate *self.accessable_attributes, :to => :model
       
     end  
     
-
     
-    def blog_post_models
-      if @blog_post_models.nil?
-        self.blog_post_models = self.page_generator.menu.blog_posts
-      end
-      @blog_post_models
+    def wrapped_models
+      models.collect{|model|  WrappedBlogPost.new(self, model) }
     end
-    
-    def blog_posts
-      if @blog_posts.nil?
-        self.blog_posts = self.blog_post_models.collect{|item| WrappedBlogPost.new(self, item)}      
-      end
-      @blog_posts    
-    end
-     
+        
 
     # means the current select blog post in erubis context.
     def current

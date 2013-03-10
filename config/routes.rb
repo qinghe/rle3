@@ -89,7 +89,7 @@ Rle3::Application.routes.draw do
   #   end
 
   match '(/:c(/:r))' => 'template_themes#preview', :c => /[\d]+/
-  match 'preview' => 'template_themes#preview' #preview home
+  match 'preview(/:c(/:r))' => 'template_themes#preview' #preview home
   
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.

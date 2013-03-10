@@ -95,11 +95,13 @@ class PageGenerator
   end
     
  
-  def build_url(options={})
-    menu_id = options[:menu_id]
-    blog_post_id = options[:blog_post_id]  
-    url= self.url_prefix+"/#{menu_id}"
-    url<< "/#{blog_post_id}" if blog_post_id
+  def build_path(model)    
+    url = nil
+    if model.kind_of?( Menu)
+      url= [self.url_prefix, model.id].join('/')
+    else  
+      url= [self.url_prefix, self.menu.id, model.id].join('/')    
+    end    
     url
   end
   

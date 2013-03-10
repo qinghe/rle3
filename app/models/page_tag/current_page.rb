@@ -18,8 +18,8 @@ module PageTag
     
     def initialize(page_generator_instance)
       super(page_generator_instance)
-      self.website_tag = ::PageTag::Website.new(page_generator_instance)
-      self.template_tag = ::PageTag::Template.new(page_generator_instance)
+      self.website_tag = ::PageTag::WebsiteTag.new(page_generator_instance)
+      self.template_tag = ::PageTag::TemplateTag.new(page_generator_instance)
     end
     
     #title is current page title,  resource.title-menu.title-website.title
@@ -34,6 +34,11 @@ module PageTag
       if data_source.present?
         if data_source == 'gpvs'
           objs = menu.blog_posts
+        elsif data_source == 'this_product'
+          objs = menu.blog_posts.where(:id=>resource.id)        
+        end
+        if objs.present?
+          objs = BlogPosts.new( self.page_generator, objs)
         end
       end
       objs

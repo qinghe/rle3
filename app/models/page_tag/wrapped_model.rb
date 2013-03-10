@@ -9,6 +9,9 @@ module PageTag
       self.collection_tag = collection_tag
     end
     
+    def path
+      self.collection_tag.page_generator.build_path( self.model)
+    end
     
     def [](attribute_name)
       if accessable_attributes.include? attribute_name.to_sym

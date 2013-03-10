@@ -1,5 +1,5 @@
 module PageTag
-  class Website < Base
+  class WebsiteTag < Base
     
     def website
       page_generator.theme.website

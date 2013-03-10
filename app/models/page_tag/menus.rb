@@ -1,7 +1,7 @@
 module PageTag
   class Menus < Base
     class WrappedMenu < WrappedModel
-      self.accessable_attributes=[:id,:title, :path, :clickable?]
+      self.accessable_attributes=[:id,:title, :clickable?]
       delegate *self.accessable_attributes, :to => :model
 
       def children
@@ -14,13 +14,9 @@ module PageTag
         self.collection_tag.template_tag.page_generator.menu.id == self.model.id
       end
       
-      # since a page could have many blog_post list, get it by current section's data source
-      def blog_posts
-        data_source = self.section.current_data_source
-        if blog_posts_tags_cache[data_source].nil?
-          self.blog_posts_tags_cache[data_source] = BlogPostsTag.new(self.collection_tag.page_generator, self)
-        end
-        self.blog_posts_tags_cache[data_source]
+      #override super, menu belongs to template
+      def path
+        self.collection_tag.template_tag.page_generator.build_path( self.model)
       end
       
     end
