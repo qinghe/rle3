@@ -5,19 +5,8 @@ module PageEvent
 # this event system is mainly build for modifying layout to fixed or fluid.
 # to implement, in section tables, add column, section_event, it include all reserved event by this section.     
 
-  class GlobalParamValueEvent < AbstractSectionEvent
-    attr_accessor :param_value, :html_attribute, :event, :original_html_attribute_value, :new_html_attribute_value
-    attr_accessor :updated_html_attribute_values
-    
-    def initialize(event, param_value,html_attribute,original_html_attribute_value, new_html_attribute_value)
-      self.event = event
-      self.param_value = param_value
-      self.html_attribute = html_attribute
-      self.original_html_attribute_value = original_html_attribute_value
-      self.new_html_attribute_value = new_html_attribute_value    
-      self.updated_html_attribute_values = []  
-    end
-  
+  class GlobalParamValueEvent < ParamValueEventBase
+
     # it should return updated_html_attribute_values, action collect them and update the editor.  
     def notify
       page_layout = self.param_value.page_layout

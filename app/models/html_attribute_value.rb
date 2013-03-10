@@ -202,7 +202,7 @@ Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribu
    
   def update()
     Rails.logger.debug "yes, in HtmlAttributeValue.save"
-    self.param_value.update_html_attribute_value(self.html_attribute, self.properties)
+    self.param_value.update_html_attribute_value(self.html_attribute, self.properties, 'system')
   end
   
 

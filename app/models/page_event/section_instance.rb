@@ -1,5 +1,4 @@
 class SectionInstance
-  SectionEnum = {'center_part'=>'center_part'}
   GlobalParamValueEventEnum={"page_layout_fixed"=>10}
   SectionEventEnum = {:disabled_event=>1, :removed_event=>2}
 

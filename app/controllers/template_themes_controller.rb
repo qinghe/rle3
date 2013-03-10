@@ -246,6 +246,7 @@ class TemplateThemesController < ApplicationController
     end    
   end
 
+  #FIXME, fix do_update_param_value
   def update_param_values
     selected_theme_id = params[:selected_theme_id]
     selected_editor_id = params[:selected_editor_id]
@@ -317,17 +318,19 @@ class TemplateThemesController < ApplicationController
   #         param_value_params, hash, format as {"84"=>{"pvalue"=>"section_name", "psvalue"=>"0t"}}
   # Return, all updated_html_attribute_values, may include html_attribute_value belongs to other section, also include the source change, it is the first,
   #         it cause the serial changes.
-  def do_update_param_value(param_value, param_value_params, param_value_event=nil, editing_html_attribute_id=nil) 
+  def do_update_param_value(param_value, param_value_params, param_value_event, editing_html_attribute_id)
+    html_attribute = html_attribute_value_params = nil 
     param_value_params.keys.each {|ha_id|
       ha_id = ha_id.to_i
       if editing_html_attribute_id.nil? or editing_html_attribute_id==ha_id
         html_attribute = HtmlAttribute.find_by_ids(ha_id)
         html_attribute_value_params = param_value_params[ha_id.to_s]
-        event_params = {:html_attribute=>html_attribute,:html_attribute_value_params=>html_attribute_value_params}
-        param_value.raise_event(param_value_event, event_params)
+        #event_params = {:html_attribute=>html_attribute,:html_attribute_value_params=>html_attribute_value_params}
+        #param_value.raise_event(param_value_event, event_params)
       end      
     }
-    param_value.save
+    param_value.update_html_attribute_value(html_attribute, html_attribute_value_params, param_value_event )
+    #param_value.save
     param_value.updated_html_attribute_values
   end
   

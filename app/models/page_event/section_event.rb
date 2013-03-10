@@ -1,5 +1,5 @@
 module PageEvent
-  class SectionEvent < AbstractSectionEvent
+  class SectionEvent < AbstractEvent
     # when user modify section, like disable, remove, will trigger section event.
     # there are event, section_disabled, section_removed,
     # ex. user disable a section like 'left_part', we need tell other section like 'center part' and 'right_part', it is disabled, please update your width. 

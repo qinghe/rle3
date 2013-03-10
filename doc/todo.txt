@@ -1,1 +1,4 @@
 1. order the html_attribute_values in editor.
+2. show editor panel in preview page.
+3. param_values become attribute accesor of page_layout node.
+   ex. page_layout.width=100,  page_layout.background_color ='red'

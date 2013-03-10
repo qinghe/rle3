@@ -5,12 +5,12 @@ objs=[
   {"id"=>5, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"page", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"21,20,32"},
   {"id"=>6, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"inner", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"32"},
   {"id"=>7, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"page_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"92"},
-  {"id"=>8, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"horizontal_content", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
+  {"id"=>8, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"content_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
   {"id"=>9, "editor_id"=>3, "section_piece_id"=>1, "class_name"=>"background", "pclass"=>"css", "param_category_id"=>3,  "html_attribute_ids"=>"2,3,4,5"},
   {"id"=>10, "editor_id"=>4, "section_piece_id"=>1, "class_name"=>"text", "pclass"=>"css", "param_category_id"=>4,  "html_attribute_ids"=>"23,24,25,26,27,16,49,53,54,55,56,52,58,57"},
   #{"id"=>14, "editor_id"=>1, "section_piece_id"=>2, "class_name"=>"section_name", "pclass"=>"string", "param_category_id"=>1,  "html_attribute_ids"=>"84"},
-  #horizontal_content_horizontal
-  {"id"=>13, "editor_id"=>2, "section_piece_id"=>2, "class_name"=>"horizontal_content", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
+  #content_layout_horizontal
+  {"id"=>13, "editor_id"=>2, "section_piece_id"=>2, "class_name"=>"content_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
   {"id"=>15, "editor_id"=>2, "section_piece_id"=>2, "class_name"=>"block", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"101,15,21,111", "param_conditions"=>{15=>['pv_changed']}},
   #general decoration, margin, border,padding
   {"id"=>16, "editor_id"=>2, "section_piece_id"=>2, "class_name"=>"inner", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"31,32,7,8,6,15", "param_conditions"=>{31=>['pv_changed'],32=>['pv_changed']}},

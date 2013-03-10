@@ -7,12 +7,14 @@ class ParamValue < ActiveRecord::Base
   belongs_to :template_theme, :foreign_key=>"theme_id"
   
   serialize :pvalue, Hash
+  before_save :collect_events
   after_save :trigger_events
 
   scope :within_section, lambda { |param_value|
   where(" theme_id=? and param_values.page_layout_id=? ", param_value.theme_id, param_value.page_layout_id).includes(:section_param=>:section_piece_param)      
      }
 
+  attr_accessor :updated_html_attribute_values, :original_html_attribute_values, :page_events
   #usage:  
   #        return hash, values are all param_values within same section piece, 
   #        keys are class_name,  format is {:class_name1=>pv1,:class_name2=>pv2  ...}
@@ -47,9 +49,11 @@ class ParamValue < ActiveRecord::Base
   # usage: update attribute:pvalue 
   # params: html_attribute_id_value_map, 
   #  it is hash like {html_attribute_id=>{pvalue, unit,psvalue}}
-  def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event = nil)
+  def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event )
     # it maybe called more times by conditions, we should keep updated_html_attribute_values
-    @updated_html_attribute_values ||= []
+    self.page_events ||=[]
+    self.updated_html_attribute_values ||= []
+    self.original_html_attribute_values ||= []
     original_html_attribute_value = HtmlAttributeValue.parse_from(self,html_attribute)
     new_html_attribute_value = HtmlAttributeValue.parse_from(self, html_attribute, html_attribute_value_params)
     is_updated= false
@@ -80,7 +84,9 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
         end
         self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)        
       end
-      @updated_html_attribute_values << new_html_attribute_value
+      self.updated_html_attribute_values << new_html_attribute_value
+      self.original_html_attribute_values << original_html_attribute_value
+      self.page_events<<some_event
       is_updated = true  
     end
     [is_updated, new_html_attribute_value, original_html_attribute_value]
@@ -93,21 +99,16 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
   #                                   accumulate modification event, include global_param_value_event and section_event -> 
   #                                   after pv.save -> call trigger_event
   # 
-  def raise_event(some_event, event_params)
-    @param_value_events||=[]
-    @global_param_value_events||=[]
-    if some_event=~/changed/
-      html_attribute =  event_params[:html_attribute ]
-      html_attribute_value_params= event_params[:html_attribute_value_params]
-      is_updated, new_html_attribute_value, original_html_attribute_value = update_html_attribute_value(html_attribute, html_attribute_value_params, some_event)
-      if is_updated
-        if some_event!=EventEnum[:psv_changed]
-          pve = PageEvent::ParamValueEvent.new(some_event, self, html_attribute, nil, nil )
-          @param_value_events<<pve
-        end    
+  def collect_events()
+    @param_value_events=[]
+    @global_param_value_events=[]
+    if self.page_events.present?      
+      last_position =   page_events.size -1
+        pve = PageEvent::ParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
+        @param_value_events<<pve
         # tell current section, this is new html attribute value. 
         #Rails.logger.debug "self.section=#{section.inspect}"        
-        se = PageEvent::GlobalParamValueEvent.new(some_event, self, html_attribute,nil, new_html_attribute_value )
+        se = PageEvent::GlobalParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
         if self.page_layout.subscribe_event?(se)
           @global_param_value_events << se
         end
@@ -120,14 +121,14 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
   def trigger_events
 Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_events=#{@global_param_value_events.inspect}"
     #@param_value_events may be nil, ex. load seed.   
-    unless @param_value_events.nil?
+    if @param_value_events.present?
       param_value_events = @param_value_events
       @param_value_events = nil # in case update self.pvalue, trigger again.
       param_value_events.each{|pve| 
         @updated_html_attribute_values.concat( pve.notify )
       }
     end 
-    unless @global_param_value_events.nil?
+    if @global_param_value_events.present?
       section_events = @global_param_value_events
       @global_param_value_events = nil # in case update self.pvalue, trigger again.
       section_events.each{|pve| 
@@ -135,11 +136,7 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
       }
     end 
   end
-  
-  def updated_html_attribute_values
-    @updated_html_attribute_values
-  end
-  
+    
   def html_attribute_ids()
     if @html_attribute_ids.nil?
       section_piece_param = self.section_param.section_piece_param

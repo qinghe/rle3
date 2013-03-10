@@ -1,17 +1,5 @@
 module PageEvent
-  class ParamValueEvent
-  
-    attr_accessor :param_value, :html_attribute, :event, :original_html_attribute_value, :new_html_attribute_value
-    attr_accessor :updated_html_attribute_values #updated_param_value_and_html_attribute_ids [[pvid,haid],[pvid,haid]..]
-    def initialize(event, param_value,html_attribute,original_html_attribute_value, new_html_attribute_value)
-      self.event = event
-      self.param_value = param_value
-      self.html_attribute = html_attribute
-      self.original_html_attribute_value = original_html_attribute_value
-      self.new_html_attribute_value = new_html_attribute_value
-      self.updated_html_attribute_values = []
-    end
-    
+  class ParamValueEvent < ParamValueEventBase
     # it should return updated_html_attribute_values, action collect them and update the editor.  
     def notify
       param_conditions = self.param_value.section_param.section_piece_param.param_conditions

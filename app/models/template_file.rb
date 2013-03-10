@@ -1,3 +1,4 @@
+# file uploaded for template
 class TemplateFile < ActiveRecord::Base
   belongs_to :template_theme, :foreign_key=>"theme_id"
 
