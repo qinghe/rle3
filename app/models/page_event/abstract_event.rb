@@ -15,5 +15,8 @@ module PageEvent
       raise "unimplement"
     end
 
+    def handler_name
+      raise "unimplement"
+    end
   end
 end

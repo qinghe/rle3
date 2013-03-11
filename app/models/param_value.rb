@@ -11,8 +11,8 @@ class ParamValue < ActiveRecord::Base
   after_save :trigger_events
 
   scope :within_section, lambda { |param_value|
-  where(" theme_id=? and param_values.page_layout_id=? ", param_value.theme_id, param_value.page_layout_id).includes(:section_param=>:section_piece_param)      
-     }
+      where(" theme_id=? and param_values.page_layout_id=? ", param_value.theme_id, param_value.page_layout_id).includes(:section_param=>:section_piece_param)      
+    }
 
   attr_accessor :updated_html_attribute_values, :original_html_attribute_values, :page_events
   #usage:  
@@ -46,10 +46,13 @@ class ParamValue < ActiveRecord::Base
   end
   
 
-  # usage: update attribute:pvalue 
-  # params: html_attribute_id_value_map, 
-  #  it is hash like {html_attribute_id=>{pvalue, unit,psvalue}}
+  # * usage - update attribute:pvalue 
+  # * params
+  #   * html_attribute_value_params - it is hash like {"psvalue0"=>"l1", "pvalue0"=>"810", "unit0"=>"px"}
+  #      or {"psvalue0"=>"l1", "pvalue0"=>"0", "unit0"=>"px", "psvalue1"=>"l1", "pvalue1"=>"0", "unit1"=>"px", "psvalue2"=>"l1", "pvalue2"=>"0", "unit2"=>"px", "psvalue3"=>"l1", "pvalue3"=>"0", "unit3"=>"px", "unset"=>"1"}
+  #   * some_event - one of EventEnum
   def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event )
+    #FIXME confirm next line. 
     # it maybe called more times by conditions, we should keep updated_html_attribute_values
     self.page_events ||=[]
     self.updated_html_attribute_values ||= []
@@ -86,7 +89,8 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
       end
       self.updated_html_attribute_values << new_html_attribute_value
       self.original_html_attribute_values << original_html_attribute_value
-      self.page_events<<some_event
+      self.page_events << some_event
+      self.save!
       is_updated = true  
     end
     [is_updated, new_html_attribute_value, original_html_attribute_value]
@@ -103,16 +107,15 @@ Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)
     @param_value_events=[]
     @global_param_value_events=[]
     if self.page_events.present?      
-      last_position =   page_events.size -1
-        pve = PageEvent::ParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
-        @param_value_events<<pve
-        # tell current section, this is new html attribute value. 
-        #Rails.logger.debug "self.section=#{section.inspect}"        
-        se = PageEvent::GlobalParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
-        if self.page_layout.subscribe_event?(se)
-          @global_param_value_events << se
-        end
-      end
+      last_position =  self.page_events.size - 1
+      pve = PageEvent::ParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
+      @param_value_events<<pve
+      # tell current section, this is new html attribute value. 
+      #Rails.logger.debug "self.section=#{section.inspect}"        
+      se = PageEvent::GlobalParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
+      if self.page_layout.subscribe_event?(se)
+        @global_param_value_events << se
+      end      
     end
   end
   
@@ -201,7 +204,7 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
   # in case, there is only one html_attribute_id in current param_value
   # use this to fetch param value directly.
   def first_pvalue
-    pvalue_for_haid(html_attribute_ids.first)
+    pvalue_for_haid( html_attribute_ids.first )
   end
   
 end

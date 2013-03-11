@@ -25,6 +25,14 @@ module PageEvent
         end
       end
     end
+    
+    # there are event, section_disabled, section_removed,
+    # ex. user disable a section like 'left_part', we need tell other section like 'center part' and 'right_part', it is disabled, please update your width.   
+    def section_disabled_event_handler(section_event)
+      source_section_name = section_event.source_section_name
+           
+    end
+    
   end
   
 end

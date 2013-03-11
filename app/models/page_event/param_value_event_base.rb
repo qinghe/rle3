@@ -11,4 +11,5 @@ module PageEvent
       self.new_html_attribute_value = new_html_attribute_value    
       self.updated_html_attribute_values = []  
     end
+  end
 end  
