@@ -22,13 +22,13 @@ class HtmlAttributeValue
       }
       # if unset is uncheck, 'unset' is nil in posted params.
       if pvalue_properties["unset"].nil?
-        pvalue_properties["unset"] = HtmlAttribute::UNSET_FALSE
+        pvalue_properties["unset"] = HtmlAttribute::BOOL_FALSE
       end
     end
     
     # default unset is checked
     if pvalue_properties["unset"].nil?
-      pvalue_properties["unset"] = HtmlAttribute::UNSET_TRUE
+      pvalue_properties["unset"] = HtmlAttribute::BOOL_TRUE
     end
     if pvalue_properties["hidden"].nil?
       pvalue_properties["hidden"] = HtmlAttribute::BOOL_FALSE
@@ -86,7 +86,7 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
           object_properties.merge!( html_attribute.default_properties )
         end
       end
-Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribute.slug},pvalue_string=#{pvalue_string.inspect}, pclass=#{param_value_class},properties=#{object_properties.inspect}"
+#Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribute.slug},pvalue_string=#{pvalue_string.inspect}, pclass=#{param_value_class},properties=#{object_properties.inspect}"
     object_properties
   end
   
@@ -146,7 +146,13 @@ Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribu
   # if the reperts==1  key are pvalue, psvalue, unit,unset
   # if the reperts>1   key are pvalue{n}, psvalue{n}, n start from 0  
   def []=(key,val)
-    if key=~/(unset)|(hidden)/
+    if key=~/unset/
+      if val.kind_of?(TrueClass) or val.kind_of?(FalseClass)
+        val = val ? HtmlAttribute::BOOL_TRUE : HtmlAttribute::BOOL_FALSE
+      end  
+      properties[key] = val
+      #it has default value at least while initialize!
+    elsif key=~/hidden/
       properties[key] = val
     elsif key=~/[\d]$/
       properties[key] = val
@@ -154,6 +160,15 @@ Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribu
       self.html_attribute.repeats.times{|i|
         properties[key+i.to_s] = val
       }  
+    end
+    if key=~/pvalue/ # in code we could set 'width=200'
+      # correct psvalue and unit
+      unless self.html_attribute.manual_entry? self['psvalue']
+        self['psvalue'] =  self.html_attribute.manual_selected_value
+        if self.html_attribute.has_unit?
+          self['unit'] =  self.html_attribute.units.first
+        end
+      end
     end
   end
   
@@ -169,11 +184,11 @@ Rails.logger.debug "param_value:#{param_value.id}, html_attribute=#{html_attribu
   end
   
   def unset
-    return unset? ? HtmlAttribute::UNSET_TRUE : HtmlAttribute::UNSET_FALSE
+    return unset? ? HtmlAttribute::BOOL_TRUE : HtmlAttribute::BOOL_FALSE
   end
   
   def unset?
-    return properties["unset"]!=HtmlAttribute::UNSET_FALSE
+    return properties["unset"]!=HtmlAttribute::BOOL_FALSE
   end
 
   def hidden

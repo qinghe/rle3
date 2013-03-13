@@ -2,9 +2,6 @@ class HtmlAttribute < ActiveRecord::Base
   extend FriendlyId
   BOOL_TRUE='1'
   BOOL_FALSE='0'
- 
-  UNSET_TRUE = '1'
-  UNSET_FALSE= '0'
   
   cattr_accessor :psv_for_manual_entry_enum, :unit_collection, :special_enum
   # slug db,bool,text,src pvalue are special
@@ -105,12 +102,14 @@ class HtmlAttribute < ActiveRecord::Base
   end 
   
   def has_unit?
-    not self.punits.empty?
+    self.punits.present?
   end
   
   def units
-    if has_unit?
-      @units||= punits.split(',').collect{|unit| ((self.class.unit_collection.key?(unit.to_sym)) ? (self.class.unit_collection.fetch(unit.to_sym)) : unit) }.flatten!
+    if @units.blank?
+      if has_unit?
+        @units= punits.split(',').collect{|unit| ((self.class.unit_collection.key?(unit.to_sym)) ? (self.class.unit_collection.fetch(unit.to_sym)) : unit) }.flatten!
+      end
     end 
     @units
   end

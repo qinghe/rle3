@@ -35,7 +35,7 @@ class HtmlPage# it correspond to template
       for page_layout in page_layouts
         pvs_for_layout = pvs.select{|pv| pv.page_layout_id==page_layout.id}
         parent_section_instance = @partial_htmls.select{|obj| obj.is_parent_of?(page_layout)}.first
-        new_section_instance =self.new(self, page_layout,  parent_section_instance, pvs_for_layout)   
+        new_section_instance =PartialHtml.new(self, page_layout,  parent_section_instance, pvs_for_layout)   
         @partial_htmls << new_section_instance
         if parent_section_instance
           parent_section_instance.children << new_section_instance
@@ -50,6 +50,8 @@ class HtmlPage# it correspond to template
      
     attr_accessor :html_page, :page_layout, :section, :param_values,  :parent, :children
     attr_accessor :updated_html_attribute_values # keep unsaved html_attribute_values
+    
+    
     # a page_layout record, infact it is a setion instance.
     #
     # parent_section_instance, we need param values of parents of current section instance while handling event, ex. parent's width.
@@ -61,6 +63,7 @@ class HtmlPage# it correspond to template
       self.param_values = pvs
       self.children = []
       self.updated_html_attribute_values =[]
+      #Rails.logger.debug "PartialHtml.initialize.param_values=#{pvs.inspect}"
     end
     
     def is_parent_of?( other_page_layout)
@@ -153,6 +156,7 @@ class HtmlPage# it correspond to template
     def section_slug
       self.section.slug
     end  
+    alias_method :[],:html_attribute_values
   end
 
 end

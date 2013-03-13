@@ -73,7 +73,7 @@ module PageTag
           end
         end
       end
-   Rails.logger.debug    " class_name={class_name}, val=#{val}"
+#   Rails.logger.debug    " class_name=#{class_name}, val=#{val}"
       val
     end
         

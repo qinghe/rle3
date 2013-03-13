@@ -72,7 +72,7 @@ onchange = my_remote_function( :submit=>"layout_editor_form",
 <%onchange = my_remote_function( :submit=>"layout_editor_form",  
 :url => { :action => "update_param_value",:editing_param_value_id=> param_value.id, :editing_html_attribute_id=>ha.id, :param_value_event=>ParamValue::EventEnum[:unset_changed]})
 -%>
-        <%=check_box_tag("#{pv_ele_id}[unset]", HtmlAttribute::UNSET_TRUE, hav.unset?, :onchange=>onchange)%> <%=label_tag "#{pv_ele_id}[unset]", "Unset"%>
+        <%=check_box_tag("#{pv_ele_id}[unset]", HtmlAttribute::BOOL_TRUE, hav.unset?, :onchange=>onchange)%> <%=label_tag "#{pv_ele_id}[unset]", "Unset"%>
       </div>
   </div>
 

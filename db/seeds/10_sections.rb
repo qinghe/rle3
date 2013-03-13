@@ -14,21 +14,20 @@ for ha in objs
 end
 =end
 #section_piece slugs= [root,container,menu,menuitem]
-unset_false = HtmlAttribute::UNSET_FALSE
-unset_true = HtmlAttribute::UNSET_TRUE
-bool_true =  HtmlAttribute::UNSET_TRUE
+bool_false = HtmlAttribute::BOOL_FALSE
+bool_true =  HtmlAttribute::BOOL_TRUE
 website = Website.first
 sps = SectionPiece.all
 section_piece_hash= sps.inject({}){|h,sp| h[sp.slug] = sp; h}
 
 Section.delete_all              
 root = Section.create_section(section_piece_hash['root'].id, {:title=>"root",:global_events=>"page_layout_fixed",:subscribed_global_events=>"page_layout_fixed"}, 
-  {'content_layout'=>{86=>HtmlAttribute::BOOL_FALSE},
-   'page'=>{21=>"width:800px",'21unset'=>unset_false, 20=>"min-width:800px", '20hidden'=>bool_true},
-   'page_layout'=>{'92unset'=>unset_false,92=>bool_true}})
+  {'content_layout'=>{86=>bool_false},
+   'page'=>{21=>"width:800px",'21unset'=>bool_false, 20=>"min-width:800px", '20hidden'=>bool_true},
+   'page_layout'=>{'92unset'=>bool_false,92=>bool_true}})
 
-container = Section.create_section(section_piece_hash['container'].id, {:title=>"container",:subscribed_global_events=>"page_layout_fixed"},{'content_layout'=>{86=>bool_true,'86unset'=>unset_false},
-'block'=>{15=>"height:100px",'15unset'=>unset_false,101=>"float:left",'101unset'=>unset_false}, 'inner'=>{'15hidden'=>bool_true}})
+container = Section.create_section(section_piece_hash['container'].id, {:title=>"container",:subscribed_global_events=>"page_layout_fixed"},{'content_layout'=>{86=>bool_true,'86unset'=>bool_false},
+'block'=>{15=>"height:100px",'15unset'=>bool_false,101=>"float:left",'101unset'=>bool_false}, 'inner'=>{'15hidden'=>bool_true,'15hidden'=>bool_true}})
 
 
 hmenu = Section.create_section(section_piece_hash['container'].id, {:title=>"hmenu",:website_id=>website.id},
@@ -70,22 +69,22 @@ blog_post_body = Section.create_section(section_piece_hash['container'].id, {:ti
 blog_post_body.add_section_piece(section_piece_hash['blog-post-body'].id)
 
 ################################################ center area start ##############################################  
-center_area = Section.create_section(section_piece_hash['container'].id, {:title=>"center_area",:subscribed_global_events=>"page_layout_fixed,block_width"},{'content_layout'=>{86=>bool_true,'86unset'=>unset_false},
-'block'=>{15=>"height:100px",'15unset'=>unset_false,:disabled_ha_ids=>"101"}})
+center_area = Section.create_section(section_piece_hash['container'].id, {:title=>"center_area",:subscribed_global_events=>"page_layout_fixed,block_width"},{'content_layout'=>{86=>bool_true,'86unset'=>bool_false},
+'block'=>{15=>"height:100px",'15unset'=>bool_false,:disabled_ha_ids=>"101"}})
 
 left_part = Section.create_section(section_piece_hash['container'].id, {:title=>"left_part",:global_events=>"block_width"},
-  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
-   'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:200px",'21unset'=>unset_false, 101=>"float:left",'101unset'=>unset_false,111=>"margin:0 -200px 0 0",'111unset'=>unset_false,:disabled_ha_ids=>"111"},
+  {'content_layout'=>{86=>bool_true},
+   'block'=>{15=>"height:100px",'15unset'=>bool_false,21=>"width:200px",'21unset'=>bool_false, 101=>"float:left",'101unset'=>bool_false,111=>"margin:0 -200px 0 0",'111unset'=>bool_false,:disabled_ha_ids=>"111"},
    'inner'=>{'15hidden'=>bool_true}})
 right_part = Section.create_section(section_piece_hash['container'].id, {:title=>"right_part",:global_events=>"block_width"},
-  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
-   'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:200px",'21unset'=>unset_false, 101=>"float:right",'101unset'=>unset_false,111=>"margin:0 0 0 -200px",'111unset'=>unset_false,:disabled_ha_ids=>"111"},
+  {'content_layout'=>{86=>bool_true},
+   'block'=>{15=>"height:100px",'15unset'=>bool_false,21=>"width:200px",'21unset'=>bool_false, 101=>"float:right",'101unset'=>bool_false,111=>"margin:0 0 0 -200px",'111unset'=>bool_false,:disabled_ha_ids=>"111"},
    'inner'=>{'15hidden'=>bool_true}})
    
 center_part = Section.create_section(section_piece_hash['container'].id, {:title=>"center_part",:global_events=>"block_width"},
-  {'content_layout'=>{86=>HtmlAttribute::BOOL_TRUE},
-'block'=>{15=>"height:100px",'15unset'=>unset_false,21=>"width:100%",'21unset'=>unset_false, 101=>"float:left",'101unset'=>unset_false,111=>"margin:0 -100% 0 0",'111unset'=>unset_false, '111hidden'=>bool_true,:disabled_ha_ids=>"101,21"},
-'inner'=>{31=>"margin:0 200px 0 200px",'31unset'=>unset_false, '31hidden'=>bool_true, '15hidden'=>bool_true}})
+  {'content_layout'=>{86=>bool_true},
+'block'=>{15=>"height:100px",'15unset'=>bool_false,21=>"width:100%",'21unset'=>bool_false, 101=>"float:left",'101unset'=>bool_false,111=>"margin:0 -100% 0 0",'111unset'=>bool_false, '111hidden'=>bool_true,:disabled_ha_ids=>"101,21"},
+'inner'=>{31=>"margin:0 200px 0 200px",'31unset'=>bool_false, '31hidden'=>bool_true, '15hidden'=>bool_true}})
 ################################################ center area end ##############################################  
 
   

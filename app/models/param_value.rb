@@ -15,19 +15,7 @@ class ParamValue < ActiveRecord::Base
     }
 
   attr_accessor :updated_html_attribute_values, :original_html_attribute_values, :page_events
-  #usage:  
-  #        return hash, values are all param_values within same section piece, 
-  #        keys are class_name,  format is {:class_name1=>pv1,:class_name2=>pv2  ...}
-  def self.find_within_section_piece(param_value)
-    section_param = param_value.section_param
     
-    pvs = self.find(:all, :conditions=>["theme_id=? and param_values.page_layout_id=? and section_param_id=? ",
-      param_value.theme_id, param_value.page_layout_id, param_value.section_param_id], 
-    :include=>[{:section_param=>:section_piece_param}, :page_layout])
-    name_pv_hash = pvs.inject({}){|h, pv| h[pv.section_param.section_piece_param.class_name] = pv; h;}
-
-  end
-  
   # usage: return all html_attribute_values this param value contains. 
   #   return a hash, values are instance of HtmlAttributeValue, keys are html_attribute_id and html_attribute.slug. 
   #   key is section_param.section_piece_param.class_name+html_attribute.slug. ex."block_width"
@@ -46,100 +34,6 @@ class ParamValue < ActiveRecord::Base
   end
   
 
-  # * usage - update attribute:pvalue 
-  # * params
-  #   * html_attribute_value_params - it is hash like {"psvalue0"=>"l1", "pvalue0"=>"810", "unit0"=>"px"}
-  #      or {"psvalue0"=>"l1", "pvalue0"=>"0", "unit0"=>"px", "psvalue1"=>"l1", "pvalue1"=>"0", "unit1"=>"px", "psvalue2"=>"l1", "pvalue2"=>"0", "unit2"=>"px", "psvalue3"=>"l1", "pvalue3"=>"0", "unit3"=>"px", "unset"=>"1"}
-  #   * some_event - one of EventEnum
-  def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event )
-    #FIXME confirm next line. 
-    # it maybe called more times by conditions, we should keep updated_html_attribute_values
-    self.page_events ||=[]
-    self.updated_html_attribute_values ||= []
-    self.original_html_attribute_values ||= []
-    original_html_attribute_value = HtmlAttributeValue.parse_from(self,html_attribute)
-    new_html_attribute_value = HtmlAttributeValue.parse_from(self, html_attribute, html_attribute_value_params)
-    is_updated= false
-    Rails.logger.debug "original_html_attribute_value=#{original_html_attribute_value.properties.inspect},new_html_attribute_value=#{new_html_attribute_value.properties.inspect}"    
-    unless original_html_attribute_value.equal_to?(new_html_attribute_value)
-      # changed by user actions, some_event = [pv_changed|psv_changed|psu_changed|unset_changed]
-      if some_event 
-        if some_event==EventEnum[:unset_changed]
-          if new_html_attribute_value.unset?
-            self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)     
-          else # user modify unset, we should give a default value. 
-            self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)   
-Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)}"              
-            self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue(default=true))            
-          end
-        else
-          self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)
-        end 
-      else
-        if new_html_attribute_value.hidden != original_html_attribute_value.hidden
-          self.html_attribute_extra(html_attribute.id, 'hidden', new_html_attribute_value.hidden)
-        end     
-        if new_html_attribute_value.unset != original_html_attribute_value.unset
-          self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)
-        end
-        if new_html_attribute_value.computed != original_html_attribute_value.computed
-          self.html_attribute_extra(html_attribute.id, 'computed', new_html_attribute_value.computed)
-        end
-        self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)        
-      end
-      self.updated_html_attribute_values << new_html_attribute_value
-      self.original_html_attribute_values << original_html_attribute_value
-      self.page_events << some_event
-      self.save!
-      is_updated = true  
-    end
-    [is_updated, new_html_attribute_value, original_html_attribute_value]
-  end
-  
-  #Usage:  user modify param_value, trigger event, event in EventEnum
-  # flow chart is:
-  #            client side               server side
-  #  user modify param_value ->       raise_event -> if(change_event) modify pvalue(not save) -> 
-  #                                   accumulate modification event, include global_param_value_event and section_event -> 
-  #                                   after pv.save -> call trigger_event
-  # 
-  def collect_events()
-    @param_value_events=[]
-    @global_param_value_events=[]
-    if self.page_events.present?      
-      last_position =  self.page_events.size - 1
-      pve = PageEvent::ParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
-      @param_value_events<<pve
-      # tell current section, this is new html attribute value. 
-      #Rails.logger.debug "self.section=#{section.inspect}"        
-      se = PageEvent::GlobalParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
-      if self.page_layout.subscribe_event?(se)
-        @global_param_value_events << se
-      end      
-    end
-  end
-  
-  # Usage: it is called after save, to trigger accumulated events.
-  # we also collect all updated_html_attribute_values which caused by GlobalParamValueEvent or ParamValueEvent events.
-  def trigger_events
-Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_events=#{@global_param_value_events.inspect}"
-    #@param_value_events may be nil, ex. load seed.   
-    if @param_value_events.present?
-      param_value_events = @param_value_events
-      @param_value_events = nil # in case update self.pvalue, trigger again.
-      param_value_events.each{|pve| 
-        @updated_html_attribute_values.concat( pve.notify )
-      }
-    end 
-    if @global_param_value_events.present?
-      section_events = @global_param_value_events
-      @global_param_value_events = nil # in case update self.pvalue, trigger again.
-      section_events.each{|pve| 
-        @updated_html_attribute_values.concat(pve.notify)      
-      }
-    end 
-  end
-    
   def html_attribute_ids()
     if @html_attribute_ids.nil?
       section_piece_param = self.section_param.section_piece_param
@@ -171,7 +65,7 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
   
   
   def unset?(html_attribute_id)
-    ( self.html_attribute_extra(html_attribute_id, 'unset')== HtmlAttribute::UNSET_FALSE) ? false : true    
+    ( self.html_attribute_extra(html_attribute_id, 'unset')== HtmlAttribute::BOOL_FALSE) ? false : true    
   end
      
   # use in page_generator
@@ -205,6 +99,112 @@ Rails.logger.debug "trigger_events:#{@param_value_events.inspect}, section_event
   # use this to fetch param value directly.
   def first_pvalue
     pvalue_for_haid( html_attribute_ids.first )
+  end
+  
+  
+  def partial_html
+    pvs = self.class.within_section(self) 
+    HtmlPage::PartialHtml.new(nil, self.page_layout, nil, pvs)
+  end
+  
+  begin 'update param value'
+    # * usage - update attribute:pvalue 
+    # * params
+    #   * html_attribute_value_params - it is hash like {"psvalue0"=>"l1", "pvalue0"=>"810", "unit0"=>"px"}
+    #      or {"psvalue0"=>"l1", "pvalue0"=>"0", "unit0"=>"px", "psvalue1"=>"l1", "pvalue1"=>"0", "unit1"=>"px", "psvalue2"=>"l1", "pvalue2"=>"0", "unit2"=>"px", "psvalue3"=>"l1", "pvalue3"=>"0", "unit3"=>"px", "unset"=>"1"}
+    #   * some_event - one of EventEnum
+    def update_html_attribute_value(html_attribute, html_attribute_value_params, some_event )
+      #FIXME confirm next line. 
+      # it maybe called more times by conditions, we should keep updated_html_attribute_values
+      self.page_events ||=[]
+      self.updated_html_attribute_values ||= []
+      self.original_html_attribute_values ||= []
+      original_html_attribute_value = HtmlAttributeValue.parse_from(self,html_attribute)
+      new_html_attribute_value = HtmlAttributeValue.parse_from(self, html_attribute, html_attribute_value_params)
+      is_updated= false
+      Rails.logger.debug "original_html_attribute_value=#{original_html_attribute_value.properties.inspect},new_html_attribute_value=#{new_html_attribute_value.properties.inspect}"    
+      unless original_html_attribute_value.equal_to?(new_html_attribute_value)
+        # changed by user actions, some_event = [pv_changed|psv_changed|psu_changed|unset_changed]
+        if some_event 
+          if some_event==EventEnum[:unset_changed]
+            if new_html_attribute_value.unset?
+              self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)     
+            else # user modify unset, we should give a default value. 
+              self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)   
+  Rails.logger.debug "pvalue=#{new_html_attribute_value.build_pvalue(default=true)}"              
+              self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue(default=true))            
+            end
+          else
+            self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)
+          end 
+        else
+          if new_html_attribute_value.hidden != original_html_attribute_value.hidden
+            self.html_attribute_extra(html_attribute.id, 'hidden', new_html_attribute_value.hidden)
+          end     
+          if new_html_attribute_value.unset != original_html_attribute_value.unset
+            self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)
+          end
+          if new_html_attribute_value.computed != original_html_attribute_value.computed
+            self.html_attribute_extra(html_attribute.id, 'computed', new_html_attribute_value.computed)
+          end
+          self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)        
+        end
+        self.updated_html_attribute_values << new_html_attribute_value
+        self.original_html_attribute_values << original_html_attribute_value
+        self.page_events << some_event
+        self.save!
+        is_updated = true  
+      end
+      [is_updated, new_html_attribute_value, original_html_attribute_value]
+    end
+
+    #Usage:  user modify param_value, trigger event, event in EventEnum
+    # flow chart is:
+    #            client side               server side
+    #  user modify param_value ->       raise_event -> if(change_event) modify pvalue(not save) -> 
+    #                                   accumulate modification event, include global_param_value_event and section_event -> 
+    #                                   after pv.save -> call trigger_event
+    # 
+    def collect_events()
+      @param_value_events=[]
+      @global_param_value_events=[]
+      if self.page_events.present?      
+        last_position =  self.page_events.size - 1
+        pve = PageEvent::ParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
+        @param_value_events<<pve
+        # tell current section, this is new html attribute value. 
+        #Rails.logger.debug "self.section=#{section.inspect}"        
+        se = PageEvent::GlobalParamValueEvent.new(self.page_events.first, self, self.original_html_attribute_values.first, self.updated_html_attribute_values.first )
+        if self.page_layout.subscribe_event?(se)
+          @global_param_value_events << se
+        end      
+      end
+    end
+    
+    # Usage: it is called after save, to trigger accumulated events.
+    # we also collect all updated_html_attribute_values which caused by GlobalParamValueEvent or ParamValueEvent events.
+    def trigger_events
+      extra_html_attribute_values = []
+  Rails.logger.debug "@param_value_events:#{@param_value_events.inspect}, @global_param_value_events=#{@global_param_value_events.inspect}"
+      #@param_value_events may be nil, ex. load seed.   
+      if @param_value_events.present?
+        param_value_events = @param_value_events
+        @param_value_events = nil # in case update self.pvalue, trigger again.
+        param_value_events.each{|pve| 
+          extra_html_attribute_values.concat( pve.notify )
+        }
+      end 
+      if @global_param_value_events.present?
+        section_events = @global_param_value_events
+        @global_param_value_events = nil # in case update self.pvalue, trigger again.
+        section_events.each{|pve| 
+          extra_html_attribute_values.concat(pve.notify)      
+        }
+      end      
+      extra_html_attribute_values.each{|hav| hav.update}
+      updated_html_attribute_values.concat(extra_html_attribute_values )
+    end
+    
   end
   
 end

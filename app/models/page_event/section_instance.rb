@@ -211,9 +211,9 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.slug}"
       block_margin =  html_attribute_values("page_margin")
       #block, inner
       
-        block_width['unset']  = HtmlAttribute::UNSET_TRUE
+        block_width['unset']  = HtmlAttribute::BOOL_TRUE
         block_width['hidden']  = HtmlAttribute::BOOL_TRUE
-        block_min_width['unset']  = HtmlAttribute::UNSET_FALSE
+        block_min_width['unset']  = HtmlAttribute::BOOL_FALSE
         block_min_width['hidden']  = HtmlAttribute::BOOL_FALSE
       self.updated_html_attribute_values.push(block_width,block_min_width,block_margin )
     elsif self.section.slug=='container'
@@ -233,11 +233,11 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.slug}"
       block_width = html_attribute_values("page_width")
       block_margin =  html_attribute_values("page_margin")
       #block, inner
-        block_width['unset']  = HtmlAttribute::UNSET_FALSE
+        block_width['unset']  = HtmlAttribute::BOOL_FALSE
         block_width['hidden']  = HtmlAttribute::BOOL_FALSE
-        block_min_width['unset']  = HtmlAttribute::UNSET_TRUE
+        block_min_width['unset']  = HtmlAttribute::BOOL_TRUE
         block_min_width['hidden']  = HtmlAttribute::BOOL_TRUE
-        block_margin['unset'] = HtmlAttribute::UNSET_FALSE
+        block_margin['unset'] = HtmlAttribute::BOOL_FALSE
         block_margin['psvalue'] = 'auto'  
       
       self.updated_html_attribute_values.push(block_width,block_min_width,block_margin )
@@ -269,7 +269,7 @@ Rails.logger.debug "is_fixed = #{is_fixed}, handle section=#{self.section.slug}"
       computed_inner_height['psvalue'] = height['psvalue']
       computed_inner_height['pvalue'] = inner_height_value
       computed_inner_height['unit'] = height['unit']
-      computed_inner_height['unset'] = HtmlAttribute::UNSET_FALSE
+      computed_inner_height['unset'] = HtmlAttribute::BOOL_FALSE
       self.updated_html_attribute_values.push(computed_inner_height)
     end
   end

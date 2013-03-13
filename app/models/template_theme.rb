@@ -98,7 +98,11 @@ Rails.logger.debug "resource_key=#{resource_key}, page_layout_id=#{page_layout_i
     end
   end
   
-  begin 'param values'  
+  begin 'param values'
+    def html_page
+      HtmlPage.new(self)
+    end
+      
       # param values of self.
     def full_param_values(editor_id=0)
       if editor_id>0
