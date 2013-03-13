@@ -8,7 +8,7 @@ module PageTag
     def param_values_hash
       if @param_values_hash.nil?
         param_values =  ParamValue.find(:all,:conditions=>["theme_id=?", self.template_tag.id],
-          :include=>[:section_param=>:section_piece_param]
+          :include=>[:section_param=>:section_piece_param], :order=>'param_values.page_layout_id,section_piece_params.class_name '
         )
         
         @param_values_hash = param_values.inject({}){|h,pv|

@@ -243,11 +243,10 @@ container:
     .<?=g_piece_selector?> .<?=g_piece_selector?>_inner
     {
       <?=@template.css(:inner)?>
-      <?=@template.css(:background)?>
     }
     .<?=g_piece_selector?> .section
     {
-      <?if @template.css(:horizontal_content).to_i > 0 ?>
+      <?if @template.css(:content_layout).to_i > 0 ?>
       clear:none;
       <?else?>
       clear:both;

@@ -7,8 +7,8 @@ class ParamValue < ActiveRecord::Base
   belongs_to :template_theme, :foreign_key=>"theme_id"
   
   serialize :pvalue, Hash
-  before_save :collect_events
-  after_save :trigger_events
+  before_update :collect_events # skip create 
+  after_update :trigger_events
 
   scope :within_section, lambda { |param_value|
       where(" theme_id=? and param_values.page_layout_id=? ", param_value.theme_id, param_value.page_layout_id).includes(:section_param=>:section_piece_param)      
@@ -125,7 +125,7 @@ class ParamValue < ActiveRecord::Base
       Rails.logger.debug "original_html_attribute_value=#{original_html_attribute_value.properties.inspect},new_html_attribute_value=#{new_html_attribute_value.properties.inspect}"    
       unless original_html_attribute_value.equal_to?(new_html_attribute_value)
         # changed by user actions, some_event = [pv_changed|psv_changed|psu_changed|unset_changed]
-        if some_event 
+        if EventEnum.key? some_event 
           if some_event==EventEnum[:unset_changed]
             if new_html_attribute_value.unset?
               self.html_attribute_extra(html_attribute.id, 'unset', new_html_attribute_value.unset)     
@@ -138,6 +138,7 @@ class ParamValue < ActiveRecord::Base
             self.set_pvalue_for_haid(html_attribute.id, new_html_attribute_value.build_pvalue)
           end 
         else
+          # no event here, we would program to change html_attribute_value, like section.width = 100 
           if new_html_attribute_value.hidden != original_html_attribute_value.hidden
             self.html_attribute_extra(html_attribute.id, 'hidden', new_html_attribute_value.hidden)
           end     
@@ -202,7 +203,7 @@ class ParamValue < ActiveRecord::Base
         }
       end      
       extra_html_attribute_values.each{|hav| hav.update}
-      updated_html_attribute_values.concat(extra_html_attribute_values )
+      self.updated_html_attribute_values.concat(extra_html_attribute_values )
     end
     
   end

@@ -83,7 +83,7 @@ objs=[
   {"neg_ok"=>false, "pvalues_desc"=>"Please select a menu", "default_value"=>-1, "pvalues"=>"0d", "punits"=>"", "title"=>"db", "id"=>83, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"0t", "default_value"=>-1, "pvalues"=>"0t", "punits"=>"", "title"=>"text", "id"=>84, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"0i", "default_value"=>-1, "pvalues"=>"0i", "punits"=>"", "title"=>"content themeimg", "id"=>85, "pvspecial"=>""},
-  {"neg_ok"=>false, "pvalues_desc"=>"0b", "default_value"=>-1, "pvalues"=>"0b", "punits"=>"", "title"=>"horizontal", "id"=>86, "pvspecial"=>""},
+  {"neg_ok"=>false, "pvalues_desc"=>"0b", "default_value"=>0, "pvalues"=>"0b", "punits"=>"", "title"=>"horizontal", "id"=>86, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"", "default_value"=>-1, "pvalues"=>"", "punits"=>"", "title"=>"content int", "id"=>87, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"0t", "default_value"=>-1, "pvalues"=>"0t", "punits"=>"", "title"=>"area var", "id"=>88, "pvspecial"=>""},
   {"neg_ok"=>false, "pvalues_desc"=>"", "default_value"=>-1, "pvalues"=>"", "punits"=>"", "title"=>"area db", "id"=>89, "pvspecial"=>""},

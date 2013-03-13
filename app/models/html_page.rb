@@ -19,8 +19,8 @@ class HtmlPage# it correspond to template
   end
 
   def param_values
-      # class_name = [block, inner, page, layout]
-      pvs = template.param_values.all(:conditions=>[], :include=>[{:section_param=>:section_piece_param},:section])      
+      # only get param_values of section.root
+      pvs = ParamValue.all(:conditions=>["param_values.theme_id=? and section_params.section_root_id=section_params.section_id", self.template.id], :include=>[:section_param=>:section_piece_param])      
   end
   
   # disassemble template into partial_html

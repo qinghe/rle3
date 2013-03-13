@@ -137,6 +137,8 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
   # if the reperts==1  key are pvalue, psvalue, unit,unset
   # if the reperts>1   hav[pvalue{n}],hav[psvalue{n}], hav[unit{n}]   ,n start from 0  
   def [](key)
+    
+    #return properties[key] if key=~/unset/
     # pvalue and pvalue0 both return pvalue0
     key=~/[\d]$/ ? properties[key] : properties[key+'0'] 
            
@@ -146,10 +148,11 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
   # if the reperts==1  key are pvalue, psvalue, unit,unset
   # if the reperts>1   key are pvalue{n}, psvalue{n}, n start from 0  
   def []=(key,val)
+    #unset or bool like this way
+    if val.kind_of?(TrueClass) or val.kind_of?(FalseClass)
+      val = val ? HtmlAttribute::BOOL_TRUE : HtmlAttribute::BOOL_FALSE
+    end  
     if key=~/unset/
-      if val.kind_of?(TrueClass) or val.kind_of?(FalseClass)
-        val = val ? HtmlAttribute::BOOL_TRUE : HtmlAttribute::BOOL_FALSE
-      end  
       properties[key] = val
       #it has default value at least while initialize!
     elsif key=~/hidden/

@@ -189,17 +189,17 @@ class PageLayout < ActiveRecord::Base
       layout_root_id = self.root_id
       themes = TemplateTheme.by_layout(layout_root_id)
       for theme in themes
-          section_params = self.section.section_params
-          for sp in section_params
-            #use root section_id
-            ParamValue.create(:page_layout_root_id=>layout_root_id, :page_layout_id=>layout_id) do |pv|
-              pv.section_param_id = sp.id
-              pv.theme_id = theme.id
-  # puts "sp.default_value=#{sp.default_value.inspect}"            
-              pv.pvalue = sp.default_value   
-              #set default empty {} for now.
-            end
+        section_params = self.section.section_params
+        for sp in section_params
+          #use root section_id
+          ParamValue.create(:page_layout_root_id=>layout_root_id, :page_layout_id=>layout_id) do |pv|
+            pv.section_param_id = sp.id
+            pv.theme_id = theme.id
+# puts "sp.default_value=#{sp.default_value.inspect}"            
+            pv.pvalue = sp.default_value   
+            #set default empty {} for now.
           end
+        end
       end
     end 
      
