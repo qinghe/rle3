@@ -28,7 +28,7 @@ class PageLayoutTest < ActiveSupport::TestCase
     section_roots = Section.roots
     section_hash = section_roots.inject({}){|h,sp| h[sp.slug] = sp; h}
     puts "section_hash=#{section_hash.keys}"
-    root = PageLayout.create_layout(section_hash['root'].id, :slug=>"layout1")
+    root = PageLayout.create_layout(section_hash['root'].id, :title=>"layout1")
     header = root.add_section(section_hash['container'].id)
     body = root.add_section(section_hash['container'].id)
     footer = root.add_section(section_hash['container'].id)

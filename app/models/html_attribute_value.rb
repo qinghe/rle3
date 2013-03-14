@@ -166,6 +166,9 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
     end
     if key=~/pvalue/ # in code we could set 'width=200'
       # correct psvalue and unit
+      if self.unset?
+        properties['unset'] = HtmlAttribute::BOOL_FALSE
+      end
       unless self.html_attribute.manual_entry? self['psvalue']
         self['psvalue'] =  self.html_attribute.manual_selected_value
         if self.html_attribute.has_unit?

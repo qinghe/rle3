@@ -3,9 +3,9 @@ require 'test_helper'
 class ParamValueTest < ActiveSupport::TestCase
   
   setup do
-    @param_value_block = TemplateTheme.first.param_values.find(:first, :conditions=>["section_piece_params.class_name=?",'block'],
+    @param_value_block = TemplateTheme.first.param_values.find(:first, :conditions=>["section_piece_params.editor_id=2 and section_piece_params.class_name=?",'block'],
       :include=>[:section_param=>:section_piece_param])
-    @param_value_inner = TemplateTheme.first.param_values.find(:first, :conditions=>["section_piece_params.class_name=? and param_values.page_layout_root_id!=param_values.page_layout_id",'inner'],
+    @param_value_inner = TemplateTheme.first.param_values.find(:first, :conditions=>["section_piece_params.editor_id=2 and section_piece_params.class_name=? and param_values.page_layout_root_id!=param_values.page_layout_id",'inner'],
       :include=>[:section_param=>:section_piece_param])
     
   end
