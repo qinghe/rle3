@@ -1,13 +1,13 @@
 objs=[
-  {"id"=>2, "editor_id"=>1, "section_piece_id"=>3, "class_name"=>"menu", "pclass"=>"db", "param_category_id"=>1,  "html_attribute_ids"=>"83"},
-  {"id"=>3, "editor_id"=>1, "section_piece_id"=>4, "class_name"=>"menu", "pclass"=>"db", "param_category_id"=>1,  "html_attribute_ids"=>"83"},
+  #{"id"=>2, "editor_id"=>1, "section_piece_id"=>3, "class_name"=>"menu", "pclass"=>"db", "param_category_id"=>1,  "html_attribute_ids"=>"83"},
+  #{"id"=>3, "editor_id"=>1, "section_piece_id"=>4, "class_name"=>"menu", "pclass"=>"db", "param_category_id"=>1,  "html_attribute_ids"=>"83"},
   #{"id"=>3, "editor_id"=>1, "section_piece_id"=>1, "class_name"=>"section_name", "pclass"=>"string", "param_category_id"=>1,  "html_attribute_ids"=>"84"},
   {"id"=>5, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"page", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"21,20,32"},
   {"id"=>6, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"inner", "pclass"=>"css", "param_category_id"=>2,  "html_attribute_ids"=>"32"},
   {"id"=>7, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"page_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"92"},
   {"id"=>8, "editor_id"=>2, "section_piece_id"=>1, "class_name"=>"content_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
-  {"id"=>9, "editor_id"=>3, "section_piece_id"=>1, "class_name"=>"block", "pclass"=>"css", "param_category_id"=>3,  "html_attribute_ids"=>"2,3,4,5"},
-  {"id"=>10, "editor_id"=>4, "section_piece_id"=>1, "class_name"=>"block", "pclass"=>"css", "param_category_id"=>4,  "html_attribute_ids"=>"23,24,25,26,27,16,49,53,54,55,56,52,58,57"},
+  {"id"=>9, "editor_id"=>3, "section_piece_id"=>1, "class_name"=>"page", "pclass"=>"css", "param_category_id"=>3,  "html_attribute_ids"=>"2,3,4,5"},
+  {"id"=>10, "editor_id"=>4, "section_piece_id"=>1, "class_name"=>"page", "pclass"=>"css", "param_category_id"=>4,  "html_attribute_ids"=>"23,24,25,26,27,16,49,53,54,55,56,52,58,57"},
   #{"id"=>14, "editor_id"=>1, "section_piece_id"=>2, "class_name"=>"section_name", "pclass"=>"string", "param_category_id"=>1,  "html_attribute_ids"=>"84"},
   #content_layout_horizontal
   {"id"=>13, "editor_id"=>2, "section_piece_id"=>2, "class_name"=>"content_layout", "pclass"=>"bool", "param_category_id"=>1,  "html_attribute_ids"=>"86"},
@@ -39,7 +39,7 @@ objs=[
   {"id"=>65, "editor_id"=>3, "section_piece_id"=>6, "class_name"=>"au", "pclass"=>"css", "param_category_id"=>65,  "html_attribute_ids"=>"2,3,4,5"},
   
   # text
-  {"id"=>101, "editor_id"=>1, "section_piece_id"=>8, "class_name"=>"text", "pclass"=>"text", "param_category_id"=>2,  "html_attribute_ids"=>"84"},
+  #{"id"=>101, "editor_id"=>1, "section_piece_id"=>8, "class_name"=>"text", "pclass"=>"text", "param_category_id"=>2,  "html_attribute_ids"=>"84"},
   
   ]
 

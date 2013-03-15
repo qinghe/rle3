@@ -26,6 +26,9 @@ ActiveRecord::Base.connection.reconnect!
 html_page = template.html_page
 for partial_html in html_page.partial_htmls
   case partial_html.page_layout.title
+  when 'Header'
+    partial_html['block_height']['unset'] = true
+    partial_html['block_height'].update
   when 'Main menu'
     partial_html['block_background-color']['pvalue'] = '#D74700'
     partial_html['block_background-color'].update

@@ -31,7 +31,7 @@ center_area.add_section(section_hash['right_part'].id,:slug=>"right_part")
   
 root = PageLayout.create_layout(section_hash['root'], "Template One", :website_id=>website_id)
 
-header = root.add_section(section_hash['container'].id,:slug=>"header")
+header = root.add_section(section_hash['container'].id,:title=>"Header")
 header.add_section(section_hash['logo'].id,:title=>"Logo")
 header.add_section(section_hash['hmenu'].id,:title=>"Main menu")
 

@@ -1,5 +1,5 @@
 # Editor 
-editors = [{:id=>1,:slug=>'config'},
+editors = [
   {:id=>2,:slug=>'position'},  
   {:id=>3,:slug=>'color'}, 
   {:id=>4,:slug=>'text'}  

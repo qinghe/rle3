@@ -8,7 +8,6 @@ class PageGenerator
   
   attr_accessor :website, :menu, :theme, :resource # resource could be blog_post, flash, file, image...
   attr_accessor :editor
-  attr_accessor :url_prefix
   attr_accessor :html, :css, :js
   #ruby embeded source
   attr_accessor :ehtml, :ecss, :ejs 
@@ -34,11 +33,7 @@ class PageGenerator
     self.menu = menu
     self.theme = theme
     self.resource = nil
-    if options[:preview_url]
-      self.url_prefix = "/preview"
-    else
-      self.url_prefix = "/erubis/example"
-    end
+    self.is_preview = options[:preview].present?
     
     self.editor = options[:editor]
     if options[:blog_post_id]
@@ -47,10 +42,13 @@ class PageGenerator
     html = css = js = nil
     ehtml = ecss = ejs = nil
     #init template variables, used in templates
-    self.is_preview = false
     self.current_page_tag =   PageTag::CurrentPage.new(self)
     initialize_context_variables
       
+  end
+  
+  def url_prefix      
+    self.is_preview ? "/preview" : ""
   end
   
   def has_editor?

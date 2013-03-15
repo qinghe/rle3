@@ -128,7 +128,12 @@ class TemplateThemesController < ApplicationController
     html,css = do_preview(theme, menu, {:blog_post_id=>(resource.nil? ? nil:resource.id),:editor=>editor})
     #insert css to html
     style = %Q!<style type="text/css">#{css}</style>!
+    
+    #editor_panel require @theme, @editors, @editor ...
+    prepare_params_for_editors(theme)
+    editor_panel = render_to_string :partial=>'layout_editor_panel'
     html.insert(html.index("</head>"),style)
+    html.insert(html.index("</body>"),editor_panel)
     render :text => html
   end
     
@@ -412,7 +417,7 @@ logger.debug "uploaded_image = #{uploaded_image.inspect}"
   end
   
   def do_preview( theme,  menu, options={})
-      options[:preview_url] = true #preview_template_themes_url
+      options[:preview] = true #preview_template_themes_url
       @lg = PageGenerator.generator( menu, theme, options)
       html = @lg.generate
       css,js  = @lg.generate_assets

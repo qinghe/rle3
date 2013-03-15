@@ -14,7 +14,7 @@ module PageTag
 
     attr_accessor :website_tag, :template_tag
     delegate :menu, :to => :page_generator
-    delegate :resource, :to => :page_generator
+    delegate :resource,:is_preview, :to => :page_generator
     
     def initialize(page_generator_instance)
       super(page_generator_instance)
@@ -53,6 +53,8 @@ module PageTag
       end
 
     end
+    
+
   end
   
 end
