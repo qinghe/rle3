@@ -8,6 +8,8 @@
         div = "pv_#{param_value.id}_#{html_attribute.id}" #it should be same as html_attribute_value.html.erb.
 %>        
         $("#<%=div%>").replaceWith(<%= raw ( render :partial => "html_attribute_value", :locals=>{:html_attribute=>html_attribute, :param_value=>param_value}).to_json %>)
+        
+        $("<%=hav.css_selector%>").css('<%=hav.attribute_name%>','<%=hav.attribute_value%>')        
 <%
       end
 %>

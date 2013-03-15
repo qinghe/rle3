@@ -220,7 +220,28 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
   def computed?
     return properties["computed"]==HtmlAttribute::BOOL_TRUE
   end
-   
+  
+  begin 'css selector, name, value'
+    def css_selector
+      if self.param_value.section_param.section_piece_param.class_name=~/(block)/
+        ".s_#{self.param_value.page_layout_id}_#{self.param_value.section_param.section_id}"
+      else  
+        ".s_#{self.param_value.page_layout_id}_#{self.param_value.section_param.section_id} .#{self.param_value.section_param.section_piece_param.class_name}"
+      end
+    end
+    
+    def attribute_name
+      self.html_attribute.slug
+    end
+    def attribute_value
+        vals = html_attribute.repeats.times.collect{|i|
+          html_attribute.manual_entry?(properties["psvalue#{i}"]) ? 
+            "#{properties["pvalue#{i}"]}#{properties["unit#{i}"]}" : properties["psvalue#{i}"]
+        }.join(' ')
+    end
+  end
+  
+  # update param_value with self 
   def update()
     Rails.logger.debug "yes, in HtmlAttributeValue.save"
     self.param_value.update_html_attribute_value(self.html_attribute, self.properties, 'system')

@@ -28,7 +28,7 @@ root:
     <? end ?>
     
     </head>
-    <body class="clear-block">
+    <body class="<?=g_piece_selector?> clear-block">
 
       <div id="page" class='page'><div id="page-inner" class="clear-block">
         <a name="top" id="navigation-top"></a>
