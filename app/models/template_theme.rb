@@ -107,12 +107,12 @@ Rails.logger.debug "resource_key=#{resource_key}, page_layout_id=#{page_layout_i
     def full_param_values(editor_id=0)
       if editor_id>0
       ParamValue.find(:all, :include=>[:section_param=>[:section_piece_param=>:param_category]], 
-       :conditions=>["theme_id=? and section_piece_params.editor_id=?", self.id, theme_id, editor_id],
+       :conditions=>["theme_id=? and section_piece_params.editor_id=?", self.id, editor_id],
        :order=>"section_piece_params.editor_id, param_categories.position")
         
       else
       ParamValue.find(:all, :include=>[:section_param=>[:section_piece_param=>:param_category]], 
-       :conditions=>["theme_id=?", self.id, theme_id],
+       :conditions=>["theme_id=?", self.id],
        :order=>"section_piece_params.editor_id, param_categories.position")
           
       end

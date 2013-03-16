@@ -184,7 +184,7 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
     if html_attribute.is_special? :bool
       casted_value = casted_value.to_i > 0    
     elsif html_attribute.is_special? :db
-      casted_value = casted_value.to_i
+      casted_value = casted_value.to_i      
     end
     casted_value
   end
@@ -228,16 +228,33 @@ Rails.logger.debug "pvalue_string=#{pvalue_string}"
       else  
         ".s_#{self.param_value.page_layout_id}_#{self.param_value.section_param.section_id} .#{self.param_value.section_param.section_piece_param.class_name}"
       end
-    end
+    end 
     
     def attribute_name
       self.html_attribute.slug
     end
     def attribute_value
-        vals = html_attribute.repeats.times.collect{|i|
-          html_attribute.manual_entry?(properties["psvalue#{i}"]) ? 
-            "#{properties["pvalue#{i}"]}#{properties["unit#{i}"]}" : properties["psvalue#{i}"]
-        }.join(' ')
+      val = nil
+      if unset?
+        html_attribute.default_possible_selected_value
+      else
+        if html_attribute.slug== 'background-image'
+          if html_attribute.manual_entry?(self["psvalue"])
+            file = TemplateFile.find_by_attachment_file_name( self["pvalue"] )
+            if file.present?
+              val="url(#{file.attachment.url})"
+            end
+          else
+            val=self["psvalue"]
+          end
+  
+        else
+          val = html_attribute.repeats.times.collect{|i|
+            html_attribute.manual_entry?(properties["psvalue#{i}"]) ? 
+              "#{properties["pvalue#{i}"]}#{properties["unit#{i}"]}" : properties["psvalue#{i}"]
+          }.join(' ')
+        end
+      end
     end
   end
   

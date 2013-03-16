@@ -23,6 +23,7 @@ root:
       <script type="text/javascript" src="/javascripts/jquery_ujs.js"></script>
       <script type="text/javascript" src="/javascripts/ajax.js"></script>
       <script type="text/javascript" src="/javascripts/refinerycms-template.js"></script>
+      <script type="text/javascript" src="/javascripts/jquery.form.js"></script>
       <link rel="stylesheet" href="/stylesheets/refinerycms-template.css" type="text/css" />    
       <link rel="stylesheet" href="/stylesheets/jquery-ui/smoothness/jquery-ui.css" type="text/css" />    
     <? end ?>

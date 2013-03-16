@@ -1,8 +1,8 @@
 <% # extension is js.erb.  Rails is looking for _cart.erb or _cart.js.erb, since is a JS format request
--%>
+%>
 <%= form_for :template_file, :html => { :multipart => true, :id=>"upload_file_form", :method=>'post' } do |form| %>  
-  <%= form.label :file, "Local file path"%>
-  <%= form.file_field :file %>  
+  <%= form.label :attachment, "Local file path"%>
+  <%= form.file_field :attachment %>  
   <%= form.submit "Upload" %>  
 <% #= observe_field 'uploaded_image_abc', :url => {:action=>'check_upload_file_name'}, :with => 'file_name'
 %>
@@ -10,23 +10,26 @@
 <%=hidden_field_tag :html_attribute_id, @html_attribute_id%>
 <%=hidden_field :template_file, "theme_id", :value=>@theme_id%>
 
-<% end %> 
+<% end %>
+ 
 <script type="text/javascript">
 $(document).ready(function() { 
+<%
+#        //target:        '#output1',   // target element(s) to be updated with server response 
+#        //beforeSubmit:  showRequest,  // pre-submit callback 
+#        //success:       showResponse  // post-submit callback 
+#        dataType:  'script'
+#        // other available options: 
+#        //url:       url         // override for form's 'action' attribute 
+#        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+#        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+#        //clearForm: true        // clear all form fields after successful submit 
+#        //resetForm: true        // reset the form after successful submit 
+#        // $.ajax options can be used here too, for example: 
+#        //timeout:   3000 
+%>
     var options = { 
-        //target:        '#output1',   // target element(s) to be updated with server response 
-        //beforeSubmit:  showRequest,  // pre-submit callback 
-        //success:       showResponse  // post-submit callback 
         dataType:  'script'
-        // other available options: 
-        //url:       url         // override for form's 'action' attribute 
-        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
-        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
-        //clearForm: true        // clear all form fields after successful submit 
-        //resetForm: true        // reset the form after successful submit 
- 
-        // $.ajax options can be used here too, for example: 
-        //timeout:   3000 
     }; 
     $('#upload_file_form').ajaxForm(options);
   }); 
